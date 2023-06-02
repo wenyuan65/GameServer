@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "PlayerPb";
+
+package com.panda.game.proto;
+
+//获取角色数据
+message PlayerGetInfoRq {
+}
+message PlayerGetInfoRs {
+    int32 lv = 1;               // 经验
+    int32 exp = 2;              // 经验
+    string name = 3;            // 名称
+    string pic = 4;             // 头像
+}
+
+// 修改角色名
+message PlayerSetNameRq {
+    string name = 1;            // 名称
+}
+message PlayerSetNameRs {
+    string name = 1;            // 名称
+}
+

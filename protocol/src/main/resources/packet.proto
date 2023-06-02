@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "PacketPb";
+
+package com.panda.game.proto;
+
+//游戏包数据
+message Pkg {
+  int32 cmd = 1;                //命令号，区分不同命令
+  int32 error_code = 2;         //错误码
+  int64 playerId = 3;   		//玩家唯一ID
+  bytes body = 4;               //包体的二进制数据
+}

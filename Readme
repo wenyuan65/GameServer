@@ -1,0 +1,55 @@
+battle：战斗服
+logic：逻辑服
+gateway：网关服
+login：登陆服
+core: 框架核心模块
+common：通用工具包
+protocol:接口协议包
+tools：代码自动生成、机器人模块
+
+
+特性：
+1.使用protoBuf协议作为网络数据编码方式
+2.接口执行时，支持多种将其绑定到指定线程的策略
+3.在内存中维护玩家数据，异步落库
+4.支持分组加载玩家的数据
+5.支持redis订阅接口
+
+
+Action类：
+@Action
+public class PlayerAction {
+
+    @Command(Cmd.PlayerGetListRq_Value)
+    public void getPlayerList(PlayerGetListRq rq, GamePlayer player) {
+    }
+
+    @Command(Cmd.PlayerGetInfoRq_Value)
+    public void getPlayerInfo(PlayerGetInfoRq rq, GamePlayer player) {
+    }
+
+
+    @Command(value=Cmd.PlayerUpdateNameRq_Value, index = 0, bind={"playerId"})
+    public void updatePlayerName(PlayerUpdateNameRq rq, GamePlayer player) {
+    }
+
+    @Command(value=Cmd.ClubApplyRq_Value, index = 0, bind={"clubId"}) // ClubApplyRq中包含clubId字段
+    public void apply(ClubApplyRq rq, GamePlayer player) {
+    }
+
+}
+
+
+定时任务：
+@Timer
+public class PlayerTimer {
+
+    @Schedule(crontab="0 0 0 * * ? *")
+    public void resetOnlinePlayerDaily() {
+
+    }
+
+}
+
+
+Block

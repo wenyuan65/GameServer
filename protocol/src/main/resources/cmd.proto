@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "CmdPb";
+
+package com.panda.game.proto;
+
+// 请求相应接口id
+enum Cmd {
+    Unkown = 0;
+    PlayerGetInfoRq = 1001;
+    PlayerGetInfoRs = 1002;
+    PlayerSetNameRq = 1003; //
+    PlayerSetNameRs = 1004;
+
+    FriendGetInfoRq = 2001;
+    FriendGetInfoRs = 2002;
+    FriendApplyRq = 2003;
+    FriendApplyRs = 2004;
+
+    ClubGetInfoRq = 3001;
+    ClubGetInfoRs = 3002;
+}
