@@ -28,11 +28,17 @@ public class TableEntityManager {
 
     private String databaseName;
     private DataSource dataSource;
-    private Map<String, TableEntity> tableMap = new HashMap<>();
+    private Map<Class<?>, TableEntity> tableMap = new HashMap<>();
 
     private NameStrategy nameStrategy = new DefaultNameStrategy();
 
-    public boolean init(String path) {
+    public boolean init(String path, String databaseName) {
+        DataSource ds = PoolManager.getInstance().getDataSource(databaseName);
+        if (ds == null) {
+            throw new RuntimeException("没有找到对应的数据源, " + databaseName);
+        }
+        this.dataSource = ds;
+
         Set<Class<?>> classSet = ScanUtil.scan(path);
         for (Class<?> clazz : classSet) {
             TableField tableField = clazz.getDeclaredAnnotation(TableField.class);
@@ -41,11 +47,11 @@ public class TableEntityManager {
             }
 
             try {
-                TableEntity table = new TableEntity(clazz);
-                table.setDataSource(this.dataSource);
+                TableEntity<?> table = new TableEntity<>(clazz);
+                table.setDatabase(databaseName);
                 table.setNameStrategy(nameStrategy);
-                table.init();
-                tableMap.put(clazz.getName(), table);
+                table.init(this.dataSource);
+                tableMap.put(clazz, table);
 
                 log.info("init table {}", clazz.getName());
             } catch (Exception e) {
@@ -55,6 +61,10 @@ public class TableEntityManager {
         }
 
         return true;
+    }
+
+    public <T> TableEntity<T> getTableEntity(Class<T> clazz) {
+        return tableMap.get(clazz);
     }
 
 }

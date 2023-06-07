@@ -7,23 +7,23 @@ import java.util.List;
 
 public class SQLHelper {
 
-    public static String buildMaxIdSqlTemplate(TableEntity tableEntity) {
+    public static String buildMaxIdSQL(TableEntity tableEntity) {
         return "select max(id) as id from " + tableEntity.getTableName();
     }
 
-    public static String buildCountSqlTemplate(TableEntity tableEntity) {
+    public static String buildCountSQL(TableEntity tableEntity) {
         return "select count(*) as count from " + tableEntity.getTableName();
     }
 
-    public static String buildSelectAllSqlTemplate(TableEntity tableEntity) {
+    public static String buildSelectAllSQL(TableEntity tableEntity) {
         return String.format("select * from `%s`", tableEntity.getTableName());
     }
 
-    public static String buildSelectByPlayerIdSqlTemplate(TableEntity tableEntity) {
+    public static String buildSelectByPlayerIdSQL(TableEntity tableEntity) {
         return String.format("select * from `%s` where playerId=?", tableEntity.getTableName());
     }
 
-    public static String buildSelectSQLTemplate(TableEntity tableEntity) {
+    public static String buildSelectSQL(TableEntity tableEntity) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("select * from ").append(tableEntity.getTableName());
 
@@ -47,7 +47,7 @@ public class SQLHelper {
         return sqlBuilder.toString();
     }
 
-    public static String buildUpdateSqlTemplate(TableEntity tableEntity) {
+    public static String buildUpdateSQL(TableEntity tableEntity) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("update ").append(tableEntity.getTableName()).append(" SET ");
 
@@ -85,7 +85,7 @@ public class SQLHelper {
         return sqlBuilder.toString();
     }
 
-    public static String buildDeleteSqlTemplate(TableEntity tableEntity) {
+    public static String buildDeleteSQL(TableEntity tableEntity) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("delete from ").append(tableEntity.getTableName());
 
@@ -109,11 +109,11 @@ public class SQLHelper {
         return sqlBuilder.toString();
     }
 
-    public static String buildDeleteAllSqlTemplate(TableEntity tableEntity) {
+    public static String buildDeleteAllSQL(TableEntity tableEntity) {
         return "truncate table " + tableEntity.getTableName();
     }
 
-    public static String buildInsertSqlTemplate(TableEntity tableEntity) {
+    public static String buildInsertSQL(TableEntity tableEntity) {
         StringBuilder sqlBuilder = new StringBuilder();
         StringBuilder paramBuilder = new StringBuilder();
         boolean isFirst = true;
@@ -137,7 +137,7 @@ public class SQLHelper {
         return sqlBuilder.toString();
     }
 
-    public static String buildAddOrUpdateSQLTemplate(TableEntity tableEntity) {
+    public static String buildAddOrUpdateSQL(TableEntity tableEntity) {
         StringBuilder sqlBuilder = new StringBuilder();
         StringBuilder paramBuilder = new StringBuilder();
         boolean isFirst = true;

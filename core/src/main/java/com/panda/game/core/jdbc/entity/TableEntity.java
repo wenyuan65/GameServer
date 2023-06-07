@@ -3,6 +3,7 @@ package com.panda.game.core.jdbc.entity;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.utils.StringUtils;
+import com.panda.game.core.jdbc.base.BaseEntity;
 import com.panda.game.core.jdbc.common.JdbcConstants;
 import com.panda.game.core.jdbc.common.JdbcUtils;
 import com.panda.game.core.jdbc.common.SQLHelper;
@@ -11,65 +12,84 @@ import com.panda.game.core.jdbc.name.NameStrategy;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TableEntity {
+public class TableEntity<T> {
 	
 	private static Logger log = LoggerFactory.getLogger(TableEntity.class);
 
-	private DataSource dataSource;
+	/** 数据库的简称 */
+	private String database;
 
 	/** Entity类名 */
-	private Class<?> entityClass;
+	private Class<T> entityClass;
 	/** jdbc对象名 */
 	private String tableEntityName;
 	/** 对应数据库表名 */
 	private String tableName;
 	/** 表字段名 */
 	private List<FieldEntity> fieldEntityList = new ArrayList<>();
+	/** 表字段是playerId的 */
+	private FieldEntity playerIdFieldEntity;
 
 	private String insertSQL;
 	private String deleteSQL;
 	private String deleteAllSQL;
 	private String updateSQL;
-	private String selectSQL;
+	private String selectSQL; // 通过primary字段查询
 	private String selectAllSQL;
-	private String selectByPlayerIdSQL;
+	private String selectByPlayerIdSQL; // 通过playerId字段查询
 	private String addOrUpdateSQL;
 	private String maxIdSQL;
 	private String countSQL;
 
 	private NameStrategy nameStrategy;
 	
-	public TableEntity(Class<?> clazz) {
+	public TableEntity(Class<T> clazz) {
 		this.entityClass = clazz;
 	}
 	
-	public void init() throws Exception {
+	public void init(DataSource dataSource) throws Exception {
 		this.tableEntityName = entityClass.getSimpleName();
-		this.tableName = nameStrategy.classNameToTableName(tableEntityName);
+		this.tableName = nameStrategy.convert2TableName(tableEntityName);
 
-		parseField();
+		parseField(dataSource);
 		buildSQlTemplate();
 	}
 
 	private void buildSQlTemplate() {
-		insertSQL = SQLHelper.buildInsertSqlTemplate(this);
-		deleteSQL = SQLHelper.buildDeleteSqlTemplate(this);
-		updateSQL = SQLHelper.buildUpdateSqlTemplate(this);
-		selectSQL = SQLHelper.buildSelectSQLTemplate(this);
-		addOrUpdateSQL = SQLHelper.buildAddOrUpdateSQLTemplate(this);
-		selectAllSQL = SQLHelper.buildSelectAllSqlTemplate(this);
-		selectByPlayerIdSQL = SQLHelper.buildSelectByPlayerIdSqlTemplate(this);
-		deleteAllSQL = SQLHelper.buildDeleteAllSqlTemplate(this);
-		maxIdSQL = SQLHelper.buildMaxIdSqlTemplate(this);
-		countSQL = SQLHelper.buildCountSqlTemplate(this);
+		insertSQL = SQLHelper.buildInsertSQL(this);
+		deleteSQL = SQLHelper.buildDeleteSQL(this);
+		updateSQL = SQLHelper.buildUpdateSQL(this);
+		selectSQL = SQLHelper.buildSelectSQL(this);
+		addOrUpdateSQL = SQLHelper.buildAddOrUpdateSQL(this);
+		selectAllSQL = SQLHelper.buildSelectAllSQL(this);
+		selectByPlayerIdSQL = SQLHelper.buildSelectByPlayerIdSQL(this);
+		deleteAllSQL = SQLHelper.buildDeleteAllSQL(this);
+		maxIdSQL = SQLHelper.buildMaxIdSQL(this);
+		countSQL = SQLHelper.buildCountSQL(this);
+
+		log.info("============================================================");
+		log.info("Build SQL: {} ", insertSQL);
+		log.info("Build SQL: {} ", deleteSQL);
+		log.info("Build SQL: {} ", updateSQL);
+		log.info("Build SQL: {} ", selectSQL);
+		log.info("Build SQL: {} ", addOrUpdateSQL);
+		log.info("Build SQL: {} ", selectAllSQL);
+		log.info("Build SQL: {} ", selectByPlayerIdSQL);
+		log.info("Build SQL: {} ", deleteAllSQL);
+		log.info("Build SQL: {} ", maxIdSQL);
+		log.info("Build SQL: {} ", countSQL);
 	}
 
-	private void parseField() throws Exception {
+	private void parseField(DataSource dataSource) throws Exception {
 		Field[] fields = entityClass.getDeclaredFields();
 
 		// 解析key字段
@@ -80,7 +100,7 @@ public class TableEntity {
 		}
 
 		String sqlDescTable = String.format("desc %s", this.tableName);
-		List<Map<String, Object>> resultList = JdbcUtils.queryListMap(this.getDataSource(), sqlDescTable);
+		List<Map<String, Object>> resultList = JdbcUtils.queryListMap(dataSource, sqlDescTable);
 		for (Map<String, Object> map : resultList) {
 			String columnName = (String)map.get(JdbcConstants.META_DATA_COLUMN_NAME);
 			String columnType = (String)map.get(JdbcConstants.META_DATA_COLUMN_TYPE);
@@ -94,19 +114,19 @@ public class TableEntity {
 				throw new Exception(String.format("数据库字段命令异常, table:%s, field:%s", tableName, columnName));
 			}
 			
-			String propertyName = nameStrategy.columnsNameToPropertyName(columnName);
-			Field field = fieldMap.get(propertyName);
+			String fieldName = nameStrategy.convert2FieldName(columnName);
+			Field field = fieldMap.get(fieldName);
 			if (field == null) {
-				throw new Exception(String.format("在表对象%s中找不到表%s列名%s对应的的字段%s", tableEntityName, tableName, columnName, propertyName));
+				throw new Exception(String.format("在表对象%s中找不到表%s列名%s对应的的字段%s", tableEntityName, tableName, columnName, fieldName));
 			}
 
-			String getterName = nameStrategy.getGetterName(propertyName);
+			String getterName = nameStrategy.getGetterName(fieldName);
 			Method getter = entityClass.getDeclaredMethod(getterName);
-			String setterName = nameStrategy.getSetterName(propertyName);
+			String setterName = nameStrategy.getSetterName(fieldName);
 			Method setter = entityClass.getDeclaredMethod(setterName);
 
 			FieldEntity entity = new FieldEntity(field);
-			entity.setFieldName(propertyName);
+			entity.setFieldName(fieldName);
 			entity.setColumnName(columnName);
 			entity.setColumnType(columnType);
 			entity.setAutoIncrement(autoIncrement);
@@ -116,15 +136,149 @@ public class TableEntity {
 			entity.setSetter(setter);
 			entity.init();
 			fieldEntityList.add(entity);
+
+			// 当前字段是playerId
+			if ("playerId".equals(fieldName)) {
+				playerIdFieldEntity = entity;
+			}
 		}
 	}
 
-	public DataSource getDataSource() {
-		return dataSource;
+	/**
+	 * 将数据库查询结果resultSet转化为对象列表<br/>
+	 * 暂时默认resultSet是类似于"select * from table [where id = ?]"的sql查询出来的结果<br/>
+	 * 如果指定了查询的字段不是默认排序的所有字段，则不可时使用该方法
+	 * @param resultSet
+	 * @return
+	 * @throws Exception
+	 */
+	public List<T> convert(ResultSet resultSet) throws Exception {
+		List<T> list = new ArrayList<>();
+		while (resultSet.next()) {
+			T obj = entityClass.newInstance();
+			for (int i = 0; i < fieldEntityList.size(); i++) {
+				FieldEntity fieldEntity = fieldEntityList.get(i);
+
+				Object result = fieldEntity.getResultValue(resultSet, i + 1);
+				fieldEntity.getSetter().invoke(obj, result);
+			}
+
+			if (obj instanceof BaseEntity) {
+				((BaseEntity)obj).clearOption();
+			}
+
+			list.add(obj);
+		}
+
+		return list;
 	}
 
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+	/**
+	 * 往PreparedStatement中注入参数<br/>
+	 * SQL类似于"select * from {table} where id = ?"
+	 * @param ps
+	 * @param keys
+	 * @throws Exception
+	 */
+	public void setSelectSQLParams(PreparedStatement ps, Object... keys) throws Exception {
+		int paramIndex = 1;
+		for (int i = 0; i < fieldEntityList.size(); i++) {
+			FieldEntity fieldEntity = fieldEntityList.get(i);
+			if (!fieldEntity.isPrimary()) {
+				continue;
+			}
+
+			fieldEntity.setParamValue(ps, paramIndex, keys[paramIndex - 1]);
+			paramIndex ++;
+		}
+	}
+
+	/**
+	 * 往PreparedStatement中注入参数<br/>
+	 * SQL类似于"select * from {table} where player_id = ?"
+	 * @param ps
+	 * @param playerId
+	 * @throws Exception
+	 */
+	public void setSelectByPlayerIdSQLParams(PreparedStatement ps, long playerId) throws Exception {
+		playerIdFieldEntity.setParamValue(ps, 1, playerId);
+	}
+
+	/**
+	 * 往PreparedStatement中注入参数<br/>
+	 * SQL类似于"insert/replace into {table} (column1, column2, ...) value (?, ?, ...)"
+	 * @param ps
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void setInsertOrReplaceSQLParams(PreparedStatement ps, T obj) throws Exception {
+		int paramIndex = 1;
+		for (int i = 0; i < fieldEntityList.size(); i++) {
+			FieldEntity fieldEntity = fieldEntityList.get(i);
+			Method getter = fieldEntity.getGetter();
+			Object result = getter.invoke(obj);
+			if (fieldEntity.isAutoIncrement() && fieldEntity.getFieldTypeClazz() == int.class && ((int)result) <= 0) {
+				fieldEntity.setAutoIncrementParamValue(ps, paramIndex++, result);
+			} else {
+				fieldEntity.setParamValue(ps, paramIndex++, result);
+			}
+		}
+	}
+
+	/**
+	 * 往PreparedStatement中注入参数<br/>
+	 * SQL类似于"update {table} set {column1}=? , {column2}=? where key1=? and key2=?"
+	 * @param ps
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void setUpdateSQLParams(PreparedStatement ps, T obj) throws Exception {
+		int paramIndex = 1;
+		List<FieldEntity> primaryFieldEntityList = new ArrayList<>();
+		for (int i = 0; i < fieldEntityList.size(); i++) {
+			FieldEntity fieldEntity = fieldEntityList.get(i);
+			if (fieldEntity.isPrimary()) {
+				primaryFieldEntityList.add(fieldEntity);
+				continue;
+			}
+			Object result = fieldEntity.getGetter().invoke(obj);
+			fieldEntity.setParamValue(ps, paramIndex++, result);
+		}
+
+		// 注入primary字段
+		for (int i = 0; i < primaryFieldEntityList.size(); i++) {
+			FieldEntity fieldEntity = primaryFieldEntityList.get(i);
+			Object result = fieldEntity.getGetter().invoke(obj);
+			fieldEntity.setParamValue(ps, paramIndex++, result);
+		}
+	}
+
+	/**
+	 * 往PreparedStatement中注入参数<br/>
+	 * SQL类似于"delete from {table} where key1=? and key2=?"
+	 * @param ps
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void setDeleteSQLParams(PreparedStatement ps, T obj) throws Exception {
+		int paramIndex = 1;
+		for (int i = 0; i < fieldEntityList.size(); i++) {
+			FieldEntity fieldEntity = fieldEntityList.get(i);
+			if (!fieldEntity.isPrimary()) {
+				continue;
+			}
+
+			Object result = fieldEntity.getGetter().invoke(obj);
+			fieldEntity.setParamValue(ps, paramIndex++, result);
+		}
+	}
+
+	public String getDatabase() {
+		return database;
+	}
+
+	public void setDatabase(String database) {
+		this.database = database;
 	}
 
 	public Class<?> getEntityClass() {

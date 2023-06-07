@@ -2,18 +2,18 @@ package com.panda.game.core.jdbc.name;
 
 public interface NameStrategy {
 
-	public boolean checkColumnName(String columnName);
+	boolean checkColumnName(String columnName);
 	
-	public String columnsNameToPropertyName(String columnName);
+	String convert2FieldName(String columnName);
 	
-	public String propertyNameToColumnsName(String propertyName);
+	String convert2ColumnName(String fieldName);
 	
-	public String tableNameToClassName(String tableName);
+	String convert2ClassName(String tableName);
 	
-	public String classNameToTableName(String className);
+	String convert2TableName(String className);
 
-	public String getSetterName(String fieldName);
+	String getSetterName(String fieldName);
 
-	public String getGetterName(String fieldName);
+	String getGetterName(String fieldName);
 
 }

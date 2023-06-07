@@ -40,6 +40,7 @@
         <nacos.version>2.1.1</nacos.version>
         <netty.version>4.1.5.Final</netty.version>
         <guava.version>28.0-jre</guava.version>
+        <hikari.version>4.0.3</hikari.version>
         <mysql-connector.version>5.1.46</mysql-connector.version>
         <druid.version>1.0.31</druid.version>
         <lang3.version>3.8</lang3.version>
@@ -148,6 +149,13 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikari.version}</version>
             </dependency>
 
             <dependency>

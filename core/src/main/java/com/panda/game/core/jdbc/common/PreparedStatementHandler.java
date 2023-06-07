@@ -8,5 +8,5 @@ import java.sql.SQLException;
 @FunctionalInterface
 public interface PreparedStatementHandler<T> {
     @Nullable
-    T handle(PreparedStatement ps) throws SQLException,  IllegalArgumentException, IllegalAccessException, InstantiationException;
+    T handle(PreparedStatement ps) throws Throwable;
 }

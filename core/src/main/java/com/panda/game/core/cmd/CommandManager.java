@@ -59,6 +59,8 @@ public class CommandManager {
                 CmdHandler cmdHandler = new CmdHandler();
                 cmdHandler.init(clazz, method, cmd);
                 commandMap.put(cmd.value(), cmdHandler);
+
+                logger.info("注册handler: {}.{}(), {}", clazz.getName(), method.getName(), CmdPb.Cmd.forNumber(cmd.value()).name());
             }
         }
 

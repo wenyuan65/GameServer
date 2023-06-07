@@ -58,7 +58,7 @@ public class DefaultNameStrategy implements NameStrategy {
 	}
 	
 	@Override
-	public String columnsNameToPropertyName(String columnName) {
+	public String convert2FieldName(String columnName) {
 		StringBuilder sb = new StringBuilder(columnName.length());
 		
 		boolean first = true;
@@ -79,19 +79,19 @@ public class DefaultNameStrategy implements NameStrategy {
 	}
 
 	@Override
-	public String propertyNameToColumnsName(String propertyName) {
-		StringBuilder sb = new StringBuilder(propertyName.length() + 4);
+	public String convert2ColumnName(String fieldName) {
+		StringBuilder sb = new StringBuilder(fieldName.length() + 4);
 		int start = 0;
 		int end = 0;
-		for (int i = 0; i < propertyName.length(); i++) {
-			char anyChar = propertyName.charAt(i);
+		for (int i = 0; i < fieldName.length(); i++) {
+			char anyChar = fieldName.charAt(i);
 			if ('A' <= anyChar && anyChar <= 'Z') {
 				end = i;
 				if (start == 0) {
-					sb.append(propertyName.substring(start, end)).append(NAME_SEPARATOR);
+					sb.append(fieldName.substring(start, end)).append(NAME_SEPARATOR);
 				} else {
-					char firstChar = Character.toLowerCase(propertyName.charAt(start));
-					sb.append(firstChar).append(propertyName.substring(start + 1, end));
+					char firstChar = Character.toLowerCase(fieldName.charAt(start));
+					sb.append(firstChar).append(fieldName.substring(start + 1, end));
 					sb.append(NAME_SEPARATOR);
 				}
 				
@@ -100,31 +100,36 @@ public class DefaultNameStrategy implements NameStrategy {
 		}
 		
 		if (start == 0) {
-			return propertyName;
+			return fieldName;
 		} else {
-			char firstChar = Character.toLowerCase(propertyName.charAt(start));
-			sb.append(firstChar).append(propertyName.substring(start + 1));
+			char firstChar = Character.toLowerCase(fieldName.charAt(start));
+			sb.append(firstChar).append(fieldName.substring(start + 1));
 		}
 		
 		return sb.toString();
 	}
 	
 	@Override
-	public String classNameToTableName(String className) {
+	public String convert2TableName(String className) {
 		String first = className.substring(0, 1);
 		StringBuilder sb = new StringBuilder();
 		sb.append(first.toLowerCase()).append(className.substring(1));
 		
-		return propertyNameToColumnsName(sb.toString());
+		return convert2ColumnName(sb.toString());
 	}
 
 	@Override
-	public String tableNameToClassName(String tableName) {
-		String propertyName = columnsNameToPropertyName(tableName);
-		String first = propertyName.substring(0, 1);
-		StringBuilder sb = new StringBuilder();
-		sb.append(first.toUpperCase()).append(propertyName.substring(1));
-		
+	public String convert2ClassName(String tableName) {
+		StringBuilder sb = new StringBuilder(tableName.length());
+
+		String[] array = tableName.split(NAME_SEPARATOR);
+		for (int i = 0; i < array.length; i++) {
+			String component = array[i];
+
+			char firstChar = Character.toUpperCase(component.charAt(0));
+			sb.append(firstChar).append(component.substring(1));
+		}
+
 		return sb.toString();
 	}
 

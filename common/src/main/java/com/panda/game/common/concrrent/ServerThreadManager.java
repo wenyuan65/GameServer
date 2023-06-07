@@ -36,7 +36,7 @@ public class ServerThreadManager {
     /** 关闭 */
     private volatile boolean shutdown = false;
 
-    public void init(int coreThreadNum, int asyncThreadNum) {
+    public boolean init(int coreThreadNum, int asyncThreadNum) {
         int coreThreadPoolSize = coreThreadNum;
         if ((coreThreadPoolSize & (coreThreadPoolSize - 1)) != 0 || coreThreadPoolSize < 8 || coreThreadPoolSize > 256) {
             throw new RuntimeException("核心线程数必须是2的N次方，并且在[8, 256]范围内" + coreThreadNum);
@@ -55,6 +55,8 @@ public class ServerThreadManager {
         DefaultThreadFactory asyncThreadPoolsFactory = new DefaultThreadFactory("AsyncThreadPools", poolSize);
         asyncThreadPools = new ThreadPoolExecutor(2, poolSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), asyncThreadPoolsFactory);
         log.info("init async Thread pool, size:{}", poolSize);
+
+        return true;
     }
 
     public ScheduledThread newScheduleThread(String name, Runnable task, boolean runOnce) {
