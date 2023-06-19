@@ -8,8 +8,6 @@ import java.util.Iterator;
 
 public class CommandInvoker implements Runnable {
 
-    private static final Logger dayLog = LoggerFactory.getDayLog();
-
     private CommandContext ctx;
     private Iterator<CommandInterceptor> it;
 

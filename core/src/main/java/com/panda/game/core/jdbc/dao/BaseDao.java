@@ -12,11 +12,8 @@ import javax.sql.DataSource;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +24,10 @@ public class BaseDao<T> {
 
     private Class<T> clazz;
     private  TableEntity<T> tableEntity;
+
+    public BaseDao() {
+        init();
+    }
 
     public void init() {
         Type type = this.getClass().getGenericSuperclass();
@@ -68,14 +69,11 @@ public class BaseDao<T> {
             this.tableEntity.setSelectSQLParams(ps, keys);
 
             ResultSet rs = ps.executeQuery();
-            List<T> list;
             try {
-                list = this.tableEntity.convert(rs);
+                return this.tableEntity.convert(rs);
             } finally {
                 JdbcUtils.close(rs);
             }
-
-            return list;
         });
     }
 
@@ -96,6 +94,24 @@ public class BaseDao<T> {
                 JdbcUtils.close(rs);
             }
 
+            return list;
+        });
+    }
+
+    /**
+     * 使用sql自定义查询
+     * @param sql
+     * @return
+     */
+    public List<T> getAllBySql(String sql) {
+        return JdbcUtils.execute(getDataSource(), sql, ps -> {
+            ResultSet rs = ps.executeQuery();
+            List<T> list;
+            try {
+                list = this.tableEntity.convert(rs);
+            } finally {
+                JdbcUtils.close(rs);
+            }
             return list;
         });
     }
@@ -335,45 +351,7 @@ public class BaseDao<T> {
      * @return
      */
     public List<Map<String, Object>> queryMap(String sql) {
-        return JdbcUtils.execute(getDataSource(), sql, ps -> {
-            ResultSet rs = ps.executeQuery();
-            try {
-                return convertMap(rs);
-            } finally {
-                JdbcUtils.close(rs);
-            }
-        });
-    }
-
-    /**
-     * 将数据库查询结果resultSet转化为Map列表<br/>
-     * @param resultSet
-     * @return
-     * @throws SQLException
-     */
-    private List<Map<String, Object>> convertMap(ResultSet resultSet) throws SQLException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int size = metaData.getColumnCount();
-
-        List<String> columnNameList = new ArrayList<>();
-        for (int i = 1; i <= size; i++) {
-            String columnName = metaData.getColumnName(i);
-            columnNameList.add(columnName);
-        }
-
-        while (resultSet.next()) {
-            Map<String, Object> map = new HashMap<>();
-            for (int i = 1; i <= size; i++) {
-                String key = columnNameList.get(i - 1);
-                Object value = resultSet.getObject(i);
-                map.put(key, value);
-            }
-
-            list.add(map);
-        }
-
-        return list;
+        return JdbcUtils.queryMapList(getDataSource(), sql);
     }
 
     public DataSource getDataSource() {

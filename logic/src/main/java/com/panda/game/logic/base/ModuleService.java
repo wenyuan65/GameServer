@@ -56,8 +56,8 @@ public interface ModuleService {
     void resetDaily(boolean isLogin);
 
     /**
-     * 手动重置
+     * 定时执行方法, 该任务只处理玩家相关的事
      */
-    void resetBySelf(boolean isLogin);
+    void tick(long now);
 
 }

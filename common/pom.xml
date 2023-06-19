@@ -22,6 +22,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.panda.game</groupId>
+            <artifactId>protocol</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>

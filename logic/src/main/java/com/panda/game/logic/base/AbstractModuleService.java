@@ -1,6 +1,6 @@
 package com.panda.game.logic.base;
 
-import com.panda.game.logic.player.GamePlayer;
+import com.panda.game.logic.common.GamePlayer;
 
 public abstract class AbstractModuleService implements ModuleService {
 
@@ -41,8 +41,7 @@ public abstract class AbstractModuleService implements ModuleService {
     }
 
     @Override
-    public void resetBySelf(boolean isLogin) {
+    public void tick(long now) {
 
     }
-
 }

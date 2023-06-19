@@ -1,52 +1,60 @@
 package com.panda.game.common.timer.quartz;
 
+import java.lang.reflect.Method;
+
 public class Job {
 	
-	private static final String JOB_NAME_PREFFIX = "job_";
-
 	private int jobId;
 	private String jobName;
-	private String beanName;
-	private String methodName;
+	private Object target;
+	private Method method;
 	private String cronExpression;
 	
-	public Job(int jobId, String jobName, String beanName, String methodName, String cronExpression) {
+	public Job(int jobId, String jobName, Object target, Method method, String cronExpression) {
 		this.jobId = jobId;
-		this.jobName = JOB_NAME_PREFFIX + jobName + "_" + jobId;
-		this.beanName = beanName;
-		this.methodName = methodName;
+		this.jobName = "job_" + jobName + "_" + jobId;
+		this.target = target;
+		this.method = method;
 		this.cronExpression = cronExpression;
 	}
-	
+
 	public int getJobId() {
 		return jobId;
 	}
+
 	public void setJobId(int jobId) {
 		this.jobId = jobId;
 	}
+
 	public String getJobName() {
 		return jobName;
 	}
+
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
 	}
-	public String getBeanName() {
-		return beanName;
+
+	public Object getTarget() {
+		return target;
 	}
-	public void setBeanName(String beanName) {
-		this.beanName = beanName;
+
+	public void setTarget(Object target) {
+		this.target = target;
 	}
-	public String getMethodName() {
-		return methodName;
+
+	public Method getMethod() {
+		return method;
 	}
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
+
+	public void setMethod(Method method) {
+		this.method = method;
 	}
+
 	public String getCronExpression() {
 		return cronExpression;
 	}
+
 	public void setCronExpression(String cronExpression) {
 		this.cronExpression = cronExpression;
 	}
-	
 }

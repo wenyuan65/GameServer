@@ -1,18 +1,16 @@
 drop table if exists `global_value`;
 create table `global_value` (
 	`id` int(10) unsigned not null comment 'id',
-	`param1` varchar(128) not null default '' comment '参数1',
-	`param2` bigint(20) unsigned not null default '0' comment '参数2',
-    `param3` datetime unsigned not null default '0' comment '参数3',
+	`value` varchar(128) not null default '' comment '值',
+	`param1` bigint(20) not null default '0' comment '参数1',
+	`param2` bigint(20) not null default '0' comment '参数2',
+	`param3` bigint(20) not null default '0' comment '参数3',
+    `time` datetime not null default '2020-01-01 00:00:00' comment '时间参数',
 	`intro` varchar(50) not null default '' comment '描述',
 	primary key(`id`)
 );
 
-drop table if exists `version`;
-create table `version` (
-	`version` varchar(20) not null default '' comment '版本号',
-);
-insert into `version`(`version`) value('0.0.0.0');
+insert into `global_value`(`id`, `value`, `intro`) value(1, '0.0.0.0', '数据库版本号');
 
 drop table if exists `player`;
 create table `player` (
@@ -30,4 +28,4 @@ create table `player` (
 	index `idx_userId` (`user_id`) using btree
 );
 
-update `version` set `version` = '0.0.0.1';
+update `global_value` set `value` = '0.0.1.0' where `id` = 1;

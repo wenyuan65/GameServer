@@ -12,7 +12,7 @@ public class JdbcUtils {
     private static Logger log = LoggerFactory.getLogger(JdbcUtils.class);
     private static final Logger asyncLogger = LoggerFactory.getLogger("async");
 
-    public static List<Map<String, Object>> queryListMap(DataSource dataSource, String sql) {
+    public static List<Map<String, Object>> queryMapList(DataSource dataSource, String sql) {
         return JdbcUtils.execute(dataSource, sql, ps -> {
             ResultSet rs = ps.executeQuery();
             List<Map<String, Object>> result = new ArrayList<>();

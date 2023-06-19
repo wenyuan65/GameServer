@@ -1,6 +1,7 @@
 package com.panda.game.core.jdbc.pool;
 
 import com.panda.game.common.config.Configuration;
+import com.panda.game.common.constants.DataBaseType;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -10,27 +11,27 @@ import java.sql.SQLException;
 
 public class HikariPool {
 
-    private String poolName;
+    private DataBaseType database;
 
     private DataSource dataSource;
 
-    public HikariPool(String poolName) {
-        this.poolName = poolName;
+    public HikariPool(DataBaseType database) {
+        this.database = database;
     }
 
     public void init() {
-        String name = Configuration.getProperty(String.format("jdbc.%s.datasource.name", poolName));
-        String driver = Configuration.getProperty(String.format("jdbc.%s.datasource.driver", poolName));
-        String url = Configuration.getProperty(String.format("jdbc.%s.datasource.url", poolName));
-        String username = Configuration.getProperty(String.format("jdbc.%s.datasource.username", poolName));
-        String password = Configuration.getProperty(String.format("jdbc.%s.datasource.password", poolName));
-        String minimumSize = Configuration.getProperty(String.format("jdbc.%s.datasource.minimumSize", poolName));
-        String maximumSize = Configuration.getProperty(String.format("jdbc.%s.datasource.maximumSize", poolName));
+        String name = Configuration.getProperty(String.format("jdbc.%s.datasource.name", database.getName()));
+        String driver = Configuration.getProperty(String.format("jdbc.%s.datasource.driver", database.getName()));
+        String url = Configuration.getProperty(String.format("jdbc.%s.datasource.url", database.getName()));
+        String username = Configuration.getProperty(String.format("jdbc.%s.datasource.username", database.getName()));
+        String password = Configuration.getProperty(String.format("jdbc.%s.datasource.password", database.getName()));
+        String minimumSize = Configuration.getProperty(String.format("jdbc.%s.datasource.minimumSize", database.getName()));
+        String maximumSize = Configuration.getProperty(String.format("jdbc.%s.datasource.maximumSize", database.getName()));
         int minSize = Integer.parseInt(minimumSize);
         int maxSize = Integer.parseInt(maximumSize);
 
         HikariConfig config = new HikariConfig();
-        config.setPoolName("HikariPool-" + poolName);
+        config.setPoolName("HikariPool-" + database.getName());
         config.setDataSourceClassName(name);
         config.setDriverClassName(driver);
         config.setJdbcUrl(url);
@@ -53,7 +54,4 @@ public class HikariPool {
         return dataSource.getConnection();
     }
 
-    public String getPoolName() {
-        return poolName;
-    }
 }

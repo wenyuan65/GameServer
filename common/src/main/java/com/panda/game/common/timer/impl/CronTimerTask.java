@@ -9,6 +9,7 @@ import com.panda.game.common.timer.quartz.Job;
 import com.panda.game.common.utils.DateUtil;
 
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -21,20 +22,19 @@ public class CronTimerTask implements TimerTask {
 	private ThreadPoolExecutor executor;
 	private CronTrigger cronTrigger;
 	private Date nextFireTime;
-	private Method method;
-	
-	public CronTimerTask(Job job, ThreadPoolExecutor executor) throws Exception {
+
+	public CronTimerTask(Job job, ThreadPoolExecutor executor) {
 		// 检查定时任务的参数是否正确
-		// TODO:
-		this.method = null;
-		
 		this.job = job;
 		this.executor = executor;
-		this.cronTrigger = new CronTrigger(job.getCronExpression());
+		try {
+			this.cronTrigger = new CronTrigger(job.getCronExpression());
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 		this.nextFireTime = this.cronTrigger.getFireTimeAfter(null);
 		
-		log.info("#execute#job#{}#{}#{}#{}#first#{}#", job.getJobId(), job.getJobName(), job.getBeanName(), 
-			job.getMethodName(), DateUtil.format(this.nextFireTime));
+		log.info("#execute#job#{}#add#{}#", job.getJobName(), DateUtil.format(this.nextFireTime));
 	}
 
 	@Override
@@ -43,14 +43,15 @@ public class CronTimerTask implements TimerTask {
 
 			@Override
 			public void run() {
-				log.info("#execute#job#{}#{}#{}#{}#begin", job.getJobId(), job.getJobName(), 
-						job.getBeanName(), job.getMethodName());
+				log.info("#execute#job#{}#{}#{}#{}#begin", job.getJobName());
+
 				try {
-					// TODO:
-//					Object bean = ctx.getBean(job.getBeanName());
-					method.invoke(null);
+					Object target = job.getTarget();
+					Method method = job.getMethod();
+
+					method.invoke(target);
 				} catch (Throwable e) {
-					log.error("job {}", e, job.getJobName());
+					log.error("定时任务执行异常， {}", e, job.getJobName());
 				} finally {
 					// 设置下一次的定时任务的时间
 					Date fireTimeAfter = CronTimerTask.this.cronTrigger.getFireTimeAfter(nextFireTime);
@@ -58,8 +59,7 @@ public class CronTimerTask implements TimerTask {
 					long delay = fireTimeAfter.getTime() - System.currentTimeMillis();
 					timeout.timer().newTimeout(CronTimerTask.this, delay, TimeUnit.MILLISECONDS);
 					
-					log.info("#execute#job#{}#{}#{}#{}#finish#{}#", job.getJobId(), job.getJobName(), job.getBeanName(), 
-						job.getMethodName(), DateUtil.format(fireTimeAfter));
+					log.info("#execute#job#{}#{}#{}#{}#finish#{}#", job.getJobName(), DateUtil.format(fireTimeAfter));
 				}
 			}
 		});
@@ -68,7 +68,5 @@ public class CronTimerTask implements TimerTask {
 	public Date getNextFireTime() {
 		return nextFireTime;
 	}
-	
-	
 	
 }

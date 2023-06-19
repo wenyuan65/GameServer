@@ -28,6 +28,7 @@ public class LogInterceptor implements CommandInterceptor {
         Object[] params = ctx.getParams();
         long createdTime = ctx.getCreatedTime();
         PacketPb.Pkg pkg = ctx.getPkg();
+        int index = ctx.getIndex();
 
         CommandInterceptor interceptor = it.next();
 
@@ -51,7 +52,7 @@ public class LogInterceptor implements CommandInterceptor {
             }
         }
 
-        dayLog.info("#{}#{}#{}#{}#{}#{}#{}#", pkg.getPlayerId(), sb.toString(), action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime);
+        dayLog.info("#i#[{}]#{}#{}#{}#{}#{}#{}#{}#", index, pkg.getPlayerId(), sb.toString(), action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime);
     }
 
 }

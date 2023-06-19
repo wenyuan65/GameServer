@@ -1,5 +1,6 @@
 package com.panda.game.core.netty;
 
+import com.panda.game.core.common.ServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
@@ -26,6 +27,8 @@ public class NettyServer {
 
 	/** 服务器名称 */
 	private String name;
+	/** 服务器整体配置 */
+	private ServerConfig serverConfig;
 	/** netty配置 */
 	private NettyServerConfig config;
 	/** 服务器初始化定制配置 */
@@ -37,7 +40,7 @@ public class NettyServer {
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	
-	public NettyServer(String name, NettyServerConfig config, NettyServerInitializer initializer) {
+	public NettyServer(String name, ServerConfig serverConfig, NettyServerConfig config, NettyServerInitializer initializer) {
 		if (config == null) {
 			throw new NullPointerException("Netty服务器" + name + "配置为空");
 		}
@@ -47,17 +50,18 @@ public class NettyServer {
 
 		this.name = name;
 		this.config = config;
+		this.config = config;
 		this.initializer = initializer;
 	}
 	
 	public void init() throws Exception {
 		// EventLoop
-		bossGroup = config.isEpoll() ? new EpollEventLoopGroup(config.getBossEventLoopNum()) : new NioEventLoopGroup(config.getBossEventLoopNum());
-		workerGroup = config.isEpoll() ? new EpollEventLoopGroup(config.getWorkerEventLoopNum()) : new NioEventLoopGroup(config.getWorkerEventLoopNum());
+		bossGroup = serverConfig.isEpoll() ? new EpollEventLoopGroup(config.getBossEventLoopNum()) : new NioEventLoopGroup(config.getBossEventLoopNum());
+		workerGroup = serverConfig.isEpoll() ? new EpollEventLoopGroup(config.getWorkerEventLoopNum()) : new NioEventLoopGroup(config.getWorkerEventLoopNum());
 		bootstrap.group(bossGroup, workerGroup);
-		bootstrap.channel(config.isEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+		bootstrap.channel(serverConfig.isEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 
-		bootstrap.option(ChannelOption.ALLOCATOR, config.isUsedPooled() ? PooledByteBufAllocator.DEFAULT : UnpooledByteBufAllocator.DEFAULT);
+		bootstrap.option(ChannelOption.ALLOCATOR, serverConfig.isUsePool() ? PooledByteBufAllocator.DEFAULT : UnpooledByteBufAllocator.DEFAULT);
 
 		initializer.initBootstrap(bootstrap);
 	}

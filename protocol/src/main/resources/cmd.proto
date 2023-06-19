@@ -8,9 +8,14 @@ package com.panda.game.proto;
 // 请求相应接口id
 enum Cmd {
     Unkown = 0;
+    LoginRq = 1;
+    LoginRs = 2;
+    CreateUserRq = 3;
+    CreateUserRs = 4;
+
     PlayerGetInfoRq = 1001;
     PlayerGetInfoRs = 1002;
-    PlayerSetNameRq = 1003; //
+    PlayerSetNameRq = 1003;
     PlayerSetNameRs = 1004;
 
     FriendGetInfoRq = 2001;
@@ -20,4 +25,13 @@ enum Cmd {
 
     ClubGetInfoRq = 3001;
     ClubGetInfoRs = 3002;
+}
+
+// 错误码
+enum ErrorCode {
+    Ok = 0;
+    Param = 1;          // 参数错误
+    NoEnough = 2;      // 资源不足
+    ServiceError = 3;  // 服务异常
+    UserExist = 101;   // 用户已经存在
 }

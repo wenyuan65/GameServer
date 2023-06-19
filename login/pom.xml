@@ -33,6 +33,10 @@
             <groupId>com.panda.game</groupId>
             <artifactId>protocol</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.panda.game</groupId>
+            <artifactId>dao</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

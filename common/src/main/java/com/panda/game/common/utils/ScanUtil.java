@@ -98,8 +98,7 @@ public class ScanUtil {
 			public boolean accept(File file) {
 				return file.isDirectory() || file.getName().endsWith(".class");
 			}
-			
-			
+
 		});
 		
 		for(File file:dirFiles){

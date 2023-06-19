@@ -1,5 +1,8 @@
 package com.panda.game.logic.base;
 
+/**
+ * 玩家数据的生命周期触发点
+ */
 public enum ServiceTrigger {
 
     save {
@@ -52,10 +55,10 @@ public enum ServiceTrigger {
         }
     },
 
-    resetBySelf {
+    tick {
         @Override
         public boolean trigger(ModuleService service, Object... params) {
-            service.resetBySelf((Boolean) params[0]);
+            service.tick((Long) params[0]);
             return true;
         }
     },

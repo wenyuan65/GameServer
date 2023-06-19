@@ -2,31 +2,37 @@ package com.panda.game.logic;
 
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.config.Configuration;
+import com.panda.game.common.constants.DataBaseType;
 import com.panda.game.common.utils.MixUtil;
 import com.panda.game.core.BaseServer;
 import com.panda.game.core.cache.CacheFactory;
 import com.panda.game.core.cmd.CommandManager;
 import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
-import com.panda.game.core.jdbc.PoolManager;
-import com.panda.game.core.jdbc.TableEntityManager;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
 import com.panda.game.core.netty.handler.LogicHandler;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
-import com.panda.game.core.redis.RedisManager;
 import com.panda.game.logic.base.ModuleServiceHelper;
+import com.panda.game.logic.common.EntityIdManager;
+import com.panda.game.logic.common.GamePlayer;
 import com.panda.game.logic.common.GamePlayerInjector;
-import com.panda.game.logic.common.WorldManager;
-import com.panda.game.logic.player.GamePlayer;
-import org.redisson.codec.JsonJacksonCodec;
-import org.redisson.config.Config;
+import com.panda.game.logic.world.ScheduleTaskManager;
+import com.panda.game.logic.world.WorldManager;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class LogicServer extends BaseServer {
 
     public static void main(String[] args) {
-        LogicServer server = new LogicServer();
-        server.start();
+        try {
+            LogicServer server = new LogicServer();
+            server.start();
+        } catch (Throwable e) {
+            log.error("服务器启动异常");
+            System.err.println("服务器启动异常");
+        }
     }
 
     @Override
@@ -34,40 +40,70 @@ public class LogicServer extends BaseServer {
         // 获取项目的总路径
         String projectPackage = MixUtil.getParent(LogicServer.class.getPackage());
 
-        // 初始化线程组
-        ServerThreadManager.getInstance().init(8, 8);
-        // 初始化命令组件
-        initCmdHandler(projectPackage);
+        // 基础
+        if (!init(() -> Configuration.init(Arrays.asList("node", "server")), "初始化配置文件")) {
+            return ;
+        }
+        if (!init(() -> EntityIdManager.getInstance().init(), "初始化ID管理组件")) {
+            return ;
+        }
+        if (!init(() -> ServerThreadManager.getInstance().init(8, 8), "初始化线程组")) {
+            return ;
+        }
 
-        // 初始化数据库连接池
-        PoolManager.getInstance().init();
-        // 扫描表
-        TableEntityManager.getInstance().init(projectPackage, "logic");
-        // 初始化redis
-        initRedis();
+        // 数据
+        List<DataBaseType> databaseList = Arrays.asList(DataBaseType.Logic);
+        if (!init(() -> initDatabase(databaseList), "初始化命令组件")) {
+            return ;
+        }
+        if (!init(() -> CacheFactory.init(projectPackage), "加载静态数据")) {
+            return ;
+        }
+        if (!init(() -> initRedis(), "初始化redis")) {
+            return ;
+        }
 
-        // TODO: 初始化ID管理组件
+        // 模块
+        if (!init(() -> initCmdHandler(projectPackage), "初始化命令组件")) {
+            return ;
+        }
+        if (!init(() -> ModuleServiceHelper.init(), "加载玩家模块类")) {
+            return ;
+        }
+        if (!init(() -> WorldManager.getInstance().init(), "初始化公共模块类")) {
+            return ;
+        }
+        if (!init(() -> ScheduleTaskManager.getInstance().init(), "初始化定时任务")) {
+            return ;
+        }
 
-        // 加载静态数据
-        CacheFactory.init(projectPackage);
-        // 加载玩家模块类
-        ModuleServiceHelper.init();
-        // 初始化公共模块类
-        WorldManager.getInstance().init();
+        // 网络
+        if (!init(() -> initServer(), "初始化Netty服务器")) {
+            return ;
+        }
+        if (!init(() -> registerServers(), "服务注册")) {
+            return ;
+        }
+    }
 
-        // TODO: 初始化定时器、加载定时任务
-
+    private boolean initServer() {
         // 初始化Netty服务器
         ServerConfig serverConfig = new ServerConfig();
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
-        NettyServer nettyServer = new NettyServer("LogicTcpServer", nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
-        nettyServer.start();
+        try {
+            NettyServer nettyServer = new NettyServer("LogicTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
+            nettyServer.init();
+            nettyServer.start();
+        } catch (Exception e) {
+            log.error("服务器启动异常", e);
+            return false;
+        }
 
-        // TODO: 服务注册
+        return true;
     }
 
-    private static void initCmdHandler(String projectPackage) {
+    private boolean initCmdHandler(String projectPackage) {
         // 添加拦截器
         CommandManager.getInstance().addInterceptor(new AuthInterceptor());
         CommandManager.getInstance().addInterceptor(new RateLimitInterceptor());
@@ -77,30 +113,8 @@ public class LogicServer extends BaseServer {
         // 添加参数注入器
         CommandManager.getInstance().registerInjector(GamePlayer.class, GamePlayerInjector.class);
 
-        CommandManager.getInstance().init(projectPackage);
+        return CommandManager.getInstance().init(projectPackage);
     }
 
-    public static boolean initRedis() {
-        try {
-            String host = Configuration.getProperty("redis.host");
-            String password = Configuration.getProperty("redis.password");
-            String database = Configuration.getProperty("redis.database");
-            String idleSize = Configuration.getProperty("redis.idleSize");
-
-            Config config = new Config();
-            config.setCodec(JsonJacksonCodec.INSTANCE);
-            config.useSingleServer()
-                    .setAddress(host)
-                    .setPassword(password)
-                    .setConnectionMinimumIdleSize(Integer.parseInt(idleSize))
-                    .setDatabase(Integer.parseInt(database));
-            RedisManager.getInstance().init(config);
-        } catch (Throwable e) {
-            log.error("初始化异常", e);
-            return false;
-        }
-
-        return true;
-    }
 
 }

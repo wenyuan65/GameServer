@@ -29,7 +29,10 @@ public class ServerThreadManager {
     /** 核心线程 */
     private ThreadPoolExecutor[] coreThreadPools = null;
     /** 异步线程 */
-    private ThreadPoolExecutor asyncThreadPools = null;
+    private ThreadPoolExecutor asyncThreadPool = null;
+    /** 定时任务线程池 */
+    private ThreadPoolExecutor schedulerThreadPool = null;
+
     /** 掩码 */
     private int mark;
 
@@ -37,24 +40,32 @@ public class ServerThreadManager {
     private volatile boolean shutdown = false;
 
     public boolean init(int coreThreadNum, int asyncThreadNum) {
-        int coreThreadPoolSize = coreThreadNum;
-        if ((coreThreadPoolSize & (coreThreadPoolSize - 1)) != 0 || coreThreadPoolSize < 8 || coreThreadPoolSize > 256) {
+        int coreThreadSize = coreThreadNum;
+        if ((coreThreadSize & (coreThreadSize - 1)) != 0 || coreThreadSize < 8 || coreThreadSize > 256) {
             throw new RuntimeException("核心线程数必须是2的N次方，并且在[8, 256]范围内" + coreThreadNum);
         }
-        mark = coreThreadPoolSize - 1;
+        mark = coreThreadSize - 1;
 
-        coreThreadPools = new ThreadPoolExecutor[coreThreadPoolSize];
-        DefaultThreadFactory coreThreadFactory = new DefaultThreadFactory("CoreThreadPools", coreThreadPoolSize);
+        coreThreadPools = new ThreadPoolExecutor[coreThreadSize];
+        DefaultThreadFactory threadPoolsFactory1 = new DefaultThreadFactory("CoreThreadPools", coreThreadSize);
         for (int i = 0; i < coreThreadPools.length; i++) {
-            coreThreadPools[i] = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), coreThreadFactory);
+            coreThreadPools[i] = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), threadPoolsFactory1);
         }
-        log.info("init core Thread pool, size:{}", coreThreadPoolSize);
+        log.info("init core Thread pool, size:{}", coreThreadSize);
 
         // 异步线程池
-        int poolSize = Math.max(2, asyncThreadNum);
-        DefaultThreadFactory asyncThreadPoolsFactory = new DefaultThreadFactory("AsyncThreadPools", poolSize);
-        asyncThreadPools = new ThreadPoolExecutor(2, poolSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), asyncThreadPoolsFactory);
-        log.info("init async Thread pool, size:{}", poolSize);
+        int asyncThreadSize = Math.max(2, asyncThreadNum);
+        DefaultThreadFactory threadPoolsFactory2 = new DefaultThreadFactory("AsyncThreadPool", asyncThreadSize);
+        asyncThreadPool = new ThreadPoolExecutor(2, asyncThreadSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), threadPoolsFactory2);
+        log.info("init async Thread pool, size:{}", asyncThreadSize);
+
+        // 定时任务线程池
+        int coreNum = Runtime.getRuntime().availableProcessors();
+        int schedulerThreadSize = Math.max(2, coreNum);
+        schedulerThreadSize = Math.min(8, schedulerThreadSize);
+        DefaultThreadFactory threadPoolsFactory3 = new DefaultThreadFactory("SchedulerThreadPool", schedulerThreadSize);
+        schedulerThreadPool = new ThreadPoolExecutor(2, schedulerThreadSize, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), threadPoolsFactory3);
+        log.info("init scheduler Thread pool, size:{}", schedulerThreadSize);
 
         return true;
     }
@@ -73,6 +84,10 @@ public class ServerThreadManager {
 
     public ScheduledThread newScheduleThread(String name, Runnable task, long executeTime, long interval) {
         return new ScheduledThread(name, task, executeTime, interval);
+    }
+
+    public ThreadPoolExecutor getSchedulerThreadPool() {
+        return schedulerThreadPool;
     }
 
     /**
@@ -114,7 +129,7 @@ public class ServerThreadManager {
      * @param runnable
      */
     public Future<?> runAsync(Runnable runnable) {
-        return asyncThreadPools.submit(runnable);
+        return asyncThreadPool.submit(runnable);
     }
 
 }

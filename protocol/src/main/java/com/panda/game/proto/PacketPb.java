@@ -50,10 +50,20 @@ public final class PacketPb {
 
     /**
      * <pre>
+     * 请求id
+     * </pre>
+     *
+     * <code>int32 requestId = 4;</code>
+     * @return The requestId.
+     */
+    int getRequestId();
+
+    /**
+     * <pre>
      *包体的二进制数据
      * </pre>
      *
-     * <code>bytes body = 4;</code>
+     * <code>bytes body = 5;</code>
      * @return The body.
      */
     com.google.protobuf.ByteString getBody();
@@ -123,7 +133,12 @@ public final class PacketPb {
               playerId_ = input.readInt64();
               break;
             }
-            case 34: {
+            case 32: {
+
+              requestId_ = input.readInt32();
+              break;
+            }
+            case 42: {
 
               body_ = input.readBytes();
               break;
@@ -205,14 +220,29 @@ public final class PacketPb {
       return playerId_;
     }
 
-    public static final int BODY_FIELD_NUMBER = 4;
+    public static final int REQUESTID_FIELD_NUMBER = 4;
+    private int requestId_;
+    /**
+     * <pre>
+     * 请求id
+     * </pre>
+     *
+     * <code>int32 requestId = 4;</code>
+     * @return The requestId.
+     */
+    @java.lang.Override
+    public int getRequestId() {
+      return requestId_;
+    }
+
+    public static final int BODY_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString body_;
     /**
      * <pre>
      *包体的二进制数据
      * </pre>
      *
-     * <code>bytes body = 4;</code>
+     * <code>bytes body = 5;</code>
      * @return The body.
      */
     @java.lang.Override
@@ -243,8 +273,11 @@ public final class PacketPb {
       if (playerId_ != 0L) {
         output.writeInt64(3, playerId_);
       }
+      if (requestId_ != 0) {
+        output.writeInt32(4, requestId_);
+      }
       if (!body_.isEmpty()) {
-        output.writeBytes(4, body_);
+        output.writeBytes(5, body_);
       }
       unknownFields.writeTo(output);
     }
@@ -267,9 +300,13 @@ public final class PacketPb {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, playerId_);
       }
+      if (requestId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, requestId_);
+      }
       if (!body_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, body_);
+          .computeBytesSize(5, body_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -292,6 +329,8 @@ public final class PacketPb {
           != other.getErrorCode()) return false;
       if (getPlayerId()
           != other.getPlayerId()) return false;
+      if (getRequestId()
+          != other.getRequestId()) return false;
       if (!getBody()
           .equals(other.getBody())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -312,6 +351,8 @@ public final class PacketPb {
       hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getPlayerId());
+      hash = (37 * hash) + REQUESTID_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestId();
       hash = (37 * hash) + BODY_FIELD_NUMBER;
       hash = (53 * hash) + getBody().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -457,6 +498,8 @@ public final class PacketPb {
 
         playerId_ = 0L;
 
+        requestId_ = 0;
+
         body_ = com.google.protobuf.ByteString.EMPTY;
 
         return this;
@@ -488,6 +531,7 @@ public final class PacketPb {
         result.cmd_ = cmd_;
         result.errorCode_ = errorCode_;
         result.playerId_ = playerId_;
+        result.requestId_ = requestId_;
         result.body_ = body_;
         onBuilt();
         return result;
@@ -545,6 +589,9 @@ public final class PacketPb {
         }
         if (other.getPlayerId() != 0L) {
           setPlayerId(other.getPlayerId());
+        }
+        if (other.getRequestId() != 0) {
+          setRequestId(other.getRequestId());
         }
         if (other.getBody() != com.google.protobuf.ByteString.EMPTY) {
           setBody(other.getBody());
@@ -707,13 +754,56 @@ public final class PacketPb {
         return this;
       }
 
+      private int requestId_ ;
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 4;</code>
+       * @return The requestId.
+       */
+      @java.lang.Override
+      public int getRequestId() {
+        return requestId_;
+      }
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 4;</code>
+       * @param value The requestId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequestId(int value) {
+        
+        requestId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRequestId() {
+        
+        requestId_ = 0;
+        onChanged();
+        return this;
+      }
+
       private com.google.protobuf.ByteString body_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <pre>
        *包体的二进制数据
        * </pre>
        *
-       * <code>bytes body = 4;</code>
+       * <code>bytes body = 5;</code>
        * @return The body.
        */
       @java.lang.Override
@@ -725,7 +815,7 @@ public final class PacketPb {
        *包体的二进制数据
        * </pre>
        *
-       * <code>bytes body = 4;</code>
+       * <code>bytes body = 5;</code>
        * @param value The body to set.
        * @return This builder for chaining.
        */
@@ -743,7 +833,7 @@ public final class PacketPb {
        *包体的二进制数据
        * </pre>
        *
-       * <code>bytes body = 4;</code>
+       * <code>bytes body = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearBody() {
@@ -819,10 +909,11 @@ public final class PacketPb {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\014packet.proto\022\024com.panda.game.proto\"F\n\003" +
+      "\n\014packet.proto\022\024com.panda.game.proto\"Y\n\003" +
       "Pkg\022\013\n\003cmd\030\001 \001(\005\022\022\n\nerror_code\030\002 \001(\005\022\020\n\010" +
-      "playerId\030\003 \001(\003\022\014\n\004body\030\004 \001(\014B \n\024com.pand" +
-      "a.game.protoB\010PacketPbb\006proto3"
+      "playerId\030\003 \001(\003\022\021\n\trequestId\030\004 \001(\005\022\014\n\004bod" +
+      "y\030\005 \001(\014B \n\024com.panda.game.protoB\010PacketP" +
+      "bb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -833,7 +924,7 @@ public final class PacketPb {
     internal_static_com_panda_game_proto_Pkg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_Pkg_descriptor,
-        new java.lang.String[] { "Cmd", "ErrorCode", "PlayerId", "Body", });
+        new java.lang.String[] { "Cmd", "ErrorCode", "PlayerId", "RequestId", "Body", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

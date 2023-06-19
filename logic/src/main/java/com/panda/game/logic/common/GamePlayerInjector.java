@@ -1,7 +1,7 @@
 package com.panda.game.logic.common;
 
 import com.panda.game.core.cmd.Injector;
-import com.panda.game.logic.player.GamePlayer;
+import com.panda.game.logic.world.WorldManager;
 import com.panda.game.proto.PacketPb;
 import io.netty.channel.Channel;
 

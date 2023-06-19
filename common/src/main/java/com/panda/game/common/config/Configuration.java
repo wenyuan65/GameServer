@@ -38,26 +38,13 @@ public class Configuration {
 	/** 配置文件扫描线程 */
 	private static ScheduledThread configurationScanner = null;
 	
-	/** 配置项为bool的缓存 */
-	private static ConcurrentHashMap<String, Boolean> booleanMap = new ConcurrentHashMap<>();
-	/** 配置项为整数的缓存 */
-	private static ConcurrentHashMap<String, Integer> intMap = new ConcurrentHashMap<>();
-	/** 配置项为long的缓存 */
-	private static ConcurrentHashMap<String, Long> longMap = new ConcurrentHashMap<>();
-	/** 配置项为double的缓存 */
-	private static ConcurrentHashMap<String, Double> doubleMap = new ConcurrentHashMap<>();
-	/** 配置项为float的缓存 */
-	private static ConcurrentHashMap<String, Float> floatMap = new ConcurrentHashMap<>();
-	/** 配置项为正则表达式的缓存 */
-	private static ConcurrentHashMap<String, Pattern> patternMap = new ConcurrentHashMap<>();
-	
 	/**
 	 * 初始化通用配置文件
 	 * @param commonFileNameList
 	 */
-	public static void init(List<String> commonFileNameList) {
+	public static boolean init(List<String> commonFileNameList) {
 		if (started) {
-			return;
+			return false;
 		}
 		
 		commonFileNames.addAll(commonFileNameList);
@@ -69,6 +56,8 @@ public class Configuration {
 		// 配置文件监控线程
 		configurationScanner = new ScheduledThread("Configuration-scanner", new ConfigurationScanTask(), CHECK_MODIFIED_INTERVEL);
 		configurationScanner.start();
+
+		return true;
 	}
 	
 	/**
@@ -92,15 +81,21 @@ public class Configuration {
 	 * @param file
 	 */
 	private static void reloadFileConfig(File file, String filePath) {
+		if (filePath.endsWith("/common.properties")) {
+			logger.error("配置文件不能取名为common.properties: {}", CONFIG_TYPE_COMMON, filePath);
+			return;
+		}
 		if (!filePath.endsWith(".properties")) {
 			return;
 		}
-		
+
 		Long lastModifyTime = lastModifyTimeMap.get(file.getPath());
 		if (lastModifyTime != null && lastModifyTime == file.lastModified()) {
 			return;
 		} else if (lastModifyTime != null) {
-			logger.info("reload config {}", filePath);
+			logger.info("重新加载配置文件: {}", filePath);
+		} else {
+			logger.info("加载配置文件: {}", filePath);
 		}
 		
 		String name = file.getName();
@@ -122,8 +117,6 @@ public class Configuration {
 			for (Entry<Object, Object> entry : prop.entrySet()) {
 				// 更新属性
 				currConfigMap.put((String)entry.getKey(), (String)entry.getValue());
-				// 清理缓存
-				clearMap((String)entry.getKey());
 			}
 			
 			lastModifyTimeMap.put(file.getPath(), file.lastModified());
@@ -153,7 +146,7 @@ public class Configuration {
 	}
 	
 	/**
-	 * 优先从yx配置文件中获取channelId.key对应的值,其次取key对应的值
+	 * 优先从yx配置文件中获取channelId.key对应的值,其次取channelId.key对应的值，最后取key对应的值
 	 * @param yx
 	 * @param channelId
 	 * @param key
@@ -161,15 +154,16 @@ public class Configuration {
 	 */
 	public static String getProperty(String yx, String channelId, String key) {
 		String value = null;
+		String channelKey = getKey(channelId, key);
 		if (StringUtils.isNotBlank(yx)) {
-			value = getProperty(yx, channelId + "." + key);
+			value = getProperty(yx, channelKey);
 			if (StringUtils.isBlank(value)) {
 				value = getProperty(yx, key);
 			}
 		}
 		
 		if (StringUtils.isBlank(value)) {
-			value = getProperty(channelId + "." + key);
+			value = getProperty(channelKey);
 		} 
 		
 		if (StringUtils.isBlank(value)) {
@@ -185,160 +179,38 @@ public class Configuration {
 	 * @param suffix
 	 * @return
 	 */
-	public static String getValue(String prefix, String suffix) {
+	public static String getKey(String prefix, String suffix) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(prefix).append('.').append(suffix);
 		
 		return getProperty(sb.toString());
 	}
 	
-	/**
-	 * 获取Boolean型配置属性，并且缓存
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static Boolean getBooleanProperty(String key, Boolean defaultValue) {
-		Boolean cache = booleanMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
+	public static Integer getIntProperty(String key, Integer defaultValue) {
 		String propValue = getProperty(key);
 		if (propValue != null) {
-			boolean value = Boolean.parseBoolean(propValue);
-			booleanMap.putIfAbsent(key, value);
-			
-			return value;
+			return Integer.parseInt(propValue);
 		}
-		
+
 		return defaultValue;
 	}
-	
-	/**
-	 * 获取int型配置属性，并且缓存
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static int getIntProperty(String key, int defaultValue) {
-		Integer cache = intMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
-		String propValue = getProperty(key);
+
+	public static Integer getIntProperty(String yx, String key, Integer defaultValue) {
+		String propValue = getProperty(yx, key);
 		if (propValue != null) {
-			int value = Integer.parseInt(propValue);
-			intMap.putIfAbsent(key, value);
-			
-			return value;
+			return Integer.parseInt(propValue);
 		}
-		
+
 		return defaultValue;
 	}
-	
-	/**
-	 * 获取long型配置属性，并且缓存
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static long getLongProperty(String key, long defaultValue) {
-		Long cache = longMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
-		String propValue = getProperty(key);
+
+	public static Integer getIntProperty(String yx, String channelId, String key, Integer defaultValue) {
+		String propValue = getProperty(yx, channelId, key);
 		if (propValue != null) {
-			long value = Long.parseLong(propValue);
-			longMap.putIfAbsent(key, value);
-			
-			return value;
+			return Integer.parseInt(propValue);
 		}
-		
+
 		return defaultValue;
-	}
-	
-	/**
-	 * 获取double型配置属性，并且缓存
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static double getDoubleProperty(String key, double defaultValue) {
-		Double cache = doubleMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
-		String propValue = getProperty(key);
-		if (propValue != null) {
-			double value = Double.parseDouble(propValue);
-			doubleMap.putIfAbsent(key, value);
-			
-			return value;
-		}
-		
-		return defaultValue;
-	}
-	
-	/**
-	 * 获取float型配置属性，并且缓存
-	 * @param key
-	 * @param defaultValue
-	 * @return
-	 */
-	public static double getFloatProperty(String key, float defaultValue) {
-		Float cache = floatMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
-		String propValue = getProperty(key);
-		if (propValue != null) {
-			float value = Float.parseFloat(propValue);
-			floatMap.putIfAbsent(key, value);
-			
-			return value;
-		}
-		
-		return defaultValue;
-	}
-	
-	/**
-	 * 获取正则表达式配置属性，并且缓存
-	 * @param key
-	 * @return
-	 */
-	public static Pattern getPatternProperty(String key) {
-		Pattern cache = patternMap.get(key);
-		if (cache != null) {
-			return cache;
-		}
-		
-		String propValue = getProperty(key);
-		if (propValue != null) {
-			Pattern p = Pattern.compile(propValue);
-			patternMap.putIfAbsent(key, p);
-			
-			return p;
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * 从缓存map中移除key的属性
-	 * @param key
-	 */
-	public static void clearMap(String key) {
-		intMap.remove(key);
-		longMap.remove(key);
-		doubleMap.remove(key);
-		floatMap.remove(key);
-		patternMap.remove(key);
 	}
 	
 	/**

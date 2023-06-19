@@ -15,7 +15,7 @@ public class ModuleServiceHelper {
     private static final Logger logger = LoggerFactory.getLogger(ModuleService.class);
 
     private static final List<Class<? extends ModuleService>> ServiceList = new ArrayList<>();
-    private static final Map<ModuleGroups, List<Class<? extends ModuleService>>> BlockServicesMap = new HashMap<>();
+    private static final Map<ModuleGroups, List<Class<? extends ModuleService>>> groupServicesMap = new HashMap<>();
 
     public static boolean init() {
         Set<Class<?>> classes = ScanUtil.scan(LogicServer.class.getPackage().getName());
@@ -35,9 +35,9 @@ public class ModuleServiceHelper {
 
             Group group = clazz.getDeclaredAnnotation(Group.class);
             if (group != null) {
-                BlockServicesMap.computeIfAbsent(group.value(), k -> new ArrayList<>()).add(serviceClazz);
+                groupServicesMap.computeIfAbsent(group.value(), k -> new ArrayList<>()).add(serviceClazz);
             } else {
-                BlockServicesMap.computeIfAbsent(ModuleGroups.Other, k -> new ArrayList<>()).add(serviceClazz);
+                groupServicesMap.computeIfAbsent(ModuleGroups.Other, k -> new ArrayList<>()).add(serviceClazz);
             }
         }
 
@@ -56,7 +56,7 @@ public class ModuleServiceHelper {
     public static List<Class<? extends ModuleService>> getModuleGroupServices(List<ModuleGroups> blockList) {
         List<Class<? extends ModuleService>> result = new ArrayList<>();
         // 获取模块类
-        List<Class<? extends ModuleService>> baseClassList = BlockServicesMap.get(ModuleGroups.Base);
+        List<Class<? extends ModuleService>> baseClassList = groupServicesMap.get(ModuleGroups.Base);
         result.addAll(baseClassList);
 
         Set<ModuleGroups> loadedBlocks = new HashSet<>();
@@ -66,7 +66,7 @@ public class ModuleServiceHelper {
                 continue;
             }
 
-            List<Class<? extends ModuleService>> list = BlockServicesMap.get(block);
+            List<Class<? extends ModuleService>> list = groupServicesMap.get(block);
             result.addAll(list);
             loadedBlocks.add(block);
         }

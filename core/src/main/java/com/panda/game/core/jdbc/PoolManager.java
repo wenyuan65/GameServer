@@ -1,6 +1,7 @@
 package com.panda.game.core.jdbc;
 
 import com.panda.game.common.config.Configuration;
+import com.panda.game.common.constants.DataBaseType;
 import com.panda.game.common.utils.StringUtils;
 import com.panda.game.core.jdbc.pool.HikariPool;
 
@@ -21,27 +22,29 @@ public class PoolManager {
         return instance;
     }
 
-    private Map<String, HikariPool> poolMap = new HashMap<>();
+    private Map<DataBaseType, HikariPool> poolMap = new HashMap<>();
 
     public boolean init() {
         String databaseList = Configuration.getProperty("database.list");
         String[] databases = StringUtils.split(databaseList, ",");
 
         for (String database : databases) {
-            HikariPool pool = new HikariPool(database);
+            DataBaseType dataBaseType = DataBaseType.valueOf(database);
+
+            HikariPool pool = new HikariPool(dataBaseType);
             pool.init();
 
-            poolMap.put(database, pool);
+            poolMap.put(dataBaseType, pool);
         }
 
         return true;
     }
 
-    public Connection getConnection(String database) throws SQLException {
+    public Connection getConnection(DataBaseType database) throws SQLException {
         return poolMap.get(database).getConnection();
     }
 
-    public DataSource getDataSource(String database) {
+    public DataSource getDataSource(DataBaseType database) {
         return poolMap.get(database).getDataSource();
     }
 

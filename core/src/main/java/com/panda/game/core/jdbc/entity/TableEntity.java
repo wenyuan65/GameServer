@@ -1,5 +1,6 @@
 package com.panda.game.core.jdbc.entity;
 
+import com.panda.game.common.constants.DataBaseType;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.utils.StringUtils;
@@ -14,8 +15,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ public class TableEntity<T> {
 	private static Logger log = LoggerFactory.getLogger(TableEntity.class);
 
 	/** 数据库的简称 */
-	private String database;
+	private DataBaseType database;
 
 	/** Entity类名 */
 	private Class<T> entityClass;
@@ -100,7 +99,7 @@ public class TableEntity<T> {
 		}
 
 		String sqlDescTable = String.format("desc %s", this.tableName);
-		List<Map<String, Object>> resultList = JdbcUtils.queryListMap(dataSource, sqlDescTable);
+		List<Map<String, Object>> resultList = JdbcUtils.queryMapList(dataSource, sqlDescTable);
 		for (Map<String, Object> map : resultList) {
 			String columnName = (String)map.get(JdbcConstants.META_DATA_COLUMN_NAME);
 			String columnType = (String)map.get(JdbcConstants.META_DATA_COLUMN_TYPE);
@@ -273,11 +272,11 @@ public class TableEntity<T> {
 		}
 	}
 
-	public String getDatabase() {
+	public DataBaseType getDatabase() {
 		return database;
 	}
 
-	public void setDatabase(String database) {
+	public void setDatabase(DataBaseType database) {
 		this.database = database;
 	}
 

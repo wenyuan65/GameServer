@@ -19,7 +19,7 @@ public class FutureImpl implements Future {
 		if (!done) {
 			return false;
 		}
-		
+
 		TimerTask task = timeout.task();
 		if (task instanceof SimpleTimeTask) {
 			SimpleTimeTask task2 = (SimpleTimeTask) task;
@@ -37,7 +37,7 @@ public class FutureImpl implements Future {
 		if (!isCancelled) {
 			return false;
 		}
-		
+
 		TimerTask task = timeout.task();
 		if (task instanceof SimpleTimeTask) {
 			SimpleTimeTask task2 = (SimpleTimeTask) task;

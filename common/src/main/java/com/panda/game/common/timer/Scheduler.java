@@ -1,5 +1,6 @@
 package com.panda.game.common.timer;
 
+import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.timer.future.Future;
@@ -29,24 +30,17 @@ public final class Scheduler {
 	
 	/** 定时器 */
 	private static final Timer TIMER = new HashedWheelTimer(Executors.defaultThreadFactory(), 1, TimeUnit.MILLISECONDS, 2048);
-	
-	private static final int CORE_NUM = Runtime.getRuntime().availableProcessors();
-	
-	/** 处理任务的线程池 */
-	private static ThreadPoolExecutor EXECUTOR = null;
-	
-	static {
-		int maxNum = Math.max(2, CORE_NUM);
-		maxNum = Math.min(8, maxNum);
-		EXECUTOR = new ThreadPoolExecutor(2, maxNum, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+
+	public static ThreadPoolExecutor getThreadPool() {
+		return ServerThreadManager.getInstance().getSchedulerThreadPool();
 	}
-	
+
 	/**
 	 * 批量添加crontab定时任务
 	 * @param jobList
 	 * @throws Exception 
 	 */
-	public static void addJobList(List<Job> jobList) throws Exception {
+	public static void addJobList(List<Job> jobList) {
 		for (Job job : jobList) {
 			if (job != null) {
 				addJob(job);
@@ -59,8 +53,12 @@ public final class Scheduler {
 	 * @param job
 	 * @throws Exception 
 	 */
-	public static void addJob(Job job) throws Exception {
-		CronTimerTask timerTask = new CronTimerTask(job, EXECUTOR);
+	public static void addJob(Job job) {
+		if (job.getTarget() == null || job.getMethod() == null) {
+			throw new IllegalArgumentException("定时任务执行的对象和方法为null, " + job.getJobName());
+		}
+
+		CronTimerTask timerTask = new CronTimerTask(job, getThreadPool());
 		long delay = timerTask.getNextFireTime().getTime() - System.currentTimeMillis();
 		
 		TIMER.newTimeout(timerTask, delay, TimeUnit.MILLISECONDS);
@@ -74,7 +72,7 @@ public final class Scheduler {
 	 * @return
 	 */
 	public static Future schedule(Runnable task, long delay, TimeUnit unit) {
-		SimpleTimeTask timerTask = new SimpleTimeTask(task, EXECUTOR);
+		SimpleTimeTask timerTask = new SimpleTimeTask(task, getThreadPool());
 		Timeout timeout = TIMER.newTimeout(timerTask, delay, unit);
 		
 		return new FutureImpl(timeout);
@@ -99,7 +97,7 @@ public final class Scheduler {
 	 * @return
 	 */
 	public static Future scheduleWithFixRatio(Runnable task, long delay, long ratio, TimeUnit unit) {
-		ScheduledTimerTask timerTask = new ScheduledTimerTask(task, EXECUTOR, ratio, unit);
+		ScheduledTimerTask timerTask = new ScheduledTimerTask(task, getThreadPool(), ratio, unit);
 		Timeout timeout = TIMER.newTimeout(timerTask, delay, unit);
 		
 		return new FutureImpl(timeout);

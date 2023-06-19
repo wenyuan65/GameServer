@@ -12,8 +12,10 @@ tools：代码自动生成、机器人模块
 1.使用protoBuf协议作为网络数据编码方式
 2.接口执行时，支持多种将其绑定到指定线程的策略
 3.在内存中维护玩家数据，异步落库
-4.支持分组加载玩家的数据
-5.支持redis订阅接口
+4.支持分模块加载玩家的数据
+5.玩家数据及公共数据支持多种类型的生命周期
+6.支持redis订阅接口
+7.支持服务node注册
 
 
 Action类：
@@ -52,4 +54,30 @@ public class PlayerTimer {
 }
 
 
-Block
+自动生成带option的setter/getter方法：
+```
+#set($paramName = $helper.getParamName($field, $project))
+#if($field.modifierStatic)
+static ##
+#end
+void set$StringUtil.capitalizeWithJavaBeanConvention($StringUtil.sanitizeJavaIdentifier($helper.getPropertyName($field, $project)))($field.type $paramName) {
+#if ($field.name == $paramName)
+    #if (!$field.modifierStatic)
+    #else
+    #end
+#end
+#if ($field.primitive)
+    if (this.$field.name != $paramName) {
+        this.$field.name = $field.name;
+        setOp(Option.Update);
+    }
+}
+#else
+if ($paramName != null && !$paramName##
+.equals(this.$field.name)) {
+this.$field.name = $field.name;
+setOp(Option.Update);
+}
+}
+#end
+```

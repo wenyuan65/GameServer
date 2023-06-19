@@ -2,6 +2,7 @@ package com.panda.game.logic.player;
 
 import com.panda.game.logic.annotation.Group;
 import com.panda.game.logic.base.AbstractModuleService;
+import com.panda.game.logic.common.GamePlayer;
 import com.panda.game.logic.common.ModuleGroups;
 import com.panda.game.proto.CmdPb.*;
 import com.panda.game.proto.PlayerPb.*;
@@ -44,4 +45,5 @@ public class PlayerService extends AbstractModuleService {
         builder.setName("");
         player.sendMessage(Cmd.PlayerSetNameRs_VALUE, builder.build());
     }
+
 }

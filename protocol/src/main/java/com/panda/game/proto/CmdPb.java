@@ -28,6 +28,22 @@ public final class CmdPb {
      */
     Unkown(0),
     /**
+     * <code>LoginRq = 1;</code>
+     */
+    LoginRq(1),
+    /**
+     * <code>LoginRs = 2;</code>
+     */
+    LoginRs(2),
+    /**
+     * <code>CreateUserRq = 3;</code>
+     */
+    CreateUserRq(3),
+    /**
+     * <code>CreateUserRs = 4;</code>
+     */
+    CreateUserRs(4),
+    /**
      * <code>PlayerGetInfoRq = 1001;</code>
      */
     PlayerGetInfoRq(1001),
@@ -36,9 +52,6 @@ public final class CmdPb {
      */
     PlayerGetInfoRs(1002),
     /**
-     * <pre>
-     * </pre>
-     *
      * <code>PlayerSetNameRq = 1003;</code>
      */
     PlayerSetNameRq(1003),
@@ -78,6 +91,22 @@ public final class CmdPb {
      */
     public static final int Unkown_VALUE = 0;
     /**
+     * <code>LoginRq = 1;</code>
+     */
+    public static final int LoginRq_VALUE = 1;
+    /**
+     * <code>LoginRs = 2;</code>
+     */
+    public static final int LoginRs_VALUE = 2;
+    /**
+     * <code>CreateUserRq = 3;</code>
+     */
+    public static final int CreateUserRq_VALUE = 3;
+    /**
+     * <code>CreateUserRs = 4;</code>
+     */
+    public static final int CreateUserRs_VALUE = 4;
+    /**
      * <code>PlayerGetInfoRq = 1001;</code>
      */
     public static final int PlayerGetInfoRq_VALUE = 1001;
@@ -86,9 +115,6 @@ public final class CmdPb {
      */
     public static final int PlayerGetInfoRs_VALUE = 1002;
     /**
-     * <pre>
-     * </pre>
-     *
      * <code>PlayerSetNameRq = 1003;</code>
      */
     public static final int PlayerSetNameRq_VALUE = 1003;
@@ -147,6 +173,10 @@ public final class CmdPb {
     public static Cmd forNumber(int value) {
       switch (value) {
         case 0: return Unkown;
+        case 1: return LoginRq;
+        case 2: return LoginRs;
+        case 3: return CreateUserRq;
+        case 4: return CreateUserRs;
         case 1001: return PlayerGetInfoRq;
         case 1002: return PlayerGetInfoRs;
         case 1003: return PlayerSetNameRq;
@@ -213,6 +243,177 @@ public final class CmdPb {
     // @@protoc_insertion_point(enum_scope:com.panda.game.proto.Cmd)
   }
 
+  /**
+   * <pre>
+   * 错误码
+   * </pre>
+   *
+   * Protobuf enum {@code com.panda.game.proto.ErrorCode}
+   */
+  public enum ErrorCode
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>Ok = 0;</code>
+     */
+    Ok(0),
+    /**
+     * <pre>
+     * 参数错误
+     * </pre>
+     *
+     * <code>Param = 1;</code>
+     */
+    Param(1),
+    /**
+     * <pre>
+     * 资源不足
+     * </pre>
+     *
+     * <code>NoEnough = 2;</code>
+     */
+    NoEnough(2),
+    /**
+     * <pre>
+     * 服务异常
+     * </pre>
+     *
+     * <code>ServiceError = 3;</code>
+     */
+    ServiceError(3),
+    /**
+     * <pre>
+     * 用户已经存在
+     * </pre>
+     *
+     * <code>UserExist = 101;</code>
+     */
+    UserExist(101),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>Ok = 0;</code>
+     */
+    public static final int Ok_VALUE = 0;
+    /**
+     * <pre>
+     * 参数错误
+     * </pre>
+     *
+     * <code>Param = 1;</code>
+     */
+    public static final int Param_VALUE = 1;
+    /**
+     * <pre>
+     * 资源不足
+     * </pre>
+     *
+     * <code>NoEnough = 2;</code>
+     */
+    public static final int NoEnough_VALUE = 2;
+    /**
+     * <pre>
+     * 服务异常
+     * </pre>
+     *
+     * <code>ServiceError = 3;</code>
+     */
+    public static final int ServiceError_VALUE = 3;
+    /**
+     * <pre>
+     * 用户已经存在
+     * </pre>
+     *
+     * <code>UserExist = 101;</code>
+     */
+    public static final int UserExist_VALUE = 101;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static ErrorCode valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static ErrorCode forNumber(int value) {
+      switch (value) {
+        case 0: return Ok;
+        case 1: return Param;
+        case 2: return NoEnough;
+        case 3: return ServiceError;
+        case 101: return UserExist;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ErrorCode>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        ErrorCode> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ErrorCode>() {
+            public ErrorCode findValueByNumber(int number) {
+              return ErrorCode.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.panda.game.proto.CmdPb.getDescriptor().getEnumTypes().get(1);
+    }
+
+    private static final ErrorCode[] VALUES = values();
+
+    public static ErrorCode valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private ErrorCode(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:com.panda.game.proto.ErrorCode)
+  }
+
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -222,14 +423,18 @@ public final class CmdPb {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tcmd.proto\022\024com.panda.game.proto*\345\001\n\003Cm" +
-      "d\022\n\n\006Unkown\020\000\022\024\n\017PlayerGetInfoRq\020\351\007\022\024\n\017P" +
-      "layerGetInfoRs\020\352\007\022\024\n\017PlayerSetNameRq\020\353\007\022" +
-      "\024\n\017PlayerSetNameRs\020\354\007\022\024\n\017FriendGetInfoRq" +
-      "\020\321\017\022\024\n\017FriendGetInfoRs\020\322\017\022\022\n\rFriendApply" +
-      "Rq\020\323\017\022\022\n\rFriendApplyRs\020\324\017\022\022\n\rClubGetInfo" +
-      "Rq\020\271\027\022\022\n\rClubGetInfoRs\020\272\027B\035\n\024com.panda.g" +
-      "ame.protoB\005CmdPbb\006proto3"
+      "\n\tcmd.proto\022\024com.panda.game.proto*\243\002\n\003Cm" +
+      "d\022\n\n\006Unkown\020\000\022\013\n\007LoginRq\020\001\022\013\n\007LoginRs\020\002\022" +
+      "\020\n\014CreateUserRq\020\003\022\020\n\014CreateUserRs\020\004\022\024\n\017P" +
+      "layerGetInfoRq\020\351\007\022\024\n\017PlayerGetInfoRs\020\352\007\022" +
+      "\024\n\017PlayerSetNameRq\020\353\007\022\024\n\017PlayerSetNameRs" +
+      "\020\354\007\022\024\n\017FriendGetInfoRq\020\321\017\022\024\n\017FriendGetIn" +
+      "foRs\020\322\017\022\022\n\rFriendApplyRq\020\323\017\022\022\n\rFriendApp" +
+      "lyRs\020\324\017\022\022\n\rClubGetInfoRq\020\271\027\022\022\n\rClubGetIn" +
+      "foRs\020\272\027*M\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param\020\001\022" +
+      "\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\r\n\tUserE" +
+      "xist\020eB\035\n\024com.panda.game.protoB\005CmdPbb\006p" +
+      "roto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

@@ -10,5 +10,6 @@ message Pkg {
   int32 cmd = 1;                //命令号，区分不同命令
   int32 error_code = 2;         //错误码
   int64 playerId = 3;   		//玩家唯一ID
-  bytes body = 4;               //包体的二进制数据
+  int32 requestId = 4;          // 请求id
+  bytes body = 5;               //包体的二进制数据
 }

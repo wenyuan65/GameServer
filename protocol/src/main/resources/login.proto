@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "LoginPb";
+
+package com.panda.game.proto;
+
+// 创角
+message CreateUserRq {
+    string userName = 1;// 账户名
+    string password= 2; // 密码
+}
+message CreateUserRs {
+}
+
+
+//登陆接口
+message LoginRq {
+    string userName = 1;// 账户名
+    string password= 2; // 密码
+}
+message LoginRs {
+    int32 userId = 1; // 用户id
+    int32 playerId = 2; // 角色id
+}
+
+
