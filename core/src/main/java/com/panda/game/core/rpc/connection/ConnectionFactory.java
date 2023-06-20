@@ -4,6 +4,6 @@ public interface ConnectionFactory {
 	
 	void init();
 
-	Connection createConnection(String ip, int port, int timeoutMs) throws Exception;
-	
+	Connection createConnection(String host, int port, int timeoutMs) throws Exception;
+
 }

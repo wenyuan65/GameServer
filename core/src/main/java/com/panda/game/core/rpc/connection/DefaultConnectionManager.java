@@ -1,7 +1,5 @@
 package com.panda.game.core.rpc.connection;
 
-import com.panda.framework.log.Logger;
-import com.panda.framework.log.LoggerFactory;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 
@@ -41,14 +39,16 @@ public class DefaultConnectionManager implements ConnectionManager {
 	}
 
 	@Override
-	public Connection get(String addr) {
-		Connection connection = connectionPool.get(addr);
+	public Connection get(String host, int port) {
+		String address = host + ":" + port;
+
+		Connection connection = connectionPool.get(address);
 		if (connection == null) {
 			try {
-				connection = this.create(addr, 1000);
-				Connection absentConnection = connectionPool.putIfAbsent(addr, connection);
+				connection = this.create(host, port, 2000);
+				Connection oldConnection = connectionPool.putIfAbsent(address, connection);
 
-				return absentConnection != null ? absentConnection : connection;
+				return oldConnection != null ? oldConnection : connection;
 			} catch (Exception e) {
 				log.error("create connection error", e);
 			}
@@ -58,7 +58,12 @@ public class DefaultConnectionManager implements ConnectionManager {
 
 	@Override
 	public List<Connection> getAll(String addr) {
-		return Arrays.asList(get(addr));
+		Connection connection = connectionPool.get(addr);
+		if (connection == null) {
+			return Collections.emptyList();
+		}
+
+		return Arrays.asList(connection);
 	}
 
 	@Override
@@ -125,8 +130,8 @@ public class DefaultConnectionManager implements ConnectionManager {
 	}
 
 	@Override
-	public int count(String addr) {
-		return connectionPool.contains(addr) ? 1 : 0;
+	public int count(String address) {
+		return connectionPool.contains(address) ? 1 : 0;
 	}
 
 	@Override
@@ -141,13 +146,14 @@ public class DefaultConnectionManager implements ConnectionManager {
 	}
 
 	@Override
-	public Connection getOrCreateConnectionIfAbsent(String addr) {
-		return get(addr);
+	public Connection getOrCreateConnectionIfAbsent(String address) {
+		String[] hostPort = address.split(":");
+		return get(hostPort[0], Integer.parseInt(hostPort[1]));
 	}
 
 	@Override
 	public Connection getOrCreateConnectionIfAbsent(String ip, int port) {
-		return get(ip + ":" + port);
+		return get(ip, port);
 	}
 	
 }

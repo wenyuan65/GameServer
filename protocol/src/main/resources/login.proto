@@ -20,8 +20,34 @@ message LoginRq {
     string password= 2; // 密码
 }
 message LoginRs {
-    int32 userId = 1; // 用户id
-    int32 playerId = 2; // 角色id
+    string ip = 1; // 登陆服务器的ip
+    int32 port = 2;
+}
+
+// 登陆到gateway
+message GatewayLoginRq {
+    int64 userId = 1;// userId
+    string yx = 2; // yx
+    string channel = 3; // 渠道
+}
+message GatewayLoginRs {
+}
+
+// 登陆到gateway
+message LogicLoginRq {
+    int64 userId = 1;// userId
+    string yx = 2; // yx
+    string channel = 3; // 渠道
+    string ip = 4;      // 登陆ip
+}
+message LogicLoginRs {
+}
+
+// 连接到gateway
+message GatewayConnectRq {
+    int64 userId = 1;// userId
+}
+message GatewayConnectRs {
 }
 
 

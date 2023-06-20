@@ -11,7 +11,7 @@ public interface ConnectionManager {
     
     void add(Connection connection, String addr);
 
-    Connection get(String addr);
+    Connection get(String host, int port);
 
     List<Connection> getAll(String addr);
 

@@ -1,16 +1,13 @@
 package com.panda.game.core.rpc;
 
-import io.netty.channel.ChannelHandlerContext;
-
 public class RpcResponse {
 	
 	private int requestId;
-	
-	private Object result;
-	
-	private Throwable cause;
+	private int errorCode;
+	private byte[] result;
 
-	private ChannelHandlerContext ctx;
+	public RpcResponse() {
+	}
 
 	public RpcResponse(int requestId) {
 		this.requestId = requestId;
@@ -24,27 +21,19 @@ public class RpcResponse {
 		this.requestId = requestId;
 	}
 
-	public Object getResult() {
+	public int getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
+	}
+
+	public byte[] getResult() {
 		return result;
 	}
 
-	public void setResult(Object result) {
+	public void setResult(byte[] result) {
 		this.result = result;
-	}
-
-	public Throwable getCause() {
-		return cause;
-	}
-
-	public void setCause(Throwable t) {
-		this.cause = t;
-	}
-
-	public ChannelHandlerContext getCtx() {
-		return ctx;
-	}
-
-	public void setCtx(ChannelHandlerContext ctx) {
-		this.ctx = ctx;
 	}
 }

@@ -1,10 +1,15 @@
 package com.panda.game.core.rpc;
 
 import com.panda.game.core.netty.NettyClientInitializer;
+import com.panda.game.proto.PacketPb;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 
 public class RpcClientInitializer extends NettyClientInitializer {
 
@@ -22,8 +27,13 @@ public class RpcClientInitializer extends NettyClientInitializer {
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-        ChannelPipeline pipeline = socketChannel.pipeline();
+        ChannelPipeline cp = socketChannel.pipeline();
 
-        pipeline.addLast("rpcClientHandler", new RpcClientHandler());
+        cp.addLast(new LengthFieldPrepender(4));
+        cp.addLast(new LengthFieldBasedFrameDecoder(10485760, 0, 4, 0, 4));
+        cp.addLast(new ProtobufDecoder(PacketPb.Pkg.getDefaultInstance()));
+        cp.addLast(new ProtobufEncoder());
+
+        cp.addLast(new RpcClientHandler());
     }
 }

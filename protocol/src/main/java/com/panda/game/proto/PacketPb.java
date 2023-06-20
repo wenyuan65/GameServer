@@ -20,10 +20,20 @@ public final class PacketPb {
 
     /**
      * <pre>
+     * 请求id
+     * </pre>
+     *
+     * <code>int32 requestId = 1;</code>
+     * @return The requestId.
+     */
+    int getRequestId();
+
+    /**
+     * <pre>
      *命令号，区分不同命令
      * </pre>
      *
-     * <code>int32 cmd = 1;</code>
+     * <code>int32 cmd = 2;</code>
      * @return The cmd.
      */
     int getCmd();
@@ -33,7 +43,7 @@ public final class PacketPb {
      *错误码
      * </pre>
      *
-     * <code>int32 error_code = 2;</code>
+     * <code>int32 error_code = 3;</code>
      * @return The errorCode.
      */
     int getErrorCode();
@@ -43,20 +53,10 @@ public final class PacketPb {
      *玩家唯一ID
      * </pre>
      *
-     * <code>int64 playerId = 3;</code>
+     * <code>int64 playerId = 4;</code>
      * @return The playerId.
      */
     long getPlayerId();
-
-    /**
-     * <pre>
-     * 请求id
-     * </pre>
-     *
-     * <code>int32 requestId = 4;</code>
-     * @return The requestId.
-     */
-    int getRequestId();
 
     /**
      * <pre>
@@ -120,22 +120,22 @@ public final class PacketPb {
               break;
             case 8: {
 
-              cmd_ = input.readInt32();
+              requestId_ = input.readInt32();
               break;
             }
             case 16: {
 
-              errorCode_ = input.readInt32();
+              cmd_ = input.readInt32();
               break;
             }
             case 24: {
 
-              playerId_ = input.readInt64();
+              errorCode_ = input.readInt32();
               break;
             }
             case 32: {
 
-              requestId_ = input.readInt32();
+              playerId_ = input.readInt64();
               break;
             }
             case 42: {
@@ -175,14 +175,29 @@ public final class PacketPb {
               com.panda.game.proto.PacketPb.Pkg.class, com.panda.game.proto.PacketPb.Pkg.Builder.class);
     }
 
-    public static final int CMD_FIELD_NUMBER = 1;
+    public static final int REQUESTID_FIELD_NUMBER = 1;
+    private int requestId_;
+    /**
+     * <pre>
+     * 请求id
+     * </pre>
+     *
+     * <code>int32 requestId = 1;</code>
+     * @return The requestId.
+     */
+    @java.lang.Override
+    public int getRequestId() {
+      return requestId_;
+    }
+
+    public static final int CMD_FIELD_NUMBER = 2;
     private int cmd_;
     /**
      * <pre>
      *命令号，区分不同命令
      * </pre>
      *
-     * <code>int32 cmd = 1;</code>
+     * <code>int32 cmd = 2;</code>
      * @return The cmd.
      */
     @java.lang.Override
@@ -190,14 +205,14 @@ public final class PacketPb {
       return cmd_;
     }
 
-    public static final int ERROR_CODE_FIELD_NUMBER = 2;
+    public static final int ERROR_CODE_FIELD_NUMBER = 3;
     private int errorCode_;
     /**
      * <pre>
      *错误码
      * </pre>
      *
-     * <code>int32 error_code = 2;</code>
+     * <code>int32 error_code = 3;</code>
      * @return The errorCode.
      */
     @java.lang.Override
@@ -205,34 +220,19 @@ public final class PacketPb {
       return errorCode_;
     }
 
-    public static final int PLAYERID_FIELD_NUMBER = 3;
+    public static final int PLAYERID_FIELD_NUMBER = 4;
     private long playerId_;
     /**
      * <pre>
      *玩家唯一ID
      * </pre>
      *
-     * <code>int64 playerId = 3;</code>
+     * <code>int64 playerId = 4;</code>
      * @return The playerId.
      */
     @java.lang.Override
     public long getPlayerId() {
       return playerId_;
-    }
-
-    public static final int REQUESTID_FIELD_NUMBER = 4;
-    private int requestId_;
-    /**
-     * <pre>
-     * 请求id
-     * </pre>
-     *
-     * <code>int32 requestId = 4;</code>
-     * @return The requestId.
-     */
-    @java.lang.Override
-    public int getRequestId() {
-      return requestId_;
     }
 
     public static final int BODY_FIELD_NUMBER = 5;
@@ -264,17 +264,17 @@ public final class PacketPb {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (requestId_ != 0) {
+        output.writeInt32(1, requestId_);
+      }
       if (cmd_ != 0) {
-        output.writeInt32(1, cmd_);
+        output.writeInt32(2, cmd_);
       }
       if (errorCode_ != 0) {
-        output.writeInt32(2, errorCode_);
+        output.writeInt32(3, errorCode_);
       }
       if (playerId_ != 0L) {
-        output.writeInt64(3, playerId_);
-      }
-      if (requestId_ != 0) {
-        output.writeInt32(4, requestId_);
+        output.writeInt64(4, playerId_);
       }
       if (!body_.isEmpty()) {
         output.writeBytes(5, body_);
@@ -288,21 +288,21 @@ public final class PacketPb {
       if (size != -1) return size;
 
       size = 0;
+      if (requestId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, requestId_);
+      }
       if (cmd_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, cmd_);
+          .computeInt32Size(2, cmd_);
       }
       if (errorCode_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, errorCode_);
+          .computeInt32Size(3, errorCode_);
       }
       if (playerId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(3, playerId_);
-      }
-      if (requestId_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, requestId_);
+          .computeInt64Size(4, playerId_);
       }
       if (!body_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
@@ -323,14 +323,14 @@ public final class PacketPb {
       }
       com.panda.game.proto.PacketPb.Pkg other = (com.panda.game.proto.PacketPb.Pkg) obj;
 
+      if (getRequestId()
+          != other.getRequestId()) return false;
       if (getCmd()
           != other.getCmd()) return false;
       if (getErrorCode()
           != other.getErrorCode()) return false;
       if (getPlayerId()
           != other.getPlayerId()) return false;
-      if (getRequestId()
-          != other.getRequestId()) return false;
       if (!getBody()
           .equals(other.getBody())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -344,6 +344,8 @@ public final class PacketPb {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + REQUESTID_FIELD_NUMBER;
+      hash = (53 * hash) + getRequestId();
       hash = (37 * hash) + CMD_FIELD_NUMBER;
       hash = (53 * hash) + getCmd();
       hash = (37 * hash) + ERROR_CODE_FIELD_NUMBER;
@@ -351,8 +353,6 @@ public final class PacketPb {
       hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getPlayerId());
-      hash = (37 * hash) + REQUESTID_FIELD_NUMBER;
-      hash = (53 * hash) + getRequestId();
       hash = (37 * hash) + BODY_FIELD_NUMBER;
       hash = (53 * hash) + getBody().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -492,13 +492,13 @@ public final class PacketPb {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        requestId_ = 0;
+
         cmd_ = 0;
 
         errorCode_ = 0;
 
         playerId_ = 0L;
-
-        requestId_ = 0;
 
         body_ = com.google.protobuf.ByteString.EMPTY;
 
@@ -528,10 +528,10 @@ public final class PacketPb {
       @java.lang.Override
       public com.panda.game.proto.PacketPb.Pkg buildPartial() {
         com.panda.game.proto.PacketPb.Pkg result = new com.panda.game.proto.PacketPb.Pkg(this);
+        result.requestId_ = requestId_;
         result.cmd_ = cmd_;
         result.errorCode_ = errorCode_;
         result.playerId_ = playerId_;
-        result.requestId_ = requestId_;
         result.body_ = body_;
         onBuilt();
         return result;
@@ -581,6 +581,9 @@ public final class PacketPb {
 
       public Builder mergeFrom(com.panda.game.proto.PacketPb.Pkg other) {
         if (other == com.panda.game.proto.PacketPb.Pkg.getDefaultInstance()) return this;
+        if (other.getRequestId() != 0) {
+          setRequestId(other.getRequestId());
+        }
         if (other.getCmd() != 0) {
           setCmd(other.getCmd());
         }
@@ -589,9 +592,6 @@ public final class PacketPb {
         }
         if (other.getPlayerId() != 0L) {
           setPlayerId(other.getPlayerId());
-        }
-        if (other.getRequestId() != 0) {
-          setRequestId(other.getRequestId());
         }
         if (other.getBody() != com.google.protobuf.ByteString.EMPTY) {
           setBody(other.getBody());
@@ -625,13 +625,56 @@ public final class PacketPb {
         return this;
       }
 
+      private int requestId_ ;
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 1;</code>
+       * @return The requestId.
+       */
+      @java.lang.Override
+      public int getRequestId() {
+        return requestId_;
+      }
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 1;</code>
+       * @param value The requestId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setRequestId(int value) {
+        
+        requestId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 请求id
+       * </pre>
+       *
+       * <code>int32 requestId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearRequestId() {
+        
+        requestId_ = 0;
+        onChanged();
+        return this;
+      }
+
       private int cmd_ ;
       /**
        * <pre>
        *命令号，区分不同命令
        * </pre>
        *
-       * <code>int32 cmd = 1;</code>
+       * <code>int32 cmd = 2;</code>
        * @return The cmd.
        */
       @java.lang.Override
@@ -643,7 +686,7 @@ public final class PacketPb {
        *命令号，区分不同命令
        * </pre>
        *
-       * <code>int32 cmd = 1;</code>
+       * <code>int32 cmd = 2;</code>
        * @param value The cmd to set.
        * @return This builder for chaining.
        */
@@ -658,7 +701,7 @@ public final class PacketPb {
        *命令号，区分不同命令
        * </pre>
        *
-       * <code>int32 cmd = 1;</code>
+       * <code>int32 cmd = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearCmd() {
@@ -674,7 +717,7 @@ public final class PacketPb {
        *错误码
        * </pre>
        *
-       * <code>int32 error_code = 2;</code>
+       * <code>int32 error_code = 3;</code>
        * @return The errorCode.
        */
       @java.lang.Override
@@ -686,7 +729,7 @@ public final class PacketPb {
        *错误码
        * </pre>
        *
-       * <code>int32 error_code = 2;</code>
+       * <code>int32 error_code = 3;</code>
        * @param value The errorCode to set.
        * @return This builder for chaining.
        */
@@ -701,7 +744,7 @@ public final class PacketPb {
        *错误码
        * </pre>
        *
-       * <code>int32 error_code = 2;</code>
+       * <code>int32 error_code = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearErrorCode() {
@@ -717,7 +760,7 @@ public final class PacketPb {
        *玩家唯一ID
        * </pre>
        *
-       * <code>int64 playerId = 3;</code>
+       * <code>int64 playerId = 4;</code>
        * @return The playerId.
        */
       @java.lang.Override
@@ -729,7 +772,7 @@ public final class PacketPb {
        *玩家唯一ID
        * </pre>
        *
-       * <code>int64 playerId = 3;</code>
+       * <code>int64 playerId = 4;</code>
        * @param value The playerId to set.
        * @return This builder for chaining.
        */
@@ -744,55 +787,12 @@ public final class PacketPb {
        *玩家唯一ID
        * </pre>
        *
-       * <code>int64 playerId = 3;</code>
+       * <code>int64 playerId = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearPlayerId() {
         
         playerId_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private int requestId_ ;
-      /**
-       * <pre>
-       * 请求id
-       * </pre>
-       *
-       * <code>int32 requestId = 4;</code>
-       * @return The requestId.
-       */
-      @java.lang.Override
-      public int getRequestId() {
-        return requestId_;
-      }
-      /**
-       * <pre>
-       * 请求id
-       * </pre>
-       *
-       * <code>int32 requestId = 4;</code>
-       * @param value The requestId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setRequestId(int value) {
-        
-        requestId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 请求id
-       * </pre>
-       *
-       * <code>int32 requestId = 4;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearRequestId() {
-        
-        requestId_ = 0;
         onChanged();
         return this;
       }
@@ -910,8 +910,8 @@ public final class PacketPb {
   static {
     java.lang.String[] descriptorData = {
       "\n\014packet.proto\022\024com.panda.game.proto\"Y\n\003" +
-      "Pkg\022\013\n\003cmd\030\001 \001(\005\022\022\n\nerror_code\030\002 \001(\005\022\020\n\010" +
-      "playerId\030\003 \001(\003\022\021\n\trequestId\030\004 \001(\005\022\014\n\004bod" +
+      "Pkg\022\021\n\trequestId\030\001 \001(\005\022\013\n\003cmd\030\002 \001(\005\022\022\n\ne" +
+      "rror_code\030\003 \001(\005\022\020\n\010playerId\030\004 \001(\003\022\014\n\004bod" +
       "y\030\005 \001(\014B \n\024com.panda.game.protoB\010PacketP" +
       "bb\006proto3"
     };
@@ -924,7 +924,7 @@ public final class PacketPb {
     internal_static_com_panda_game_proto_Pkg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_Pkg_descriptor,
-        new java.lang.String[] { "Cmd", "ErrorCode", "PlayerId", "RequestId", "Body", });
+        new java.lang.String[] { "RequestId", "Cmd", "ErrorCode", "PlayerId", "Body", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

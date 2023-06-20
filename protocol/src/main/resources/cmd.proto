@@ -8,15 +8,23 @@ package com.panda.game.proto;
 // 请求相应接口id
 enum Cmd {
     Unkown = 0;
-    LoginRq = 1;
+    LoginRq = 1; // login
     LoginRs = 2;
     CreateUserRq = 3;
     CreateUserRs = 4;
 
-    PlayerGetInfoRq = 1001;
-    PlayerGetInfoRs = 1002;
-    PlayerSetNameRq = 1003;
-    PlayerSetNameRs = 1004;
+    GatewayLoginRq = 100; // gateway
+    GatewayLoginRs = 101;
+    GatewayConnectRq = 102;
+    GatewayConnectRs = 103;
+
+    LogicLoginRq = 1001; // logic
+    LogicLoginRs = 1002;
+
+    PlayerGetInfoRq = 1003;
+    PlayerGetInfoRs = 1004;
+    PlayerSetNameRq = 1005;
+    PlayerSetNameRs = 1006;
 
     FriendGetInfoRq = 2001;
     FriendGetInfoRs = 2002;
@@ -33,5 +41,8 @@ enum ErrorCode {
     Param = 1;          // 参数错误
     NoEnough = 2;      // 资源不足
     ServiceError = 3;  // 服务异常
+    RpcTimeOut = 4;    // rpc超时
+    RpcSendError = 5;  // rpc发送异常
+    RpcSendFailed = 6; // rpc发送失败
     UserExist = 101;   // 用户已经存在
 }

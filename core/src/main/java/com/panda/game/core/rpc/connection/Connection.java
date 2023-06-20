@@ -3,22 +3,24 @@ package com.panda.game.core.rpc.connection;
 import com.panda.game.core.rpc.Callback;
 import com.panda.game.core.rpc.RpcRequest;
 import com.panda.game.core.rpc.RpcResponse;
-import com.panda.game.core.rpc.future.InvokeFuture;
+import com.panda.game.core.rpc.future.RpcFuture;
 
 public interface Connection {
 	
-	public InvokeFuture sendRequest(RpcRequest request, RpcResponse response, Callback callback);
+	RpcFuture sendRequest(RpcRequest request, RpcResponse response, Callback callback);
 	
-	public void handleResponse(RpcResponse response);
+	void handleResponse(RpcResponse response);
 	
-	public InvokeFuture getInvokeFuture(int id);
+	RpcFuture getFuture(int id);
 	
-	public void addInvokeFuture(InvokeFuture future);
+	void addFuture(RpcFuture future);
+
+	void removeFuture(RpcFuture future);
 	
-	public void removeInvokeFuture(InvokeFuture future);
+	boolean checkActive();
+
+	String getRemoteAddress();
 	
-	public boolean checkActive();
-	
-	public void close();
+	void close();
 	
 }

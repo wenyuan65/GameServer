@@ -1,11 +1,13 @@
 package com.panda.game.core.cmd;
 
 import com.panda.game.proto.PacketPb;
+import io.netty.channel.Channel;
 
 import java.lang.reflect.Method;
 
 public class CommandContext {
 
+    private Channel channel;
     private Class<?> action;
     private Method method;
     private Object instance;
@@ -18,6 +20,14 @@ public class CommandContext {
     private long createdTime = System.currentTimeMillis();
     private long beginTime;
     private long endTime;
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
 
     public Class<?> getAction() {
         return action;

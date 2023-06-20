@@ -12,7 +12,9 @@ import com.panda.game.core.jdbc.PoolManager;
 import com.panda.game.core.jdbc.TableEntityManager;
 import com.panda.game.core.jdbc.common.JdbcUtils;
 import com.panda.game.core.nacos.NodeManager;
+import com.panda.game.core.netty.NettyClientConfig;
 import com.panda.game.core.redis.RedisManager;
+import com.panda.game.core.rpc.RpcManager;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
@@ -23,19 +25,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public abstract class BaseServer {
+public class BaseServer {
 
     protected static Logger log = LoggerFactory.getLogger(BaseServer.class);
 
-    protected static Map<DataBaseType, String> databasePackageMap = new HashMap<>();
-    protected static Map<DataBaseType, String> databaseVersionMap = new HashMap<>();
+    protected Map<DataBaseType, String> databasePackageMap = new HashMap<>();
+    protected Map<DataBaseType, String> databaseVersionMap = new HashMap<>();
 
-    static {
+    // 总项目的公共包路径
+    protected String projectPackage;
+    // 子模块的包路径
+    protected String modulePackage;
+    // 获取当前项目的顶级目录
+    protected String dir;
+
+    public void start() {
+        // 设置数据库实体类扫描范围
         databasePackageMap.put(DataBaseType.Logic, "com.panda.game.dao.entity.logic");
         databasePackageMap.put(DataBaseType.Login, "com.panda.game.dao.entity.login");
-
+        // 设置数据库版本号
         databaseVersionMap.put(DataBaseType.Logic, "0.0.1.0");
         databaseVersionMap.put(DataBaseType.Login, "0.0.1.0");
+
+        // 获取公共参数
+        projectPackage = MixUtil.getParent(BaseServer.class.getPackage());
+        modulePackage = getClass().getPackage().getName();
+        dir = System.getProperty("dir");
     }
 
     protected boolean initDatabase(List<DataBaseType> databaseList) {
@@ -99,6 +114,16 @@ public abstract class BaseServer {
         return true;
     }
 
+    protected boolean initRpc() {
+        NettyClientConfig config = new NettyClientConfig();
+        config.setEpoll(false);
+        config.setEventGroupNum(4);
+        config.setUsePool(true);
+        config.setTimeout(5000);
+
+        return RpcManager.getInstance().init(config);
+    }
+
     protected boolean initRedis() {
         try {
             String host = Configuration.getProperty("redis.host");
@@ -122,26 +147,27 @@ public abstract class BaseServer {
         return true;
     }
 
-    public abstract void start();
-
     protected boolean init(Callable<Boolean> callable, String name) {
         if (callable == null) {
             return false;
         }
 
+        log.info("{} 开始", name);
         long start = System.currentTimeMillis();
         Boolean result = null;
         try {
             result = callable.call();
         } catch (Exception e) {
             log.error("执行异常", e);
+            log.info("{} 异常", name);
             return false;
         }
         if (result == null || !result) {
+            log.info("{} 失败", name);
             return false;
         }
+        log.info("{} 结束, 耗时:{} ms", name, (System.currentTimeMillis() - start));
 
-        log.info("{}, 耗时:{} ms", name, (System.currentTimeMillis() - start));
         return true;
     }
 

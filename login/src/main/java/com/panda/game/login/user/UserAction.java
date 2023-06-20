@@ -12,10 +12,12 @@ import com.panda.game.core.cmd.annotation.Action;
 import com.panda.game.core.cmd.annotation.Command;
 import com.panda.game.core.jdbc.base.Option;
 import com.panda.game.core.nacos.NodeManager;
+import com.panda.game.core.rpc.RpcManager;
 import com.panda.game.dao.db.login.LoginDBManager;
 import com.panda.game.dao.entity.login.User;
 import com.panda.game.proto.CmdPb;
 import com.panda.game.proto.LoginPb;
+import com.panda.game.proto.LoginPb.*;
 import io.netty.channel.Channel;
 
 import java.util.Date;
@@ -76,11 +78,13 @@ public class UserAction {
             return ;
         }
 
-        String ip = instance.getIp();
-        int port = instance.getPort();
-
         // rpc请求连接gateway
+        GatewayLoginRq.Builder builder = GatewayLoginRq.newBuilder();
+        builder.setUserId(user.getUserId());
+        builder.setYx(user.getYx());
+        builder.setChannel(user.getChannelId());
 
+        GatewayLoginRs loginRs = RpcManager.getInstance().sendSync(instance.getIp(), instance.getPort(), CmdPb.Cmd.GatewayLoginRq_VALUE, builder.build(), GatewayLoginRs.parser());
 
 
 

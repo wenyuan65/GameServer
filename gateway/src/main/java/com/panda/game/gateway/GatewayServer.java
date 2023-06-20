@@ -1,15 +1,11 @@
-package com.panda.game.login;
+package com.panda.game.gateway;
 
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.config.Configuration;
-import com.panda.game.common.constants.DataBaseType;
-import com.panda.game.common.utils.MixUtil;
-import com.panda.game.common.utils.SnowFlake;
 import com.panda.game.core.BaseServer;
 import com.panda.game.core.cmd.CommandManager;
 import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
-import com.panda.game.core.netty.NettyClientConfig;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
 import com.panda.game.core.netty.handler.LogicHandler;
@@ -17,16 +13,18 @@ import com.panda.game.core.netty.initializer.TcpChannelInitializer;
 
 import java.util.Arrays;
 
-public class LoginServer extends BaseServer {
+public class GatewayServer extends BaseServer {
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         try {
-            LoginServer server = new LoginServer();
+            GatewayServer server = new GatewayServer();
             server.start();
         } catch (Throwable e) {
             log.error("服务器启动异常");
             System.err.println("服务器启动异常");
         }
+        log.info("服务器启动结束， 耗时：{}ms", (System.currentTimeMillis() - start));
     }
 
     @Override
@@ -38,17 +36,8 @@ public class LoginServer extends BaseServer {
         if (!init(() -> ServerThreadManager.getInstance().init(8, 8), "初始化线程组")) {
             return ;
         }
-        // 初始化id
-        Integer result = Configuration.getIntProperty("server.uniqueId", null);
-        if (result == null) {
-            return;
-        }
-        SnowFlake.init(result, null);
 
         // 数据
-        if (!init(() -> initDatabase(Arrays.asList(DataBaseType.Login)), "初始化命令组件")) {
-            return ;
-        }
         if (!init(() -> initRedis(), "初始化redis")) {
             return ;
         }
@@ -76,7 +65,7 @@ public class LoginServer extends BaseServer {
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("LoginTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
+            NettyServer nettyServer = new NettyServer("GatewayTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
             nettyServer.init();
             nettyServer.start();
         } catch (Exception e) {

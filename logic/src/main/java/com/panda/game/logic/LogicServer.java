@@ -26,6 +26,7 @@ import java.util.List;
 public class LogicServer extends BaseServer {
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         try {
             LogicServer server = new LogicServer();
             server.start();
@@ -33,13 +34,11 @@ public class LogicServer extends BaseServer {
             log.error("服务器启动异常");
             System.err.println("服务器启动异常");
         }
+        log.info("服务器启动结束， 耗时：{}ms", (System.currentTimeMillis() - start));
     }
 
     @Override
     public void start() {
-        // 获取项目的总路径
-        String projectPackage = MixUtil.getParent(LogicServer.class.getPackage());
-
         // 基础
         if (!init(() -> Configuration.init(Arrays.asList("node", "server")), "初始化配置文件")) {
             return ;
@@ -78,6 +77,9 @@ public class LogicServer extends BaseServer {
         }
 
         // 网络
+        if (!init(() -> initRpc(), "初始化RPC组件")) {
+            return ;
+        }
         if (!init(() -> initServer(), "初始化Netty服务器")) {
             return ;
         }

@@ -29,7 +29,7 @@ public class DefaultConnectionFactory implements ConnectionFactory {
 	@Override
 	public Connection createConnection(String ip, int port, int timeoutMs) throws Exception {
 		Channel channel = doCreateConnection(ip, port, timeoutMs);
-		return new DefaultConnection(channel);
+		return new DefaultConnection(channel, ip + ":" + port);
 	}
 	
 	private Channel doCreateConnection(String ip, int port, int timeoutMs) throws Exception {

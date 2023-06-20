@@ -28,6 +28,10 @@ public final class CmdPb {
      */
     Unkown(0),
     /**
+     * <pre>
+     * login
+     * </pre>
+     *
      * <code>LoginRq = 1;</code>
      */
     LoginRq(1),
@@ -44,21 +48,53 @@ public final class CmdPb {
      */
     CreateUserRs(4),
     /**
-     * <code>PlayerGetInfoRq = 1001;</code>
+     * <pre>
+     * gateway
+     * </pre>
+     *
+     * <code>GatewayLoginRq = 100;</code>
      */
-    PlayerGetInfoRq(1001),
+    GatewayLoginRq(100),
     /**
-     * <code>PlayerGetInfoRs = 1002;</code>
+     * <code>GatewayLoginRs = 101;</code>
      */
-    PlayerGetInfoRs(1002),
+    GatewayLoginRs(101),
     /**
-     * <code>PlayerSetNameRq = 1003;</code>
+     * <code>GatewayConnectRq = 102;</code>
      */
-    PlayerSetNameRq(1003),
+    GatewayConnectRq(102),
     /**
-     * <code>PlayerSetNameRs = 1004;</code>
+     * <code>GatewayConnectRs = 103;</code>
      */
-    PlayerSetNameRs(1004),
+    GatewayConnectRs(103),
+    /**
+     * <pre>
+     * logic
+     * </pre>
+     *
+     * <code>LogicLoginRq = 1001;</code>
+     */
+    LogicLoginRq(1001),
+    /**
+     * <code>LogicLoginRs = 1002;</code>
+     */
+    LogicLoginRs(1002),
+    /**
+     * <code>PlayerGetInfoRq = 1003;</code>
+     */
+    PlayerGetInfoRq(1003),
+    /**
+     * <code>PlayerGetInfoRs = 1004;</code>
+     */
+    PlayerGetInfoRs(1004),
+    /**
+     * <code>PlayerSetNameRq = 1005;</code>
+     */
+    PlayerSetNameRq(1005),
+    /**
+     * <code>PlayerSetNameRs = 1006;</code>
+     */
+    PlayerSetNameRs(1006),
     /**
      * <code>FriendGetInfoRq = 2001;</code>
      */
@@ -91,6 +127,10 @@ public final class CmdPb {
      */
     public static final int Unkown_VALUE = 0;
     /**
+     * <pre>
+     * login
+     * </pre>
+     *
      * <code>LoginRq = 1;</code>
      */
     public static final int LoginRq_VALUE = 1;
@@ -107,21 +147,53 @@ public final class CmdPb {
      */
     public static final int CreateUserRs_VALUE = 4;
     /**
-     * <code>PlayerGetInfoRq = 1001;</code>
+     * <pre>
+     * gateway
+     * </pre>
+     *
+     * <code>GatewayLoginRq = 100;</code>
      */
-    public static final int PlayerGetInfoRq_VALUE = 1001;
+    public static final int GatewayLoginRq_VALUE = 100;
     /**
-     * <code>PlayerGetInfoRs = 1002;</code>
+     * <code>GatewayLoginRs = 101;</code>
      */
-    public static final int PlayerGetInfoRs_VALUE = 1002;
+    public static final int GatewayLoginRs_VALUE = 101;
     /**
-     * <code>PlayerSetNameRq = 1003;</code>
+     * <code>GatewayConnectRq = 102;</code>
      */
-    public static final int PlayerSetNameRq_VALUE = 1003;
+    public static final int GatewayConnectRq_VALUE = 102;
     /**
-     * <code>PlayerSetNameRs = 1004;</code>
+     * <code>GatewayConnectRs = 103;</code>
      */
-    public static final int PlayerSetNameRs_VALUE = 1004;
+    public static final int GatewayConnectRs_VALUE = 103;
+    /**
+     * <pre>
+     * logic
+     * </pre>
+     *
+     * <code>LogicLoginRq = 1001;</code>
+     */
+    public static final int LogicLoginRq_VALUE = 1001;
+    /**
+     * <code>LogicLoginRs = 1002;</code>
+     */
+    public static final int LogicLoginRs_VALUE = 1002;
+    /**
+     * <code>PlayerGetInfoRq = 1003;</code>
+     */
+    public static final int PlayerGetInfoRq_VALUE = 1003;
+    /**
+     * <code>PlayerGetInfoRs = 1004;</code>
+     */
+    public static final int PlayerGetInfoRs_VALUE = 1004;
+    /**
+     * <code>PlayerSetNameRq = 1005;</code>
+     */
+    public static final int PlayerSetNameRq_VALUE = 1005;
+    /**
+     * <code>PlayerSetNameRs = 1006;</code>
+     */
+    public static final int PlayerSetNameRs_VALUE = 1006;
     /**
      * <code>FriendGetInfoRq = 2001;</code>
      */
@@ -177,10 +249,16 @@ public final class CmdPb {
         case 2: return LoginRs;
         case 3: return CreateUserRq;
         case 4: return CreateUserRs;
-        case 1001: return PlayerGetInfoRq;
-        case 1002: return PlayerGetInfoRs;
-        case 1003: return PlayerSetNameRq;
-        case 1004: return PlayerSetNameRs;
+        case 100: return GatewayLoginRq;
+        case 101: return GatewayLoginRs;
+        case 102: return GatewayConnectRq;
+        case 103: return GatewayConnectRs;
+        case 1001: return LogicLoginRq;
+        case 1002: return LogicLoginRs;
+        case 1003: return PlayerGetInfoRq;
+        case 1004: return PlayerGetInfoRs;
+        case 1005: return PlayerSetNameRq;
+        case 1006: return PlayerSetNameRs;
         case 2001: return FriendGetInfoRq;
         case 2002: return FriendGetInfoRs;
         case 2003: return FriendApplyRq;
@@ -282,6 +360,30 @@ public final class CmdPb {
     ServiceError(3),
     /**
      * <pre>
+     * rpc超时
+     * </pre>
+     *
+     * <code>RpcTimeOut = 4;</code>
+     */
+    RpcTimeOut(4),
+    /**
+     * <pre>
+     * rpc发送异常
+     * </pre>
+     *
+     * <code>RpcSendError = 5;</code>
+     */
+    RpcSendError(5),
+    /**
+     * <pre>
+     * rpc发送失败
+     * </pre>
+     *
+     * <code>RpcSendFailed = 6;</code>
+     */
+    RpcSendFailed(6),
+    /**
+     * <pre>
      * 用户已经存在
      * </pre>
      *
@@ -321,6 +423,30 @@ public final class CmdPb {
     public static final int ServiceError_VALUE = 3;
     /**
      * <pre>
+     * rpc超时
+     * </pre>
+     *
+     * <code>RpcTimeOut = 4;</code>
+     */
+    public static final int RpcTimeOut_VALUE = 4;
+    /**
+     * <pre>
+     * rpc发送异常
+     * </pre>
+     *
+     * <code>RpcSendError = 5;</code>
+     */
+    public static final int RpcSendError_VALUE = 5;
+    /**
+     * <pre>
+     * rpc发送失败
+     * </pre>
+     *
+     * <code>RpcSendFailed = 6;</code>
+     */
+    public static final int RpcSendFailed_VALUE = 6;
+    /**
+     * <pre>
      * 用户已经存在
      * </pre>
      *
@@ -357,6 +483,9 @@ public final class CmdPb {
         case 1: return Param;
         case 2: return NoEnough;
         case 3: return ServiceError;
+        case 4: return RpcTimeOut;
+        case 5: return RpcSendError;
+        case 6: return RpcSendFailed;
         case 101: return UserExist;
         default: return null;
       }
@@ -423,18 +552,22 @@ public final class CmdPb {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tcmd.proto\022\024com.panda.game.proto*\243\002\n\003Cm" +
+      "\n\tcmd.proto\022\024com.panda.game.proto*\235\003\n\003Cm" +
       "d\022\n\n\006Unkown\020\000\022\013\n\007LoginRq\020\001\022\013\n\007LoginRs\020\002\022" +
-      "\020\n\014CreateUserRq\020\003\022\020\n\014CreateUserRs\020\004\022\024\n\017P" +
-      "layerGetInfoRq\020\351\007\022\024\n\017PlayerGetInfoRs\020\352\007\022" +
-      "\024\n\017PlayerSetNameRq\020\353\007\022\024\n\017PlayerSetNameRs" +
-      "\020\354\007\022\024\n\017FriendGetInfoRq\020\321\017\022\024\n\017FriendGetIn" +
-      "foRs\020\322\017\022\022\n\rFriendApplyRq\020\323\017\022\022\n\rFriendApp" +
-      "lyRs\020\324\017\022\022\n\rClubGetInfoRq\020\271\027\022\022\n\rClubGetIn" +
-      "foRs\020\272\027*M\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param\020\001\022" +
-      "\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\r\n\tUserE" +
-      "xist\020eB\035\n\024com.panda.game.protoB\005CmdPbb\006p" +
-      "roto3"
+      "\020\n\014CreateUserRq\020\003\022\020\n\014CreateUserRs\020\004\022\022\n\016G" +
+      "atewayLoginRq\020d\022\022\n\016GatewayLoginRs\020e\022\024\n\020G" +
+      "atewayConnectRq\020f\022\024\n\020GatewayConnectRs\020g\022" +
+      "\021\n\014LogicLoginRq\020\351\007\022\021\n\014LogicLoginRs\020\352\007\022\024\n" +
+      "\017PlayerGetInfoRq\020\353\007\022\024\n\017PlayerGetInfoRs\020\354" +
+      "\007\022\024\n\017PlayerSetNameRq\020\355\007\022\024\n\017PlayerSetName" +
+      "Rs\020\356\007\022\024\n\017FriendGetInfoRq\020\321\017\022\024\n\017FriendGet" +
+      "InfoRs\020\322\017\022\022\n\rFriendApplyRq\020\323\017\022\022\n\rFriendA" +
+      "pplyRs\020\324\017\022\022\n\rClubGetInfoRq\020\271\027\022\022\n\rClubGet" +
+      "InfoRs\020\272\027*\202\001\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param" +
+      "\020\001\022\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\016\n\nRp" +
+      "cTimeOut\020\004\022\020\n\014RpcSendError\020\005\022\021\n\rRpcSendF" +
+      "ailed\020\006\022\r\n\tUserExist\020eB\035\n\024com.panda.game" +
+      ".protoB\005CmdPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

@@ -7,14 +7,14 @@ import com.panda.game.core.rpc.RpcResponse;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultInvokeFuture implements InvokeFuture {
+public class DefaultRpcFuture implements RpcFuture {
 	
 	private CountDownLatch countDownLatch = new CountDownLatch(1);
 	private RpcRequest request;
 	private RpcResponse response;
 	private Callback callback;
 	
-	public DefaultInvokeFuture(RpcRequest request, RpcResponse response, Callback callback) {
+	public DefaultRpcFuture(RpcRequest request, RpcResponse response, Callback callback) {
 		this.request = request;
 		this.response = response;
 		this.callback = callback;
@@ -41,7 +41,7 @@ public class DefaultInvokeFuture implements InvokeFuture {
 	}
 
 	@Override
-	public void putResponse(Object result) {
+	public void putResponse(byte[] result) {
 		if (response != null) {
 			response.setResult(result);
 		}
@@ -56,18 +56,23 @@ public class DefaultInvokeFuture implements InvokeFuture {
 	@Override
 	public void executeCallback() {
 		if (callback != null) {
-			callback.invoke(request, response);
+			callback.execute(request, response);
 		}
 	}
 
 	@Override
-	public void setCause(Throwable t) {
-		response.setCause(t);
+	public void setErrorCode(int errorCode) {
+		if (response != null) {
+			response.setErrorCode(errorCode);
+		}
 	}
 
 	@Override
-	public Throwable getCause() {
-		return response.getCause();
-	}
+	public int getErrorCode() {
+		if (response != null) {
+			return response.getErrorCode();
+		}
 
+		return 0;
+	}
 }

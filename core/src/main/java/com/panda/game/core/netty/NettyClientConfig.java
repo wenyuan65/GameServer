@@ -2,23 +2,14 @@ package com.panda.game.core.netty;
 
 public class NettyClientConfig {
 
-	private String name = "NettyClient";
-	
 	private boolean epoll = false;
 	
 	private boolean usePool = false;
 	
 	private int eventGroupNum = 8;
 	
-	private int msgProcessEventGroupNum = 8;
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	// rpc请求超时时间
+	private long timeout = 5000;
 
 	public boolean isEpoll() {
 		return epoll;
@@ -44,12 +35,11 @@ public class NettyClientConfig {
 		this.eventGroupNum = eventGroupNum;
 	}
 
-	public int getMsgProcessEventGroupNum() {
-		return msgProcessEventGroupNum;
+	public long getTimeout() {
+		return timeout;
 	}
 
-	public void setMsgProcessEventGroupNum(int msgProcessEventGroupNum) {
-		this.msgProcessEventGroupNum = msgProcessEventGroupNum;
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
 	}
-
 }

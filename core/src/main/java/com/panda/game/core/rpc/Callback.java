@@ -1,7 +1,8 @@
 package com.panda.game.core.rpc;
 
+@FunctionalInterface
 public interface Callback {
 
-	public void invoke(RpcRequest request, RpcResponse response);
+	void execute(RpcRequest request, RpcResponse response);
 	
 }

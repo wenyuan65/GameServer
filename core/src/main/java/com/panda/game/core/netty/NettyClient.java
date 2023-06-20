@@ -14,6 +14,9 @@ import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+
 public class NettyClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
@@ -46,28 +49,32 @@ public class NettyClient {
 	}
 	
 	public Channel connect(String host, int port, int timeoutMs) throws Exception {
+		return connect(new InetSocketAddress(host, port), timeoutMs);
+	}
+
+	public Channel connect(SocketAddress socketAddress, int timeoutMs) throws Exception {
 		timeoutMs = Math.max(timeoutMs, 1000);
 		bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, timeoutMs);
-		
-		ChannelFuture future = bootstrap.connect(host, port).sync();
-		
+
+		ChannelFuture future = bootstrap.connect(socketAddress).sync();
+
 		if (future.isSuccess()) {
-			logger.info("create connection success: {} ==> {}:{}", name, host, port);
+			logger.info("create connection success: {} ==> {}", name, socketAddress.toString());
 			return future.channel();
 		}
-		
-		String connectionMsg = name + " ==> " + host + ":" + port;
+
+		String connectionMsg = name + " ==> " + socketAddress;
 		if (!future.isDone()) {
 			String errMsg = String.format("create connection timeout: " + connectionMsg);
-            logger.warn(errMsg);
-            throw new Exception(errMsg);
-        }
-        if (future.isCancelled()) {
-            String errMsg = String.format("create connection cancelled: " + connectionMsg);
-            logger.warn(errMsg);
-            throw new Exception(errMsg);
-        }
-        
+			logger.warn(errMsg);
+			throw new Exception(errMsg);
+		}
+		if (future.isCancelled()) {
+			String errMsg = String.format("create connection cancelled: " + connectionMsg);
+			logger.warn(errMsg);
+			throw new Exception(errMsg);
+		}
+
 		String errMsg = String.format("create connection error: " + connectionMsg);
 		logger.warn(errMsg);
 		throw new Exception(errMsg, future.cause());

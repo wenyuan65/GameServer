@@ -134,6 +134,7 @@ public class CmdHandler {
         ctx.setParams(params);
         ctx.setPkg(pkg);
         ctx.setIndex(index);
+        ctx.setChannel(channel);
 
         // 解决RPC循环调用，例如A -> B -> A,
         // 1.将A调用B之后的逻辑，封装成一个异步任务，放在异步线程中执行，不在核心线程中阻塞；

@@ -1,6 +1,6 @@
 package com.panda.game.core.rpc.future;
 
-public interface InvokeCallback {
+public interface RpcCallback {
 
 	void run();
 	

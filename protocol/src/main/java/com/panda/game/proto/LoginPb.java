@@ -2034,23 +2034,29 @@ public final class LoginPb {
 
     /**
      * <pre>
-     * 用户id
+     * 登陆服务器的ip
      * </pre>
      *
-     * <code>int32 userId = 1;</code>
-     * @return The userId.
+     * <code>string ip = 1;</code>
+     * @return The ip.
      */
-    int getUserId();
-
+    java.lang.String getIp();
     /**
      * <pre>
-     * 角色id
+     * 登陆服务器的ip
      * </pre>
      *
-     * <code>int32 playerId = 2;</code>
-     * @return The playerId.
+     * <code>string ip = 1;</code>
+     * @return The bytes for ip.
      */
-    int getPlayerId();
+    com.google.protobuf.ByteString
+        getIpBytes();
+
+    /**
+     * <code>int32 port = 2;</code>
+     * @return The port.
+     */
+    int getPort();
   }
   /**
    * Protobuf type {@code com.panda.game.proto.LoginRs}
@@ -2065,6 +2071,7 @@ public final class LoginPb {
       super(builder);
     }
     private LoginRs() {
+      ip_ = "";
     }
 
     @java.lang.Override
@@ -2097,14 +2104,15 @@ public final class LoginPb {
             case 0:
               done = true;
               break;
-            case 8: {
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              userId_ = input.readInt32();
+              ip_ = s;
               break;
             }
             case 16: {
 
-              playerId_ = input.readInt32();
+              port_ = input.readInt32();
               break;
             }
             default: {
@@ -2139,34 +2147,61 @@ public final class LoginPb {
               com.panda.game.proto.LoginPb.LoginRs.class, com.panda.game.proto.LoginPb.LoginRs.Builder.class);
     }
 
-    public static final int USERID_FIELD_NUMBER = 1;
-    private int userId_;
+    public static final int IP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object ip_;
     /**
      * <pre>
-     * 用户id
+     * 登陆服务器的ip
      * </pre>
      *
-     * <code>int32 userId = 1;</code>
-     * @return The userId.
+     * <code>string ip = 1;</code>
+     * @return The ip.
      */
     @java.lang.Override
-    public int getUserId() {
-      return userId_;
+    public java.lang.String getIp() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ip_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 登陆服务器的ip
+     * </pre>
+     *
+     * <code>string ip = 1;</code>
+     * @return The bytes for ip.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIpBytes() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ip_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int PLAYERID_FIELD_NUMBER = 2;
-    private int playerId_;
+    public static final int PORT_FIELD_NUMBER = 2;
+    private int port_;
     /**
-     * <pre>
-     * 角色id
-     * </pre>
-     *
-     * <code>int32 playerId = 2;</code>
-     * @return The playerId.
+     * <code>int32 port = 2;</code>
+     * @return The port.
      */
     @java.lang.Override
-    public int getPlayerId() {
-      return playerId_;
+    public int getPort() {
+      return port_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -2183,11 +2218,11 @@ public final class LoginPb {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (userId_ != 0) {
-        output.writeInt32(1, userId_);
+      if (!getIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ip_);
       }
-      if (playerId_ != 0) {
-        output.writeInt32(2, playerId_);
+      if (port_ != 0) {
+        output.writeInt32(2, port_);
       }
       unknownFields.writeTo(output);
     }
@@ -2198,13 +2233,12 @@ public final class LoginPb {
       if (size != -1) return size;
 
       size = 0;
-      if (userId_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, userId_);
+      if (!getIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ip_);
       }
-      if (playerId_ != 0) {
+      if (port_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, playerId_);
+          .computeInt32Size(2, port_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2221,10 +2255,10 @@ public final class LoginPb {
       }
       com.panda.game.proto.LoginPb.LoginRs other = (com.panda.game.proto.LoginPb.LoginRs) obj;
 
-      if (getUserId()
-          != other.getUserId()) return false;
-      if (getPlayerId()
-          != other.getPlayerId()) return false;
+      if (!getIp()
+          .equals(other.getIp())) return false;
+      if (getPort()
+          != other.getPort()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2236,10 +2270,10 @@ public final class LoginPb {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + USERID_FIELD_NUMBER;
-      hash = (53 * hash) + getUserId();
-      hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
-      hash = (53 * hash) + getPlayerId();
+      hash = (37 * hash) + IP_FIELD_NUMBER;
+      hash = (53 * hash) + getIp().hashCode();
+      hash = (37 * hash) + PORT_FIELD_NUMBER;
+      hash = (53 * hash) + getPort();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2373,9 +2407,9 @@ public final class LoginPb {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        userId_ = 0;
+        ip_ = "";
 
-        playerId_ = 0;
+        port_ = 0;
 
         return this;
       }
@@ -2403,8 +2437,8 @@ public final class LoginPb {
       @java.lang.Override
       public com.panda.game.proto.LoginPb.LoginRs buildPartial() {
         com.panda.game.proto.LoginPb.LoginRs result = new com.panda.game.proto.LoginPb.LoginRs(this);
-        result.userId_ = userId_;
-        result.playerId_ = playerId_;
+        result.ip_ = ip_;
+        result.port_ = port_;
         onBuilt();
         return result;
       }
@@ -2453,11 +2487,12 @@ public final class LoginPb {
 
       public Builder mergeFrom(com.panda.game.proto.LoginPb.LoginRs other) {
         if (other == com.panda.game.proto.LoginPb.LoginRs.getDefaultInstance()) return this;
-        if (other.getUserId() != 0) {
-          setUserId(other.getUserId());
+        if (!other.getIp().isEmpty()) {
+          ip_ = other.ip_;
+          onChanged();
         }
-        if (other.getPlayerId() != 0) {
-          setPlayerId(other.getPlayerId());
+        if (other.getPort() != 0) {
+          setPort(other.getPort());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2488,88 +2523,129 @@ public final class LoginPb {
         return this;
       }
 
-      private int userId_ ;
+      private java.lang.Object ip_ = "";
       /**
        * <pre>
-       * 用户id
+       * 登陆服务器的ip
        * </pre>
        *
-       * <code>int32 userId = 1;</code>
-       * @return The userId.
+       * <code>string ip = 1;</code>
+       * @return The ip.
        */
-      @java.lang.Override
-      public int getUserId() {
-        return userId_;
+      public java.lang.String getIp() {
+        java.lang.Object ref = ip_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ip_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
        * <pre>
-       * 用户id
+       * 登陆服务器的ip
        * </pre>
        *
-       * <code>int32 userId = 1;</code>
-       * @param value The userId to set.
+       * <code>string ip = 1;</code>
+       * @return The bytes for ip.
+       */
+      public com.google.protobuf.ByteString
+          getIpBytes() {
+        java.lang.Object ref = ip_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ip_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 登陆服务器的ip
+       * </pre>
+       *
+       * <code>string ip = 1;</code>
+       * @param value The ip to set.
        * @return This builder for chaining.
        */
-      public Builder setUserId(int value) {
-        
-        userId_ = value;
+      public Builder setIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ip_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * 用户id
+       * 登陆服务器的ip
        * </pre>
        *
-       * <code>int32 userId = 1;</code>
+       * <code>string ip = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearUserId() {
+      public Builder clearIp() {
         
-        userId_ = 0;
+        ip_ = getDefaultInstance().getIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 登陆服务器的ip
+       * </pre>
+       *
+       * <code>string ip = 1;</code>
+       * @param value The bytes for ip to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ip_ = value;
         onChanged();
         return this;
       }
 
-      private int playerId_ ;
+      private int port_ ;
       /**
-       * <pre>
-       * 角色id
-       * </pre>
-       *
-       * <code>int32 playerId = 2;</code>
-       * @return The playerId.
+       * <code>int32 port = 2;</code>
+       * @return The port.
        */
       @java.lang.Override
-      public int getPlayerId() {
-        return playerId_;
+      public int getPort() {
+        return port_;
       }
       /**
-       * <pre>
-       * 角色id
-       * </pre>
-       *
-       * <code>int32 playerId = 2;</code>
-       * @param value The playerId to set.
+       * <code>int32 port = 2;</code>
+       * @param value The port to set.
        * @return This builder for chaining.
        */
-      public Builder setPlayerId(int value) {
+      public Builder setPort(int value) {
         
-        playerId_ = value;
+        port_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * 角色id
-       * </pre>
-       *
-       * <code>int32 playerId = 2;</code>
+       * <code>int32 port = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearPlayerId() {
+      public Builder clearPort() {
         
-        playerId_ = 0;
+        port_ = 0;
         onChanged();
         return this;
       }
@@ -2626,6 +2702,3741 @@ public final class LoginPb {
 
   }
 
+  public interface GatewayLoginRqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.GatewayLoginRq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    long getUserId();
+
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The yx.
+     */
+    java.lang.String getYx();
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The bytes for yx.
+     */
+    com.google.protobuf.ByteString
+        getYxBytes();
+
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The channel.
+     */
+    java.lang.String getChannel();
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The bytes for channel.
+     */
+    com.google.protobuf.ByteString
+        getChannelBytes();
+  }
+  /**
+   * <pre>
+   * 登陆到gateway
+   * </pre>
+   *
+   * Protobuf type {@code com.panda.game.proto.GatewayLoginRq}
+   */
+  public static final class GatewayLoginRq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.GatewayLoginRq)
+      GatewayLoginRqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GatewayLoginRq.newBuilder() to construct.
+    private GatewayLoginRq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GatewayLoginRq() {
+      yx_ = "";
+      channel_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GatewayLoginRq();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GatewayLoginRq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              userId_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              yx_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              channel_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.GatewayLoginRq.class, com.panda.game.proto.LoginPb.GatewayLoginRq.Builder.class);
+    }
+
+    public static final int USERID_FIELD_NUMBER = 1;
+    private long userId_;
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public long getUserId() {
+      return userId_;
+    }
+
+    public static final int YX_FIELD_NUMBER = 2;
+    private volatile java.lang.Object yx_;
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The yx.
+     */
+    @java.lang.Override
+    public java.lang.String getYx() {
+      java.lang.Object ref = yx_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        yx_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The bytes for yx.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getYxBytes() {
+      java.lang.Object ref = yx_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        yx_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CHANNEL_FIELD_NUMBER = 3;
+    private volatile java.lang.Object channel_;
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The channel.
+     */
+    @java.lang.Override
+    public java.lang.String getChannel() {
+      java.lang.Object ref = channel_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        channel_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The bytes for channel.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getChannelBytes() {
+      java.lang.Object ref = channel_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        channel_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (userId_ != 0L) {
+        output.writeInt64(1, userId_);
+      }
+      if (!getYxBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, yx_);
+      }
+      if (!getChannelBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channel_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (userId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, userId_);
+      }
+      if (!getYxBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, yx_);
+      }
+      if (!getChannelBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channel_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.GatewayLoginRq)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.GatewayLoginRq other = (com.panda.game.proto.LoginPb.GatewayLoginRq) obj;
+
+      if (getUserId()
+          != other.getUserId()) return false;
+      if (!getYx()
+          .equals(other.getYx())) return false;
+      if (!getChannel()
+          .equals(other.getChannel())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + USERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUserId());
+      hash = (37 * hash) + YX_FIELD_NUMBER;
+      hash = (53 * hash) + getYx().hashCode();
+      hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
+      hash = (53 * hash) + getChannel().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.GatewayLoginRq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 登陆到gateway
+     * </pre>
+     *
+     * Protobuf type {@code com.panda.game.proto.GatewayLoginRq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.GatewayLoginRq)
+        com.panda.game.proto.LoginPb.GatewayLoginRqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.GatewayLoginRq.class, com.panda.game.proto.LoginPb.GatewayLoginRq.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.GatewayLoginRq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        userId_ = 0L;
+
+        yx_ = "";
+
+        channel_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRq_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRq getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.GatewayLoginRq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRq build() {
+        com.panda.game.proto.LoginPb.GatewayLoginRq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRq buildPartial() {
+        com.panda.game.proto.LoginPb.GatewayLoginRq result = new com.panda.game.proto.LoginPb.GatewayLoginRq(this);
+        result.userId_ = userId_;
+        result.yx_ = yx_;
+        result.channel_ = channel_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.GatewayLoginRq) {
+          return mergeFrom((com.panda.game.proto.LoginPb.GatewayLoginRq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.GatewayLoginRq other) {
+        if (other == com.panda.game.proto.LoginPb.GatewayLoginRq.getDefaultInstance()) return this;
+        if (other.getUserId() != 0L) {
+          setUserId(other.getUserId());
+        }
+        if (!other.getYx().isEmpty()) {
+          yx_ = other.yx_;
+          onChanged();
+        }
+        if (!other.getChannel().isEmpty()) {
+          channel_ = other.channel_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.GatewayLoginRq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.GatewayLoginRq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long userId_ ;
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public long getUserId() {
+        return userId_;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(long value) {
+        
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        
+        userId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object yx_ = "";
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return The yx.
+       */
+      public java.lang.String getYx() {
+        java.lang.Object ref = yx_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          yx_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return The bytes for yx.
+       */
+      public com.google.protobuf.ByteString
+          getYxBytes() {
+        java.lang.Object ref = yx_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          yx_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @param value The yx to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYx(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        yx_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearYx() {
+        
+        yx_ = getDefaultInstance().getYx();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @param value The bytes for yx to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        yx_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object channel_ = "";
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return The channel.
+       */
+      public java.lang.String getChannel() {
+        java.lang.Object ref = channel_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          channel_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return The bytes for channel.
+       */
+      public com.google.protobuf.ByteString
+          getChannelBytes() {
+        java.lang.Object ref = channel_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          channel_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @param value The channel to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChannel(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChannel() {
+        
+        channel_ = getDefaultInstance().getChannel();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @param value The bytes for channel to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChannelBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.GatewayLoginRq)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.GatewayLoginRq)
+    private static final com.panda.game.proto.LoginPb.GatewayLoginRq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.GatewayLoginRq();
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayLoginRq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GatewayLoginRq>
+        PARSER = new com.google.protobuf.AbstractParser<GatewayLoginRq>() {
+      @java.lang.Override
+      public GatewayLoginRq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GatewayLoginRq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GatewayLoginRq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GatewayLoginRq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.GatewayLoginRq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GatewayLoginRsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.GatewayLoginRs)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code com.panda.game.proto.GatewayLoginRs}
+   */
+  public static final class GatewayLoginRs extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.GatewayLoginRs)
+      GatewayLoginRsOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GatewayLoginRs.newBuilder() to construct.
+    private GatewayLoginRs(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GatewayLoginRs() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GatewayLoginRs();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GatewayLoginRs(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRs_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRs_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.GatewayLoginRs.class, com.panda.game.proto.LoginPb.GatewayLoginRs.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.GatewayLoginRs)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.GatewayLoginRs other = (com.panda.game.proto.LoginPb.GatewayLoginRs) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.GatewayLoginRs prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.panda.game.proto.GatewayLoginRs}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.GatewayLoginRs)
+        com.panda.game.proto.LoginPb.GatewayLoginRsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRs_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRs_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.GatewayLoginRs.class, com.panda.game.proto.LoginPb.GatewayLoginRs.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.GatewayLoginRs.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayLoginRs_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRs getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.GatewayLoginRs.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRs build() {
+        com.panda.game.proto.LoginPb.GatewayLoginRs result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayLoginRs buildPartial() {
+        com.panda.game.proto.LoginPb.GatewayLoginRs result = new com.panda.game.proto.LoginPb.GatewayLoginRs(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.GatewayLoginRs) {
+          return mergeFrom((com.panda.game.proto.LoginPb.GatewayLoginRs)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.GatewayLoginRs other) {
+        if (other == com.panda.game.proto.LoginPb.GatewayLoginRs.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.GatewayLoginRs parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.GatewayLoginRs) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.GatewayLoginRs)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.GatewayLoginRs)
+    private static final com.panda.game.proto.LoginPb.GatewayLoginRs DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.GatewayLoginRs();
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayLoginRs getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GatewayLoginRs>
+        PARSER = new com.google.protobuf.AbstractParser<GatewayLoginRs>() {
+      @java.lang.Override
+      public GatewayLoginRs parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GatewayLoginRs(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GatewayLoginRs> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GatewayLoginRs> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.GatewayLoginRs getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface LogicLoginRqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.LogicLoginRq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    long getUserId();
+
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The yx.
+     */
+    java.lang.String getYx();
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The bytes for yx.
+     */
+    com.google.protobuf.ByteString
+        getYxBytes();
+
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The channel.
+     */
+    java.lang.String getChannel();
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The bytes for channel.
+     */
+    com.google.protobuf.ByteString
+        getChannelBytes();
+
+    /**
+     * <pre>
+     * 登陆ip
+     * </pre>
+     *
+     * <code>string ip = 4;</code>
+     * @return The ip.
+     */
+    java.lang.String getIp();
+    /**
+     * <pre>
+     * 登陆ip
+     * </pre>
+     *
+     * <code>string ip = 4;</code>
+     * @return The bytes for ip.
+     */
+    com.google.protobuf.ByteString
+        getIpBytes();
+  }
+  /**
+   * <pre>
+   * 登陆到gateway
+   * </pre>
+   *
+   * Protobuf type {@code com.panda.game.proto.LogicLoginRq}
+   */
+  public static final class LogicLoginRq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.LogicLoginRq)
+      LogicLoginRqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use LogicLoginRq.newBuilder() to construct.
+    private LogicLoginRq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private LogicLoginRq() {
+      yx_ = "";
+      channel_ = "";
+      ip_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new LogicLoginRq();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private LogicLoginRq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              userId_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              yx_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              channel_ = s;
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              ip_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.LogicLoginRq.class, com.panda.game.proto.LoginPb.LogicLoginRq.Builder.class);
+    }
+
+    public static final int USERID_FIELD_NUMBER = 1;
+    private long userId_;
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public long getUserId() {
+      return userId_;
+    }
+
+    public static final int YX_FIELD_NUMBER = 2;
+    private volatile java.lang.Object yx_;
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The yx.
+     */
+    @java.lang.Override
+    public java.lang.String getYx() {
+      java.lang.Object ref = yx_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        yx_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * yx
+     * </pre>
+     *
+     * <code>string yx = 2;</code>
+     * @return The bytes for yx.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getYxBytes() {
+      java.lang.Object ref = yx_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        yx_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CHANNEL_FIELD_NUMBER = 3;
+    private volatile java.lang.Object channel_;
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The channel.
+     */
+    @java.lang.Override
+    public java.lang.String getChannel() {
+      java.lang.Object ref = channel_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        channel_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 渠道
+     * </pre>
+     *
+     * <code>string channel = 3;</code>
+     * @return The bytes for channel.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getChannelBytes() {
+      java.lang.Object ref = channel_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        channel_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int IP_FIELD_NUMBER = 4;
+    private volatile java.lang.Object ip_;
+    /**
+     * <pre>
+     * 登陆ip
+     * </pre>
+     *
+     * <code>string ip = 4;</code>
+     * @return The ip.
+     */
+    @java.lang.Override
+    public java.lang.String getIp() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        ip_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 登陆ip
+     * </pre>
+     *
+     * <code>string ip = 4;</code>
+     * @return The bytes for ip.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getIpBytes() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ip_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (userId_ != 0L) {
+        output.writeInt64(1, userId_);
+      }
+      if (!getYxBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, yx_);
+      }
+      if (!getChannelBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channel_);
+      }
+      if (!getIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, ip_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (userId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, userId_);
+      }
+      if (!getYxBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, yx_);
+      }
+      if (!getChannelBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channel_);
+      }
+      if (!getIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, ip_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.LogicLoginRq)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.LogicLoginRq other = (com.panda.game.proto.LoginPb.LogicLoginRq) obj;
+
+      if (getUserId()
+          != other.getUserId()) return false;
+      if (!getYx()
+          .equals(other.getYx())) return false;
+      if (!getChannel()
+          .equals(other.getChannel())) return false;
+      if (!getIp()
+          .equals(other.getIp())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + USERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUserId());
+      hash = (37 * hash) + YX_FIELD_NUMBER;
+      hash = (53 * hash) + getYx().hashCode();
+      hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
+      hash = (53 * hash) + getChannel().hashCode();
+      hash = (37 * hash) + IP_FIELD_NUMBER;
+      hash = (53 * hash) + getIp().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.LogicLoginRq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 登陆到gateway
+     * </pre>
+     *
+     * Protobuf type {@code com.panda.game.proto.LogicLoginRq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.LogicLoginRq)
+        com.panda.game.proto.LoginPb.LogicLoginRqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.LogicLoginRq.class, com.panda.game.proto.LoginPb.LogicLoginRq.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.LogicLoginRq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        userId_ = 0L;
+
+        yx_ = "";
+
+        channel_ = "";
+
+        ip_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRq_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRq getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.LogicLoginRq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRq build() {
+        com.panda.game.proto.LoginPb.LogicLoginRq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRq buildPartial() {
+        com.panda.game.proto.LoginPb.LogicLoginRq result = new com.panda.game.proto.LoginPb.LogicLoginRq(this);
+        result.userId_ = userId_;
+        result.yx_ = yx_;
+        result.channel_ = channel_;
+        result.ip_ = ip_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.LogicLoginRq) {
+          return mergeFrom((com.panda.game.proto.LoginPb.LogicLoginRq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.LogicLoginRq other) {
+        if (other == com.panda.game.proto.LoginPb.LogicLoginRq.getDefaultInstance()) return this;
+        if (other.getUserId() != 0L) {
+          setUserId(other.getUserId());
+        }
+        if (!other.getYx().isEmpty()) {
+          yx_ = other.yx_;
+          onChanged();
+        }
+        if (!other.getChannel().isEmpty()) {
+          channel_ = other.channel_;
+          onChanged();
+        }
+        if (!other.getIp().isEmpty()) {
+          ip_ = other.ip_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.LogicLoginRq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.LogicLoginRq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long userId_ ;
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public long getUserId() {
+        return userId_;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(long value) {
+        
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        
+        userId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object yx_ = "";
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return The yx.
+       */
+      public java.lang.String getYx() {
+        java.lang.Object ref = yx_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          yx_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return The bytes for yx.
+       */
+      public com.google.protobuf.ByteString
+          getYxBytes() {
+        java.lang.Object ref = yx_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          yx_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @param value The yx to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYx(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        yx_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearYx() {
+        
+        yx_ = getDefaultInstance().getYx();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * yx
+       * </pre>
+       *
+       * <code>string yx = 2;</code>
+       * @param value The bytes for yx to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        yx_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object channel_ = "";
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return The channel.
+       */
+      public java.lang.String getChannel() {
+        java.lang.Object ref = channel_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          channel_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return The bytes for channel.
+       */
+      public com.google.protobuf.ByteString
+          getChannelBytes() {
+        java.lang.Object ref = channel_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          channel_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @param value The channel to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChannel(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearChannel() {
+        
+        channel_ = getDefaultInstance().getChannel();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 渠道
+       * </pre>
+       *
+       * <code>string channel = 3;</code>
+       * @param value The bytes for channel to set.
+       * @return This builder for chaining.
+       */
+      public Builder setChannelBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        channel_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object ip_ = "";
+      /**
+       * <pre>
+       * 登陆ip
+       * </pre>
+       *
+       * <code>string ip = 4;</code>
+       * @return The ip.
+       */
+      public java.lang.String getIp() {
+        java.lang.Object ref = ip_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          ip_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 登陆ip
+       * </pre>
+       *
+       * <code>string ip = 4;</code>
+       * @return The bytes for ip.
+       */
+      public com.google.protobuf.ByteString
+          getIpBytes() {
+        java.lang.Object ref = ip_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ip_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 登陆ip
+       * </pre>
+       *
+       * <code>string ip = 4;</code>
+       * @param value The ip to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        ip_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 登陆ip
+       * </pre>
+       *
+       * <code>string ip = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIp() {
+        
+        ip_ = getDefaultInstance().getIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 登陆ip
+       * </pre>
+       *
+       * <code>string ip = 4;</code>
+       * @param value The bytes for ip to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        ip_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.LogicLoginRq)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.LogicLoginRq)
+    private static final com.panda.game.proto.LoginPb.LogicLoginRq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.LogicLoginRq();
+    }
+
+    public static com.panda.game.proto.LoginPb.LogicLoginRq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<LogicLoginRq>
+        PARSER = new com.google.protobuf.AbstractParser<LogicLoginRq>() {
+      @java.lang.Override
+      public LogicLoginRq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new LogicLoginRq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<LogicLoginRq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<LogicLoginRq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.LogicLoginRq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface LogicLoginRsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.LogicLoginRs)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code com.panda.game.proto.LogicLoginRs}
+   */
+  public static final class LogicLoginRs extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.LogicLoginRs)
+      LogicLoginRsOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use LogicLoginRs.newBuilder() to construct.
+    private LogicLoginRs(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private LogicLoginRs() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new LogicLoginRs();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private LogicLoginRs(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRs_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRs_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.LogicLoginRs.class, com.panda.game.proto.LoginPb.LogicLoginRs.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.LogicLoginRs)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.LogicLoginRs other = (com.panda.game.proto.LoginPb.LogicLoginRs) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.LogicLoginRs parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.LogicLoginRs prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.panda.game.proto.LogicLoginRs}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.LogicLoginRs)
+        com.panda.game.proto.LoginPb.LogicLoginRsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRs_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRs_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.LogicLoginRs.class, com.panda.game.proto.LoginPb.LogicLoginRs.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.LogicLoginRs.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_LogicLoginRs_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRs getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.LogicLoginRs.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRs build() {
+        com.panda.game.proto.LoginPb.LogicLoginRs result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.LogicLoginRs buildPartial() {
+        com.panda.game.proto.LoginPb.LogicLoginRs result = new com.panda.game.proto.LoginPb.LogicLoginRs(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.LogicLoginRs) {
+          return mergeFrom((com.panda.game.proto.LoginPb.LogicLoginRs)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.LogicLoginRs other) {
+        if (other == com.panda.game.proto.LoginPb.LogicLoginRs.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.LogicLoginRs parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.LogicLoginRs) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.LogicLoginRs)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.LogicLoginRs)
+    private static final com.panda.game.proto.LoginPb.LogicLoginRs DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.LogicLoginRs();
+    }
+
+    public static com.panda.game.proto.LoginPb.LogicLoginRs getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<LogicLoginRs>
+        PARSER = new com.google.protobuf.AbstractParser<LogicLoginRs>() {
+      @java.lang.Override
+      public LogicLoginRs parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new LogicLoginRs(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<LogicLoginRs> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<LogicLoginRs> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.LogicLoginRs getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GatewayConnectRqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.GatewayConnectRq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    long getUserId();
+  }
+  /**
+   * <pre>
+   * 连接到gateway
+   * </pre>
+   *
+   * Protobuf type {@code com.panda.game.proto.GatewayConnectRq}
+   */
+  public static final class GatewayConnectRq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.GatewayConnectRq)
+      GatewayConnectRqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GatewayConnectRq.newBuilder() to construct.
+    private GatewayConnectRq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GatewayConnectRq() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GatewayConnectRq();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GatewayConnectRq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              userId_ = input.readInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.GatewayConnectRq.class, com.panda.game.proto.LoginPb.GatewayConnectRq.Builder.class);
+    }
+
+    public static final int USERID_FIELD_NUMBER = 1;
+    private long userId_;
+    /**
+     * <pre>
+     * userId
+     * </pre>
+     *
+     * <code>int64 userId = 1;</code>
+     * @return The userId.
+     */
+    @java.lang.Override
+    public long getUserId() {
+      return userId_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (userId_ != 0L) {
+        output.writeInt64(1, userId_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (userId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, userId_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.GatewayConnectRq)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.GatewayConnectRq other = (com.panda.game.proto.LoginPb.GatewayConnectRq) obj;
+
+      if (getUserId()
+          != other.getUserId()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + USERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUserId());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.GatewayConnectRq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 连接到gateway
+     * </pre>
+     *
+     * Protobuf type {@code com.panda.game.proto.GatewayConnectRq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.GatewayConnectRq)
+        com.panda.game.proto.LoginPb.GatewayConnectRqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.GatewayConnectRq.class, com.panda.game.proto.LoginPb.GatewayConnectRq.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.GatewayConnectRq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        userId_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRq_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRq getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.GatewayConnectRq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRq build() {
+        com.panda.game.proto.LoginPb.GatewayConnectRq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRq buildPartial() {
+        com.panda.game.proto.LoginPb.GatewayConnectRq result = new com.panda.game.proto.LoginPb.GatewayConnectRq(this);
+        result.userId_ = userId_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.GatewayConnectRq) {
+          return mergeFrom((com.panda.game.proto.LoginPb.GatewayConnectRq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.GatewayConnectRq other) {
+        if (other == com.panda.game.proto.LoginPb.GatewayConnectRq.getDefaultInstance()) return this;
+        if (other.getUserId() != 0L) {
+          setUserId(other.getUserId());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.GatewayConnectRq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.GatewayConnectRq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long userId_ ;
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return The userId.
+       */
+      @java.lang.Override
+      public long getUserId() {
+        return userId_;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(long value) {
+        
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * userId
+       * </pre>
+       *
+       * <code>int64 userId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUserId() {
+        
+        userId_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.GatewayConnectRq)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.GatewayConnectRq)
+    private static final com.panda.game.proto.LoginPb.GatewayConnectRq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.GatewayConnectRq();
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayConnectRq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GatewayConnectRq>
+        PARSER = new com.google.protobuf.AbstractParser<GatewayConnectRq>() {
+      @java.lang.Override
+      public GatewayConnectRq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GatewayConnectRq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GatewayConnectRq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GatewayConnectRq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.GatewayConnectRq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GatewayConnectRsOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.panda.game.proto.GatewayConnectRs)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code com.panda.game.proto.GatewayConnectRs}
+   */
+  public static final class GatewayConnectRs extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.panda.game.proto.GatewayConnectRs)
+      GatewayConnectRsOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GatewayConnectRs.newBuilder() to construct.
+    private GatewayConnectRs(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GatewayConnectRs() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GatewayConnectRs();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GatewayConnectRs(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRs_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRs_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.panda.game.proto.LoginPb.GatewayConnectRs.class, com.panda.game.proto.LoginPb.GatewayConnectRs.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.panda.game.proto.LoginPb.GatewayConnectRs)) {
+        return super.equals(obj);
+      }
+      com.panda.game.proto.LoginPb.GatewayConnectRs other = (com.panda.game.proto.LoginPb.GatewayConnectRs) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.panda.game.proto.LoginPb.GatewayConnectRs prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.panda.game.proto.GatewayConnectRs}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.panda.game.proto.GatewayConnectRs)
+        com.panda.game.proto.LoginPb.GatewayConnectRsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRs_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRs_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.panda.game.proto.LoginPb.GatewayConnectRs.class, com.panda.game.proto.LoginPb.GatewayConnectRs.Builder.class);
+      }
+
+      // Construct using com.panda.game.proto.LoginPb.GatewayConnectRs.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.panda.game.proto.LoginPb.internal_static_com_panda_game_proto_GatewayConnectRs_descriptor;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRs getDefaultInstanceForType() {
+        return com.panda.game.proto.LoginPb.GatewayConnectRs.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRs build() {
+        com.panda.game.proto.LoginPb.GatewayConnectRs result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.panda.game.proto.LoginPb.GatewayConnectRs buildPartial() {
+        com.panda.game.proto.LoginPb.GatewayConnectRs result = new com.panda.game.proto.LoginPb.GatewayConnectRs(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.panda.game.proto.LoginPb.GatewayConnectRs) {
+          return mergeFrom((com.panda.game.proto.LoginPb.GatewayConnectRs)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.panda.game.proto.LoginPb.GatewayConnectRs other) {
+        if (other == com.panda.game.proto.LoginPb.GatewayConnectRs.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.panda.game.proto.LoginPb.GatewayConnectRs parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.panda.game.proto.LoginPb.GatewayConnectRs) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.panda.game.proto.GatewayConnectRs)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.panda.game.proto.GatewayConnectRs)
+    private static final com.panda.game.proto.LoginPb.GatewayConnectRs DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.panda.game.proto.LoginPb.GatewayConnectRs();
+    }
+
+    public static com.panda.game.proto.LoginPb.GatewayConnectRs getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GatewayConnectRs>
+        PARSER = new com.google.protobuf.AbstractParser<GatewayConnectRs>() {
+      @java.lang.Override
+      public GatewayConnectRs parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GatewayConnectRs(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GatewayConnectRs> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GatewayConnectRs> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.panda.game.proto.LoginPb.GatewayConnectRs getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_panda_game_proto_CreateUserRq_descriptor;
   private static final 
@@ -2646,6 +6457,36 @@ public final class LoginPb {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_panda_game_proto_LoginRs_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_GatewayLoginRq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_GatewayLoginRq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_GatewayLoginRs_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_GatewayLoginRs_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_LogicLoginRq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_LogicLoginRq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_LogicLoginRs_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_LogicLoginRs_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_GatewayConnectRq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_GatewayConnectRq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_panda_game_proto_GatewayConnectRs_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_panda_game_proto_GatewayConnectRs_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2658,9 +6499,15 @@ public final class LoginPb {
       "\n\013login.proto\022\024com.panda.game.proto\"2\n\014C" +
       "reateUserRq\022\020\n\010userName\030\001 \001(\t\022\020\n\010passwor" +
       "d\030\002 \001(\t\"\016\n\014CreateUserRs\"-\n\007LoginRq\022\020\n\010us" +
-      "erName\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"+\n\007LoginR" +
-      "s\022\016\n\006userId\030\001 \001(\005\022\020\n\010playerId\030\002 \001(\005B\037\n\024c" +
-      "om.panda.game.protoB\007LoginPbb\006proto3"
+      "erName\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"#\n\007LoginR" +
+      "s\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\"=\n\016GatewayLo" +
+      "ginRq\022\016\n\006userId\030\001 \001(\003\022\n\n\002yx\030\002 \001(\t\022\017\n\007cha" +
+      "nnel\030\003 \001(\t\"\020\n\016GatewayLoginRs\"G\n\014LogicLog" +
+      "inRq\022\016\n\006userId\030\001 \001(\003\022\n\n\002yx\030\002 \001(\t\022\017\n\007chan" +
+      "nel\030\003 \001(\t\022\n\n\002ip\030\004 \001(\t\"\016\n\014LogicLoginRs\"\"\n" +
+      "\020GatewayConnectRq\022\016\n\006userId\030\001 \001(\003\"\022\n\020Gat" +
+      "ewayConnectRsB\037\n\024com.panda.game.protoB\007L" +
+      "oginPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2689,7 +6536,43 @@ public final class LoginPb {
     internal_static_com_panda_game_proto_LoginRs_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_LoginRs_descriptor,
-        new java.lang.String[] { "UserId", "PlayerId", });
+        new java.lang.String[] { "Ip", "Port", });
+    internal_static_com_panda_game_proto_GatewayLoginRq_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_com_panda_game_proto_GatewayLoginRq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_GatewayLoginRq_descriptor,
+        new java.lang.String[] { "UserId", "Yx", "Channel", });
+    internal_static_com_panda_game_proto_GatewayLoginRs_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_com_panda_game_proto_GatewayLoginRs_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_GatewayLoginRs_descriptor,
+        new java.lang.String[] { });
+    internal_static_com_panda_game_proto_LogicLoginRq_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_com_panda_game_proto_LogicLoginRq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_LogicLoginRq_descriptor,
+        new java.lang.String[] { "UserId", "Yx", "Channel", "Ip", });
+    internal_static_com_panda_game_proto_LogicLoginRs_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_com_panda_game_proto_LogicLoginRs_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_LogicLoginRs_descriptor,
+        new java.lang.String[] { });
+    internal_static_com_panda_game_proto_GatewayConnectRq_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_com_panda_game_proto_GatewayConnectRq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_GatewayConnectRq_descriptor,
+        new java.lang.String[] { "UserId", });
+    internal_static_com_panda_game_proto_GatewayConnectRs_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_com_panda_game_proto_GatewayConnectRs_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_panda_game_proto_GatewayConnectRs_descriptor,
+        new java.lang.String[] { });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

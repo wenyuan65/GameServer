@@ -1,13 +1,13 @@
 package com.panda.game.core.rpc.connection;
 
-import com.alibaba.fastjson.JSON;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.core.rpc.Callback;
 import com.panda.game.core.rpc.RpcRequest;
 import com.panda.game.core.rpc.RpcResponse;
-import com.panda.game.core.rpc.future.DefaultInvokeFuture;
-import com.panda.game.core.rpc.future.InvokeFuture;
+import com.panda.game.core.rpc.future.DefaultRpcFuture;
+import com.panda.game.core.rpc.future.RpcFuture;
+import com.panda.game.proto.CmdPb;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,41 +15,39 @@ public abstract class AbstractConnection implements Connection {
 
 	protected static final Logger log = LoggerFactory.getLogger(Connection.class);
 	
-	private ConcurrentHashMap<Integer, InvokeFuture> invokeFutureMap = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<Integer, RpcFuture> invokeFutureMap = new ConcurrentHashMap<>();
 	
-	protected InvokeFuture createInvokeFuture(RpcRequest request, RpcResponse response, Callback callback) {
-		return new DefaultInvokeFuture(request, response, callback);
+	protected RpcFuture createInvokeFuture(RpcRequest request, RpcResponse response, Callback callback) {
+		return new DefaultRpcFuture(request, response, callback);
 	}
 	
 	@Override
 	public void handleResponse(RpcResponse response) {
 		int requestId = response.getRequestId();
 		
-		InvokeFuture future = getInvokeFuture(requestId);
+		RpcFuture future = getFuture(requestId);
 		if (future != null) {
-			future.setCause(response.getCause());
+			future.setErrorCode(response.getErrorCode());
 			future.putResponse(response.getResult());
 			// 回调
 			future.executeCallback();
-		}
-
-		if (log.isDebugEnabled()) {
-			log.debug("handle rpc response, requestId:{}, content:{}", requestId, JSON.toJSONString(response.getResult()));
+		} else {
+			log.info("#RPC#{}#执行超时或异常", requestId);
 		}
 	}
 	
 	@Override
-	public InvokeFuture getInvokeFuture(int id) {
+	public RpcFuture getFuture(int id) {
 		return invokeFutureMap.get(id);
 	}
 	
 	@Override
-	public void addInvokeFuture(InvokeFuture future) {
+	public void addFuture(RpcFuture future) {
 		invokeFutureMap.put(future.getRequestId(), future);
 	}
 	
 	@Override
-	public void removeInvokeFuture(InvokeFuture future) {
+	public void removeFuture(RpcFuture future) {
 		invokeFutureMap.remove(future.getRequestId());
 	}
 
