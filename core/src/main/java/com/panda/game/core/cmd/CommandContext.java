@@ -7,16 +7,18 @@ import java.lang.reflect.Method;
 
 public class CommandContext {
 
+    // 网络通道
     private Channel channel;
+    // 执行方法相关
     private Class<?> action;
     private Method method;
     private Object instance;
+    // 请求数据
     private PacketPb.Pkg pkg;
     private Object[] params;
-
     // 执行的线程id
     private int index;
-    // 创建时间
+    // 记录数据
     private long createdTime = System.currentTimeMillis();
     private long beginTime;
     private long endTime;

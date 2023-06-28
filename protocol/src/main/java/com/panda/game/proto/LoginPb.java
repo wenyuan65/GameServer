@@ -2033,30 +2033,20 @@ public final class LoginPb {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <pre>
-     * 登陆服务器的ip
-     * </pre>
-     *
-     * <code>string ip = 1;</code>
-     * @return The ip.
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
      */
-    java.lang.String getIp();
-    /**
-     * <pre>
-     * 登陆服务器的ip
-     * </pre>
-     *
-     * <code>string ip = 1;</code>
-     * @return The bytes for ip.
-     */
-    com.google.protobuf.ByteString
-        getIpBytes();
+    long getPlayerId();
 
     /**
-     * <code>int32 port = 2;</code>
-     * @return The port.
+     * <pre>
+     * 逻辑节点的id
+     * </pre>
+     *
+     * <code>int32 logicNodeId = 2;</code>
+     * @return The logicNodeId.
      */
-    int getPort();
+    int getLogicNodeId();
   }
   /**
    * Protobuf type {@code com.panda.game.proto.LoginRs}
@@ -2071,7 +2061,6 @@ public final class LoginPb {
       super(builder);
     }
     private LoginRs() {
-      ip_ = "";
     }
 
     @java.lang.Override
@@ -2104,15 +2093,14 @@ public final class LoginPb {
             case 0:
               done = true;
               break;
-            case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 8: {
 
-              ip_ = s;
+              playerId_ = input.readInt64();
               break;
             }
             case 16: {
 
-              port_ = input.readInt32();
+              logicNodeId_ = input.readInt32();
               break;
             }
             default: {
@@ -2147,61 +2135,30 @@ public final class LoginPb {
               com.panda.game.proto.LoginPb.LoginRs.class, com.panda.game.proto.LoginPb.LoginRs.Builder.class);
     }
 
-    public static final int IP_FIELD_NUMBER = 1;
-    private volatile java.lang.Object ip_;
+    public static final int PLAYERID_FIELD_NUMBER = 1;
+    private long playerId_;
     /**
-     * <pre>
-     * 登陆服务器的ip
-     * </pre>
-     *
-     * <code>string ip = 1;</code>
-     * @return The ip.
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
      */
     @java.lang.Override
-    public java.lang.String getIp() {
-      java.lang.Object ref = ip_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        ip_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 登陆服务器的ip
-     * </pre>
-     *
-     * <code>string ip = 1;</code>
-     * @return The bytes for ip.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getIpBytes() {
-      java.lang.Object ref = ip_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        ip_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getPlayerId() {
+      return playerId_;
     }
 
-    public static final int PORT_FIELD_NUMBER = 2;
-    private int port_;
+    public static final int LOGICNODEID_FIELD_NUMBER = 2;
+    private int logicNodeId_;
     /**
-     * <code>int32 port = 2;</code>
-     * @return The port.
+     * <pre>
+     * 逻辑节点的id
+     * </pre>
+     *
+     * <code>int32 logicNodeId = 2;</code>
+     * @return The logicNodeId.
      */
     @java.lang.Override
-    public int getPort() {
-      return port_;
+    public int getLogicNodeId() {
+      return logicNodeId_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -2218,11 +2175,11 @@ public final class LoginPb {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, ip_);
+      if (playerId_ != 0L) {
+        output.writeInt64(1, playerId_);
       }
-      if (port_ != 0) {
-        output.writeInt32(2, port_);
+      if (logicNodeId_ != 0) {
+        output.writeInt32(2, logicNodeId_);
       }
       unknownFields.writeTo(output);
     }
@@ -2233,12 +2190,13 @@ public final class LoginPb {
       if (size != -1) return size;
 
       size = 0;
-      if (!getIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, ip_);
-      }
-      if (port_ != 0) {
+      if (playerId_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, port_);
+          .computeInt64Size(1, playerId_);
+      }
+      if (logicNodeId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, logicNodeId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2255,10 +2213,10 @@ public final class LoginPb {
       }
       com.panda.game.proto.LoginPb.LoginRs other = (com.panda.game.proto.LoginPb.LoginRs) obj;
 
-      if (!getIp()
-          .equals(other.getIp())) return false;
-      if (getPort()
-          != other.getPort()) return false;
+      if (getPlayerId()
+          != other.getPlayerId()) return false;
+      if (getLogicNodeId()
+          != other.getLogicNodeId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2270,10 +2228,11 @@ public final class LoginPb {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + IP_FIELD_NUMBER;
-      hash = (53 * hash) + getIp().hashCode();
-      hash = (37 * hash) + PORT_FIELD_NUMBER;
-      hash = (53 * hash) + getPort();
+      hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getPlayerId());
+      hash = (37 * hash) + LOGICNODEID_FIELD_NUMBER;
+      hash = (53 * hash) + getLogicNodeId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2407,9 +2366,9 @@ public final class LoginPb {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        ip_ = "";
+        playerId_ = 0L;
 
-        port_ = 0;
+        logicNodeId_ = 0;
 
         return this;
       }
@@ -2437,8 +2396,8 @@ public final class LoginPb {
       @java.lang.Override
       public com.panda.game.proto.LoginPb.LoginRs buildPartial() {
         com.panda.game.proto.LoginPb.LoginRs result = new com.panda.game.proto.LoginPb.LoginRs(this);
-        result.ip_ = ip_;
-        result.port_ = port_;
+        result.playerId_ = playerId_;
+        result.logicNodeId_ = logicNodeId_;
         onBuilt();
         return result;
       }
@@ -2487,12 +2446,11 @@ public final class LoginPb {
 
       public Builder mergeFrom(com.panda.game.proto.LoginPb.LoginRs other) {
         if (other == com.panda.game.proto.LoginPb.LoginRs.getDefaultInstance()) return this;
-        if (!other.getIp().isEmpty()) {
-          ip_ = other.ip_;
-          onChanged();
+        if (other.getPlayerId() != 0L) {
+          setPlayerId(other.getPlayerId());
         }
-        if (other.getPort() != 0) {
-          setPort(other.getPort());
+        if (other.getLogicNodeId() != 0) {
+          setLogicNodeId(other.getLogicNodeId());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2523,129 +2481,76 @@ public final class LoginPb {
         return this;
       }
 
-      private java.lang.Object ip_ = "";
+      private long playerId_ ;
       /**
-       * <pre>
-       * 登陆服务器的ip
-       * </pre>
-       *
-       * <code>string ip = 1;</code>
-       * @return The ip.
+       * <code>int64 playerId = 1;</code>
+       * @return The playerId.
        */
-      public java.lang.String getIp() {
-        java.lang.Object ref = ip_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          ip_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      @java.lang.Override
+      public long getPlayerId() {
+        return playerId_;
       }
       /**
-       * <pre>
-       * 登陆服务器的ip
-       * </pre>
-       *
-       * <code>string ip = 1;</code>
-       * @return The bytes for ip.
-       */
-      public com.google.protobuf.ByteString
-          getIpBytes() {
-        java.lang.Object ref = ip_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          ip_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 登陆服务器的ip
-       * </pre>
-       *
-       * <code>string ip = 1;</code>
-       * @param value The ip to set.
+       * <code>int64 playerId = 1;</code>
+       * @param value The playerId to set.
        * @return This builder for chaining.
        */
-      public Builder setIp(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        ip_ = value;
+      public Builder setPlayerId(long value) {
+        
+        playerId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <pre>
-       * 登陆服务器的ip
-       * </pre>
-       *
-       * <code>string ip = 1;</code>
+       * <code>int64 playerId = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearIp() {
+      public Builder clearPlayerId() {
         
-        ip_ = getDefaultInstance().getIp();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 登陆服务器的ip
-       * </pre>
-       *
-       * <code>string ip = 1;</code>
-       * @param value The bytes for ip to set.
-       * @return This builder for chaining.
-       */
-      public Builder setIpBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        ip_ = value;
+        playerId_ = 0L;
         onChanged();
         return this;
       }
 
-      private int port_ ;
+      private int logicNodeId_ ;
       /**
-       * <code>int32 port = 2;</code>
-       * @return The port.
+       * <pre>
+       * 逻辑节点的id
+       * </pre>
+       *
+       * <code>int32 logicNodeId = 2;</code>
+       * @return The logicNodeId.
        */
       @java.lang.Override
-      public int getPort() {
-        return port_;
+      public int getLogicNodeId() {
+        return logicNodeId_;
       }
       /**
-       * <code>int32 port = 2;</code>
-       * @param value The port to set.
+       * <pre>
+       * 逻辑节点的id
+       * </pre>
+       *
+       * <code>int32 logicNodeId = 2;</code>
+       * @param value The logicNodeId to set.
        * @return This builder for chaining.
        */
-      public Builder setPort(int value) {
+      public Builder setLogicNodeId(int value) {
         
-        port_ = value;
+        logicNodeId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 port = 2;</code>
+       * <pre>
+       * 逻辑节点的id
+       * </pre>
+       *
+       * <code>int32 logicNodeId = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearPort() {
+      public Builder clearLogicNodeId() {
         
-        port_ = 0;
+        logicNodeId_ = 0;
         onChanged();
         return this;
       }
@@ -2708,7 +2613,7 @@ public final class LoginPb {
 
     /**
      * <pre>
-     * userId
+     * 自己的userId
      * </pre>
      *
      * <code>int64 userId = 1;</code>
@@ -2755,6 +2660,36 @@ public final class LoginPb {
      */
     com.google.protobuf.ByteString
         getChannelBytes();
+
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The yxUserId.
+     */
+    java.lang.String getYxUserId();
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The bytes for yxUserId.
+     */
+    com.google.protobuf.ByteString
+        getYxUserIdBytes();
+
+    /**
+     * <pre>
+     * 需要登陆的逻辑服的id
+     * </pre>
+     *
+     * <code>int32 nodeId = 5;</code>
+     * @return The nodeId.
+     */
+    int getNodeId();
   }
   /**
    * <pre>
@@ -2775,6 +2710,7 @@ public final class LoginPb {
     private GatewayLoginRq() {
       yx_ = "";
       channel_ = "";
+      yxUserId_ = "";
     }
 
     @java.lang.Override
@@ -2824,6 +2760,17 @@ public final class LoginPb {
               channel_ = s;
               break;
             }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              yxUserId_ = s;
+              break;
+            }
+            case 40: {
+
+              nodeId_ = input.readInt32();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -2860,7 +2807,7 @@ public final class LoginPb {
     private long userId_;
     /**
      * <pre>
-     * userId
+     * 自己的userId
      * </pre>
      *
      * <code>int64 userId = 1;</code>
@@ -2963,6 +2910,67 @@ public final class LoginPb {
       }
     }
 
+    public static final int YXUSERID_FIELD_NUMBER = 4;
+    private volatile java.lang.Object yxUserId_;
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The yxUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getYxUserId() {
+      java.lang.Object ref = yxUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        yxUserId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The bytes for yxUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getYxUserIdBytes() {
+      java.lang.Object ref = yxUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        yxUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NODEID_FIELD_NUMBER = 5;
+    private int nodeId_;
+    /**
+     * <pre>
+     * 需要登陆的逻辑服的id
+     * </pre>
+     *
+     * <code>int32 nodeId = 5;</code>
+     * @return The nodeId.
+     */
+    @java.lang.Override
+    public int getNodeId() {
+      return nodeId_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -2986,6 +2994,12 @@ public final class LoginPb {
       if (!getChannelBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channel_);
       }
+      if (!getYxUserIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, yxUserId_);
+      }
+      if (nodeId_ != 0) {
+        output.writeInt32(5, nodeId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -3004,6 +3018,13 @@ public final class LoginPb {
       }
       if (!getChannelBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channel_);
+      }
+      if (!getYxUserIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, yxUserId_);
+      }
+      if (nodeId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, nodeId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3026,6 +3047,10 @@ public final class LoginPb {
           .equals(other.getYx())) return false;
       if (!getChannel()
           .equals(other.getChannel())) return false;
+      if (!getYxUserId()
+          .equals(other.getYxUserId())) return false;
+      if (getNodeId()
+          != other.getNodeId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -3044,6 +3069,10 @@ public final class LoginPb {
       hash = (53 * hash) + getYx().hashCode();
       hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
       hash = (53 * hash) + getChannel().hashCode();
+      hash = (37 * hash) + YXUSERID_FIELD_NUMBER;
+      hash = (53 * hash) + getYxUserId().hashCode();
+      hash = (37 * hash) + NODEID_FIELD_NUMBER;
+      hash = (53 * hash) + getNodeId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3187,6 +3216,10 @@ public final class LoginPb {
 
         channel_ = "";
 
+        yxUserId_ = "";
+
+        nodeId_ = 0;
+
         return this;
       }
 
@@ -3216,6 +3249,8 @@ public final class LoginPb {
         result.userId_ = userId_;
         result.yx_ = yx_;
         result.channel_ = channel_;
+        result.yxUserId_ = yxUserId_;
+        result.nodeId_ = nodeId_;
         onBuilt();
         return result;
       }
@@ -3275,6 +3310,13 @@ public final class LoginPb {
           channel_ = other.channel_;
           onChanged();
         }
+        if (!other.getYxUserId().isEmpty()) {
+          yxUserId_ = other.yxUserId_;
+          onChanged();
+        }
+        if (other.getNodeId() != 0) {
+          setNodeId(other.getNodeId());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -3307,7 +3349,7 @@ public final class LoginPb {
       private long userId_ ;
       /**
        * <pre>
-       * userId
+       * 自己的userId
        * </pre>
        *
        * <code>int64 userId = 1;</code>
@@ -3319,7 +3361,7 @@ public final class LoginPb {
       }
       /**
        * <pre>
-       * userId
+       * 自己的userId
        * </pre>
        *
        * <code>int64 userId = 1;</code>
@@ -3334,7 +3376,7 @@ public final class LoginPb {
       }
       /**
        * <pre>
-       * userId
+       * 自己的userId
        * </pre>
        *
        * <code>int64 userId = 1;</code>
@@ -3538,6 +3580,145 @@ public final class LoginPb {
         onChanged();
         return this;
       }
+
+      private java.lang.Object yxUserId_ = "";
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return The yxUserId.
+       */
+      public java.lang.String getYxUserId() {
+        java.lang.Object ref = yxUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          yxUserId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return The bytes for yxUserId.
+       */
+      public com.google.protobuf.ByteString
+          getYxUserIdBytes() {
+        java.lang.Object ref = yxUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          yxUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @param value The yxUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        yxUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearYxUserId() {
+        
+        yxUserId_ = getDefaultInstance().getYxUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @param value The bytes for yxUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        yxUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int nodeId_ ;
+      /**
+       * <pre>
+       * 需要登陆的逻辑服的id
+       * </pre>
+       *
+       * <code>int32 nodeId = 5;</code>
+       * @return The nodeId.
+       */
+      @java.lang.Override
+      public int getNodeId() {
+        return nodeId_;
+      }
+      /**
+       * <pre>
+       * 需要登陆的逻辑服的id
+       * </pre>
+       *
+       * <code>int32 nodeId = 5;</code>
+       * @param value The nodeId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNodeId(int value) {
+        
+        nodeId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 需要登陆的逻辑服的id
+       * </pre>
+       *
+       * <code>int32 nodeId = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNodeId() {
+        
+        nodeId_ = 0;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -3594,6 +3775,12 @@ public final class LoginPb {
   public interface GatewayLoginRsOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.panda.game.proto.GatewayLoginRs)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
+     */
+    long getPlayerId();
   }
   /**
    * Protobuf type {@code com.panda.game.proto.GatewayLoginRs}
@@ -3640,6 +3827,11 @@ public final class LoginPb {
             case 0:
               done = true;
               break;
+            case 8: {
+
+              playerId_ = input.readInt64();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -3672,6 +3864,17 @@ public final class LoginPb {
               com.panda.game.proto.LoginPb.GatewayLoginRs.class, com.panda.game.proto.LoginPb.GatewayLoginRs.Builder.class);
     }
 
+    public static final int PLAYERID_FIELD_NUMBER = 1;
+    private long playerId_;
+    /**
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
+     */
+    @java.lang.Override
+    public long getPlayerId() {
+      return playerId_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -3686,6 +3889,9 @@ public final class LoginPb {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (playerId_ != 0L) {
+        output.writeInt64(1, playerId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -3695,6 +3901,10 @@ public final class LoginPb {
       if (size != -1) return size;
 
       size = 0;
+      if (playerId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, playerId_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -3710,6 +3920,8 @@ public final class LoginPb {
       }
       com.panda.game.proto.LoginPb.GatewayLoginRs other = (com.panda.game.proto.LoginPb.GatewayLoginRs) obj;
 
+      if (getPlayerId()
+          != other.getPlayerId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -3721,6 +3933,9 @@ public final class LoginPb {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getPlayerId());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3854,6 +4069,8 @@ public final class LoginPb {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        playerId_ = 0L;
+
         return this;
       }
 
@@ -3880,6 +4097,7 @@ public final class LoginPb {
       @java.lang.Override
       public com.panda.game.proto.LoginPb.GatewayLoginRs buildPartial() {
         com.panda.game.proto.LoginPb.GatewayLoginRs result = new com.panda.game.proto.LoginPb.GatewayLoginRs(this);
+        result.playerId_ = playerId_;
         onBuilt();
         return result;
       }
@@ -3928,6 +4146,9 @@ public final class LoginPb {
 
       public Builder mergeFrom(com.panda.game.proto.LoginPb.GatewayLoginRs other) {
         if (other == com.panda.game.proto.LoginPb.GatewayLoginRs.getDefaultInstance()) return this;
+        if (other.getPlayerId() != 0L) {
+          setPlayerId(other.getPlayerId());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -3954,6 +4175,37 @@ public final class LoginPb {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private long playerId_ ;
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @return The playerId.
+       */
+      @java.lang.Override
+      public long getPlayerId() {
+        return playerId_;
+      }
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @param value The playerId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPlayerId(long value) {
+        
+        playerId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPlayerId() {
+        
+        playerId_ = 0L;
+        onChanged();
         return this;
       }
       @java.lang.Override
@@ -4065,10 +4317,30 @@ public final class LoginPb {
 
     /**
      * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The yxUserId.
+     */
+    java.lang.String getYxUserId();
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The bytes for yxUserId.
+     */
+    com.google.protobuf.ByteString
+        getYxUserIdBytes();
+
+    /**
+     * <pre>
      * 登陆ip
      * </pre>
      *
-     * <code>string ip = 4;</code>
+     * <code>string ip = 5;</code>
      * @return The ip.
      */
     java.lang.String getIp();
@@ -4077,7 +4349,7 @@ public final class LoginPb {
      * 登陆ip
      * </pre>
      *
-     * <code>string ip = 4;</code>
+     * <code>string ip = 5;</code>
      * @return The bytes for ip.
      */
     com.google.protobuf.ByteString
@@ -4102,6 +4374,7 @@ public final class LoginPb {
     private LogicLoginRq() {
       yx_ = "";
       channel_ = "";
+      yxUserId_ = "";
       ip_ = "";
     }
 
@@ -4153,6 +4426,12 @@ public final class LoginPb {
               break;
             }
             case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              yxUserId_ = s;
+              break;
+            }
+            case 42: {
               java.lang.String s = input.readStringRequireUtf8();
 
               ip_ = s;
@@ -4297,14 +4576,60 @@ public final class LoginPb {
       }
     }
 
-    public static final int IP_FIELD_NUMBER = 4;
+    public static final int YXUSERID_FIELD_NUMBER = 4;
+    private volatile java.lang.Object yxUserId_;
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The yxUserId.
+     */
+    @java.lang.Override
+    public java.lang.String getYxUserId() {
+      java.lang.Object ref = yxUserId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        yxUserId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 联运的userId
+     * </pre>
+     *
+     * <code>string yxUserId = 4;</code>
+     * @return The bytes for yxUserId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getYxUserIdBytes() {
+      java.lang.Object ref = yxUserId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        yxUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int IP_FIELD_NUMBER = 5;
     private volatile java.lang.Object ip_;
     /**
      * <pre>
      * 登陆ip
      * </pre>
      *
-     * <code>string ip = 4;</code>
+     * <code>string ip = 5;</code>
      * @return The ip.
      */
     @java.lang.Override
@@ -4325,7 +4650,7 @@ public final class LoginPb {
      * 登陆ip
      * </pre>
      *
-     * <code>string ip = 4;</code>
+     * <code>string ip = 5;</code>
      * @return The bytes for ip.
      */
     @java.lang.Override
@@ -4366,8 +4691,11 @@ public final class LoginPb {
       if (!getChannelBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, channel_);
       }
+      if (!getYxUserIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, yxUserId_);
+      }
       if (!getIpBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, ip_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, ip_);
       }
       unknownFields.writeTo(output);
     }
@@ -4388,8 +4716,11 @@ public final class LoginPb {
       if (!getChannelBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, channel_);
       }
+      if (!getYxUserIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, yxUserId_);
+      }
       if (!getIpBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, ip_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, ip_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4412,6 +4743,8 @@ public final class LoginPb {
           .equals(other.getYx())) return false;
       if (!getChannel()
           .equals(other.getChannel())) return false;
+      if (!getYxUserId()
+          .equals(other.getYxUserId())) return false;
       if (!getIp()
           .equals(other.getIp())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -4432,6 +4765,8 @@ public final class LoginPb {
       hash = (53 * hash) + getYx().hashCode();
       hash = (37 * hash) + CHANNEL_FIELD_NUMBER;
       hash = (53 * hash) + getChannel().hashCode();
+      hash = (37 * hash) + YXUSERID_FIELD_NUMBER;
+      hash = (53 * hash) + getYxUserId().hashCode();
       hash = (37 * hash) + IP_FIELD_NUMBER;
       hash = (53 * hash) + getIp().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -4577,6 +4912,8 @@ public final class LoginPb {
 
         channel_ = "";
 
+        yxUserId_ = "";
+
         ip_ = "";
 
         return this;
@@ -4608,6 +4945,7 @@ public final class LoginPb {
         result.userId_ = userId_;
         result.yx_ = yx_;
         result.channel_ = channel_;
+        result.yxUserId_ = yxUserId_;
         result.ip_ = ip_;
         onBuilt();
         return result;
@@ -4666,6 +5004,10 @@ public final class LoginPb {
         }
         if (!other.getChannel().isEmpty()) {
           channel_ = other.channel_;
+          onChanged();
+        }
+        if (!other.getYxUserId().isEmpty()) {
+          yxUserId_ = other.yxUserId_;
           onChanged();
         }
         if (!other.getIp().isEmpty()) {
@@ -4936,13 +5278,109 @@ public final class LoginPb {
         return this;
       }
 
+      private java.lang.Object yxUserId_ = "";
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return The yxUserId.
+       */
+      public java.lang.String getYxUserId() {
+        java.lang.Object ref = yxUserId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          yxUserId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return The bytes for yxUserId.
+       */
+      public com.google.protobuf.ByteString
+          getYxUserIdBytes() {
+        java.lang.Object ref = yxUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          yxUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @param value The yxUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxUserId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        yxUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearYxUserId() {
+        
+        yxUserId_ = getDefaultInstance().getYxUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 联运的userId
+       * </pre>
+       *
+       * <code>string yxUserId = 4;</code>
+       * @param value The bytes for yxUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setYxUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        yxUserId_ = value;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object ip_ = "";
       /**
        * <pre>
        * 登陆ip
        * </pre>
        *
-       * <code>string ip = 4;</code>
+       * <code>string ip = 5;</code>
        * @return The ip.
        */
       public java.lang.String getIp() {
@@ -4962,7 +5400,7 @@ public final class LoginPb {
        * 登陆ip
        * </pre>
        *
-       * <code>string ip = 4;</code>
+       * <code>string ip = 5;</code>
        * @return The bytes for ip.
        */
       public com.google.protobuf.ByteString
@@ -4983,7 +5421,7 @@ public final class LoginPb {
        * 登陆ip
        * </pre>
        *
-       * <code>string ip = 4;</code>
+       * <code>string ip = 5;</code>
        * @param value The ip to set.
        * @return This builder for chaining.
        */
@@ -5002,7 +5440,7 @@ public final class LoginPb {
        * 登陆ip
        * </pre>
        *
-       * <code>string ip = 4;</code>
+       * <code>string ip = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearIp() {
@@ -5016,7 +5454,7 @@ public final class LoginPb {
        * 登陆ip
        * </pre>
        *
-       * <code>string ip = 4;</code>
+       * <code>string ip = 5;</code>
        * @param value The bytes for ip to set.
        * @return This builder for chaining.
        */
@@ -5087,6 +5525,12 @@ public final class LoginPb {
   public interface LogicLoginRsOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.panda.game.proto.LogicLoginRs)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
+     */
+    long getPlayerId();
   }
   /**
    * Protobuf type {@code com.panda.game.proto.LogicLoginRs}
@@ -5133,6 +5577,11 @@ public final class LoginPb {
             case 0:
               done = true;
               break;
+            case 8: {
+
+              playerId_ = input.readInt64();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -5165,6 +5614,17 @@ public final class LoginPb {
               com.panda.game.proto.LoginPb.LogicLoginRs.class, com.panda.game.proto.LoginPb.LogicLoginRs.Builder.class);
     }
 
+    public static final int PLAYERID_FIELD_NUMBER = 1;
+    private long playerId_;
+    /**
+     * <code>int64 playerId = 1;</code>
+     * @return The playerId.
+     */
+    @java.lang.Override
+    public long getPlayerId() {
+      return playerId_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -5179,6 +5639,9 @@ public final class LoginPb {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (playerId_ != 0L) {
+        output.writeInt64(1, playerId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -5188,6 +5651,10 @@ public final class LoginPb {
       if (size != -1) return size;
 
       size = 0;
+      if (playerId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, playerId_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -5203,6 +5670,8 @@ public final class LoginPb {
       }
       com.panda.game.proto.LoginPb.LogicLoginRs other = (com.panda.game.proto.LoginPb.LogicLoginRs) obj;
 
+      if (getPlayerId()
+          != other.getPlayerId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -5214,6 +5683,9 @@ public final class LoginPb {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + PLAYERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getPlayerId());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5347,6 +5819,8 @@ public final class LoginPb {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        playerId_ = 0L;
+
         return this;
       }
 
@@ -5373,6 +5847,7 @@ public final class LoginPb {
       @java.lang.Override
       public com.panda.game.proto.LoginPb.LogicLoginRs buildPartial() {
         com.panda.game.proto.LoginPb.LogicLoginRs result = new com.panda.game.proto.LoginPb.LogicLoginRs(this);
+        result.playerId_ = playerId_;
         onBuilt();
         return result;
       }
@@ -5421,6 +5896,9 @@ public final class LoginPb {
 
       public Builder mergeFrom(com.panda.game.proto.LoginPb.LogicLoginRs other) {
         if (other == com.panda.game.proto.LoginPb.LogicLoginRs.getDefaultInstance()) return this;
+        if (other.getPlayerId() != 0L) {
+          setPlayerId(other.getPlayerId());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -5447,6 +5925,37 @@ public final class LoginPb {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private long playerId_ ;
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @return The playerId.
+       */
+      @java.lang.Override
+      public long getPlayerId() {
+        return playerId_;
+      }
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @param value The playerId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPlayerId(long value) {
+        
+        playerId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 playerId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPlayerId() {
+        
+        playerId_ = 0L;
+        onChanged();
         return this;
       }
       @java.lang.Override
@@ -6499,15 +7008,17 @@ public final class LoginPb {
       "\n\013login.proto\022\024com.panda.game.proto\"2\n\014C" +
       "reateUserRq\022\020\n\010userName\030\001 \001(\t\022\020\n\010passwor" +
       "d\030\002 \001(\t\"\016\n\014CreateUserRs\"-\n\007LoginRq\022\020\n\010us" +
-      "erName\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"#\n\007LoginR" +
-      "s\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\"=\n\016GatewayLo" +
-      "ginRq\022\016\n\006userId\030\001 \001(\003\022\n\n\002yx\030\002 \001(\t\022\017\n\007cha" +
-      "nnel\030\003 \001(\t\"\020\n\016GatewayLoginRs\"G\n\014LogicLog" +
-      "inRq\022\016\n\006userId\030\001 \001(\003\022\n\n\002yx\030\002 \001(\t\022\017\n\007chan" +
-      "nel\030\003 \001(\t\022\n\n\002ip\030\004 \001(\t\"\016\n\014LogicLoginRs\"\"\n" +
-      "\020GatewayConnectRq\022\016\n\006userId\030\001 \001(\003\"\022\n\020Gat" +
-      "ewayConnectRsB\037\n\024com.panda.game.protoB\007L" +
-      "oginPbb\006proto3"
+      "erName\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"0\n\007LoginR" +
+      "s\022\020\n\010playerId\030\001 \001(\003\022\023\n\013logicNodeId\030\002 \001(\005" +
+      "\"_\n\016GatewayLoginRq\022\016\n\006userId\030\001 \001(\003\022\n\n\002yx" +
+      "\030\002 \001(\t\022\017\n\007channel\030\003 \001(\t\022\020\n\010yxUserId\030\004 \001(" +
+      "\t\022\016\n\006nodeId\030\005 \001(\005\"\"\n\016GatewayLoginRs\022\020\n\010p" +
+      "layerId\030\001 \001(\003\"Y\n\014LogicLoginRq\022\016\n\006userId\030" +
+      "\001 \001(\003\022\n\n\002yx\030\002 \001(\t\022\017\n\007channel\030\003 \001(\t\022\020\n\010yx" +
+      "UserId\030\004 \001(\t\022\n\n\002ip\030\005 \001(\t\" \n\014LogicLoginRs" +
+      "\022\020\n\010playerId\030\001 \001(\003\"\"\n\020GatewayConnectRq\022\016" +
+      "\n\006userId\030\001 \001(\003\"\022\n\020GatewayConnectRsB\037\n\024co" +
+      "m.panda.game.protoB\007LoginPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6536,31 +7047,31 @@ public final class LoginPb {
     internal_static_com_panda_game_proto_LoginRs_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_LoginRs_descriptor,
-        new java.lang.String[] { "Ip", "Port", });
+        new java.lang.String[] { "PlayerId", "LogicNodeId", });
     internal_static_com_panda_game_proto_GatewayLoginRq_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_com_panda_game_proto_GatewayLoginRq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_GatewayLoginRq_descriptor,
-        new java.lang.String[] { "UserId", "Yx", "Channel", });
+        new java.lang.String[] { "UserId", "Yx", "Channel", "YxUserId", "NodeId", });
     internal_static_com_panda_game_proto_GatewayLoginRs_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_com_panda_game_proto_GatewayLoginRs_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_GatewayLoginRs_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "PlayerId", });
     internal_static_com_panda_game_proto_LogicLoginRq_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_com_panda_game_proto_LogicLoginRq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_LogicLoginRq_descriptor,
-        new java.lang.String[] { "UserId", "Yx", "Channel", "Ip", });
+        new java.lang.String[] { "UserId", "Yx", "Channel", "YxUserId", "Ip", });
     internal_static_com_panda_game_proto_LogicLoginRs_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_com_panda_game_proto_LogicLoginRs_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_panda_game_proto_LogicLoginRs_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "PlayerId", });
     internal_static_com_panda_game_proto_GatewayConnectRq_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_com_panda_game_proto_GatewayConnectRq_fieldAccessorTable = new

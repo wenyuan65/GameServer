@@ -1,6 +1,10 @@
 package com.panda.game.logic.common;
 
+import com.google.protobuf.Message;
 import com.google.protobuf.MessageLite;
+import com.googlecode.protobuf.format.JsonFormat;
+import com.panda.game.common.log.Logger;
+import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.core.netty.listener.SendFailListener;
 import com.panda.game.logic.base.ModuleService;
 import com.panda.game.logic.base.ModuleServiceHelper;
@@ -8,8 +12,6 @@ import com.panda.game.logic.base.ServiceTrigger;
 import com.panda.game.proto.CmdPb;
 import com.panda.game.proto.PacketPb;
 import io.netty.channel.Channel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -17,6 +19,7 @@ import java.util.*;
 public class GamePlayer {
 
     private static final Logger logger = LoggerFactory.getLogger(GamePlayer.class);
+    private static final Logger dayLog = LoggerFactory.getDayLog();
 
     private Channel channel;
     private long playerId;
@@ -25,6 +28,13 @@ public class GamePlayer {
     private long expiredTime = 0;
 
     private Map<Class<? extends ModuleService>, ModuleService> serviceMap = new HashMap<>();
+
+    public GamePlayer(long playerId) {
+        this.playerId = playerId;
+
+        this.nextSaveTime = System.currentTimeMillis();
+        updateSaveTime();
+    }
 
     /**
      * 加载数据
@@ -127,6 +137,13 @@ public class GamePlayer {
         return true;
     }
 
+    public boolean unload() {
+        triggered(ServiceTrigger.unload);
+
+
+        return true;
+    }
+
     /**
      * 获取指定的service
      * @param clazz
@@ -135,6 +152,13 @@ public class GamePlayer {
      */
     public <T extends ModuleService> T getService(Class<T> clazz) {
         return (T) serviceMap.get(clazz);
+    }
+
+    /**
+     * 更新下次保存时间
+     */
+    public void updateSaveTime() {
+        this.nextSaveTime = this.nextSaveTime + Constants.Player_Save_Interval;
     }
 
     /**
@@ -159,7 +183,7 @@ public class GamePlayer {
      * @param msg
      */
     public void sendMessage(int rs, MessageLite msg) {
-        if (!isPushable()) {
+        if (!isOnline() || !isPushable()) {
             logger.error("玩家不在线，或者连接异常,无法推送数据", playerId, CmdPb.Cmd.forNumber(rs).name());
             return;
         }
@@ -170,11 +194,37 @@ public class GamePlayer {
         builder.setPlayerId(playerId);
 
         channel.writeAndFlush(builder.build()).addListener(new SendFailListener(playerId, rs));
+
+        String response = JsonFormat.printToString((Message) msg);
+        if (response.length() > 1024) {
+            response = new StringBuilder().append(response, 0, 256).append("...}, length:").append(response.length()).toString();
+        }
+        dayLog.info("#o#{}#{}#{}#{}#", this, CmdPb.Cmd.forNumber(rs).name(), response);
+    }
+
+    public void sendError(int rs, int errorCode) {
+        sendError(rs, errorCode, "");
+    }
+
+    public void sendError(int rs, int errorCode, String title) {
+        if (!isOnline() || !isPushable()) {
+            logger.error("玩家不在线，或者连接异常,无法推送数据", playerId, CmdPb.Cmd.forNumber(rs).name());
+            return;
+        }
+
+        PacketPb.Pkg.Builder builder = PacketPb.Pkg.newBuilder();
+        builder.setCmd(rs);
+        builder.setErrorCode(errorCode);
+        builder.setPlayerId(playerId);
+
+        channel.writeAndFlush(builder.build()).addListener(new SendFailListener(playerId, rs));
+
+        dayLog.info("#o#{}#{}#{}#{}#", this, CmdPb.Cmd.forNumber(rs).name(), CmdPb.ErrorCode.forNumber(errorCode).name(), title);
     }
 
     @Override
     public String toString() {
-        // WARNING: 不能随意修改格式
+        // GamePlayer对象的toString()方法参与日志格式的打印，修改格式需谨慎
         StringBuilder sb = new StringBuilder();
         sb.append(playerId).append('#');
         sb.append("userId").append('#');

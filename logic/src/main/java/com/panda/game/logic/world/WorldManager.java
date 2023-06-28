@@ -5,6 +5,7 @@ import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.timer.Scheduler;
 import com.panda.game.common.timer.quartz.Job;
 import com.panda.game.common.utils.ScanUtil;
+import com.panda.game.dao.db.logic.DBManager;
 import com.panda.game.logic.LogicServer;
 import com.panda.game.logic.base.ModuleService;
 import com.panda.game.logic.base.WorldServiceTrigger;
@@ -34,6 +35,8 @@ public class WorldManager {
 
     private Map<Class<? extends WorldModuleService>, WorldModuleService> worldServiceMap = new HashMap<>();
 
+    private ConcurrentHashMap<Long, Long> userId2PlayerIdMap = new ConcurrentHashMap<>();
+
     public boolean init() {
         if (initWorldModuleService()) {
             return false;
@@ -43,6 +46,7 @@ public class WorldManager {
             return false;
         }
 
+        loadUserId2PlayerId();
         loadActivePlayer();
 
         return true;
@@ -97,8 +101,24 @@ public class WorldManager {
         return (T) worldServiceMap.get(clazz);
     }
 
+    public void loadUserId2PlayerId() {
+        logger.info("加载所有玩家的userId及playerId");
+
+        Map<Long, Long> map = DBManager.getPlayerDao().getUserIdAndPlayerIdMap();
+        userId2PlayerIdMap.putAll(map);
+    }
+
+    public Long getPlayerId(long userId) {
+        return userId2PlayerIdMap.get(userId);
+    }
+
+    public void addUserIdAndPlayerIdCache(long userId, long playerId) {
+        userId2PlayerIdMap.put(userId, playerId);
+    }
+
     public void loadActivePlayer() {
         // TODO: 加载一定数量的活跃玩家
+        logger.info("加载活跃玩家");
     }
 
     public void addPlayer(GamePlayer player) {
@@ -126,11 +146,11 @@ public class WorldManager {
             return gamePlayer;
         }
 
-        GamePlayer player = new GamePlayer();
-        player.setPlayerId(playerId);
-        player.load(create);
+        // 加载数据
+        GamePlayer gamePlayer = new GamePlayer(playerId);
+        gamePlayer.load(create);
 
-        return player;
+        return gamePlayer;
     }
 
     /**
@@ -146,8 +166,7 @@ public class WorldManager {
             return gamePlayer;
         }
 
-        GamePlayer player = new GamePlayer();
-        player.setPlayerId(playerId);
+        GamePlayer player = new GamePlayer(playerId);
         player.loadModuleGroup(list);
 
         return player;

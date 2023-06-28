@@ -2,6 +2,8 @@ package com.panda.game.core.netty;
 
 public class NettyClientConfig {
 
+	private String name = "NettyClient";
+
 	private boolean epoll = false;
 	
 	private boolean usePool = false;
@@ -10,6 +12,14 @@ public class NettyClientConfig {
 	
 	// rpc请求超时时间
 	private long timeout = 5000;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public boolean isEpoll() {
 		return epoll;

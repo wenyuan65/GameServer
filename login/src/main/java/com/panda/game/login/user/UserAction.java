@@ -1,29 +1,31 @@
 package com.panda.game.login.user;
 
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.google.protobuf.GeneratedMessageV3;
 import com.panda.game.common.constants.NodeCluster;
 import com.panda.game.common.constants.NodeType;
-import com.panda.game.common.proto.PbUtil;
 import com.panda.game.common.utils.SnowFlake;
 import com.panda.game.common.utils.StringUtils;
 import com.panda.game.core.cmd.CmdBindType;
 import com.panda.game.core.cmd.annotation.Action;
 import com.panda.game.core.cmd.annotation.Command;
+import com.panda.game.core.common.BaseAction;
 import com.panda.game.core.jdbc.base.Option;
+import com.panda.game.core.nacos.NodeHelper;
 import com.panda.game.core.nacos.NodeManager;
 import com.panda.game.core.rpc.RpcManager;
 import com.panda.game.dao.db.login.LoginDBManager;
 import com.panda.game.dao.entity.login.User;
 import com.panda.game.proto.CmdPb;
 import com.panda.game.proto.LoginPb;
-import com.panda.game.proto.LoginPb.*;
+import com.panda.game.proto.LoginPb.GatewayLoginRq;
+import com.panda.game.proto.LoginPb.GatewayLoginRs;
+import com.panda.game.proto.LoginPb.LoginRs;
 import io.netty.channel.Channel;
 
 import java.util.Date;
 
 @Action
-public class UserAction {
+public class UserAction extends BaseAction {
 
     @Command(value=CmdPb.Cmd.CreateUserRq_VALUE, bindType=CmdBindType.Bind_Group)
     public void createUser(LoginPb.CreateUserRq rq, Channel channel) {
@@ -33,6 +35,7 @@ public class UserAction {
             sendError(channel, CmdPb.Cmd.CreateUserRs_VALUE, CmdPb.ErrorCode.Param_VALUE);
             return ;
         }
+        // TODO: 缓存数据
         User user = LoginDBManager.getUserDao().getUserByUserName(userName);
         if (user != null) {
             sendError(channel, CmdPb.Cmd.CreateUserRs_VALUE, CmdPb.ErrorCode.UserExist_VALUE);
@@ -43,10 +46,11 @@ public class UserAction {
         user.setUserId(SnowFlake.getNextId());
         user.setUserName(userName);
         user.setPassword(password);
-        user.setYxUserId("");
-        user.setYx("");
-        user.setChannelId("");
+        user.setYxUserId("default_"+ user.getUserId());
+        user.setYx("default");
+        user.setChannelId("default");
         user.setCreateTime(new Date());
+        user.setLogicNodeId(0);
         user.setOp(Option.Insert);
         LoginDBManager.getUserDao().add(user);
 
@@ -61,6 +65,7 @@ public class UserAction {
             sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.Param_VALUE);
             return ;
         }
+        // TODO: 缓存数据
         User user = LoginDBManager.getUserDao().getUserByUserName(userName);
         if (user == null) {
             sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.Param_VALUE);
@@ -72,9 +77,19 @@ public class UserAction {
         }
 
         // 随机gateway/和logic
-        Instance instance = NodeManager.getInstance().selectOne(NodeType.Gateway.getName(), NodeCluster.Common.getName());
+        Instance instance = NodeManager.getInstance().selectNode(NodeType.Gateway, NodeCluster.Common);
         if (instance == null) {
             sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.ServiceError_VALUE);
+            return ;
+        }
+        // 随机logic
+        if (user.getLogicNodeId() == 0) {
+            Instance logicInstance = NodeManager.getInstance().selectNode(NodeType.Logic, NodeCluster.Common);
+            user.setLogicNodeId(NodeHelper.getNodeId(logicInstance.getInstanceId()));
+            LoginDBManager.getUserDao().addOrUpdate(user);
+        }
+        if (user.getLogicNodeId() == 0) {
+            sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.GameServiceError_VALUE);
             return ;
         }
 
@@ -83,24 +98,19 @@ public class UserAction {
         builder.setUserId(user.getUserId());
         builder.setYx(user.getYx());
         builder.setChannel(user.getChannelId());
+        builder.setNodeId(user.getLogicNodeId());
+        builder.setYxUserId(user.getYxUserId());
 
-        GatewayLoginRs loginRs = RpcManager.getInstance().sendSync(instance.getIp(), instance.getPort(), CmdPb.Cmd.GatewayLoginRq_VALUE, builder.build(), GatewayLoginRs.parser());
+        GatewayLoginRs loginRs = RpcManager.getInstance().sendSync(instance.getIp(), instance.getPort(), CmdPb.Cmd.GatewayLoginRq_VALUE, builder.build());
+        if (loginRs == null) {
+            sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.GameServiceError_VALUE);
+            return ;
+        }
 
-
-
-        sendOk(channel, CmdPb.Cmd.LoginRs_VALUE);
-    }
-
-    private void sendError(Channel channel, int cmd, int errorCode) {
-        channel.writeAndFlush(PbUtil.createErrorPkg(cmd, errorCode));
-    }
-
-    private void sendOk(Channel channel, int cmd) {
-        channel.writeAndFlush(PbUtil.createPkg(cmd).build());
-    }
-
-    private void sendMessage(Channel channel, int cmd, GeneratedMessageV3 message) {
-        channel.writeAndFlush(PbUtil.createPkg(cmd, message).build());
+        LoginRs.Builder rs = LoginRs.newBuilder();
+        rs.setPlayerId(loginRs.getPlayerId());
+        rs.setLogicNodeId(user.getLogicNodeId());
+        sendMessage(channel, CmdPb.Cmd.LoginRs_VALUE, rs.build());
     }
 
 }

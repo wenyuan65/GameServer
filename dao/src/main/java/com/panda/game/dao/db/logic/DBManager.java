@@ -1,6 +1,7 @@
 package com.panda.game.dao.db.logic;
 
 import com.panda.game.dao.db.logic.common.GlobalValueDao;
+import com.panda.game.dao.db.logic.common.PlayerDao;
 
 public class DBManager {
 
@@ -10,4 +11,9 @@ public class DBManager {
         return globalValueDao;
     }
 
+    private static PlayerDao playerDao = new PlayerDao();
+
+    public static PlayerDao getPlayerDao() {
+        return playerDao;
+    }
 }

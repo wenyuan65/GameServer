@@ -4,6 +4,7 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.panda.game.common.config.Configuration;
 import com.panda.game.common.constants.DataBaseType;
 import com.panda.game.common.constants.GlobalType;
+import com.panda.game.common.constants.NodeType;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.utils.MixUtil;
@@ -11,8 +12,10 @@ import com.panda.game.common.utils.StringUtils;
 import com.panda.game.core.jdbc.PoolManager;
 import com.panda.game.core.jdbc.TableEntityManager;
 import com.panda.game.core.jdbc.common.JdbcUtils;
+import com.panda.game.core.nacos.NodeHelper;
 import com.panda.game.core.nacos.NodeManager;
 import com.panda.game.core.netty.NettyClientConfig;
+import com.panda.game.core.proto.ProtoManager;
 import com.panda.game.core.redis.RedisManager;
 import com.panda.game.core.rpc.RpcManager;
 import org.redisson.codec.JsonJacksonCodec;
@@ -102,10 +105,10 @@ public class BaseServer {
             NodeManager.getInstance().init(clusterServerList, gameName);
             List<Instance> instances = new ArrayList<>();
 
-            Instance instance1 = NodeManager.createInstance(cluster, nodeType, nodeId, ip, port);
+            Instance instance1 = NodeHelper.createInstance(cluster, nodeType, nodeId, ip, port);
             instances.add(instance1);
 
-            NodeManager.getInstance().register(nodeType, instances);
+            NodeManager.getInstance().register(NodeType.getNodeType(nodeType), instances);
         } catch (Exception e) {
             log.error("服务器启动异常", e);
             return false;

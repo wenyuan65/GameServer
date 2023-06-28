@@ -13,6 +13,7 @@ import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
 import com.panda.game.core.netty.handler.LogicHandler;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
+import com.panda.game.core.proto.ProtoManager;
 import com.panda.game.logic.base.ModuleServiceHelper;
 import com.panda.game.logic.common.EntityIdManager;
 import com.panda.game.logic.common.GamePlayer;
@@ -39,6 +40,8 @@ public class LogicServer extends BaseServer {
 
     @Override
     public void start() {
+        super.start();
+
         // 基础
         if (!init(() -> Configuration.init(Arrays.asList("node", "server")), "初始化配置文件")) {
             return ;
@@ -47,6 +50,9 @@ public class LogicServer extends BaseServer {
             return ;
         }
         if (!init(() -> ServerThreadManager.getInstance().init(8, 8), "初始化线程组")) {
+            return ;
+        }
+        if (!init(() -> ProtoManager.getInstance().init(), "初始化协议管理器")) {
             return ;
         }
 

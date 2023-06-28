@@ -360,28 +360,36 @@ public final class CmdPb {
     ServiceError(3),
     /**
      * <pre>
+     * 游戏服务异常
+     * </pre>
+     *
+     * <code>GameServiceError = 4;</code>
+     */
+    GameServiceError(4),
+    /**
+     * <pre>
      * rpc超时
      * </pre>
      *
-     * <code>RpcTimeOut = 4;</code>
+     * <code>RpcTimeOut = 10;</code>
      */
-    RpcTimeOut(4),
+    RpcTimeOut(10),
     /**
      * <pre>
      * rpc发送异常
      * </pre>
      *
-     * <code>RpcSendError = 5;</code>
+     * <code>RpcSendError = 11;</code>
      */
-    RpcSendError(5),
+    RpcSendError(11),
     /**
      * <pre>
      * rpc发送失败
      * </pre>
      *
-     * <code>RpcSendFailed = 6;</code>
+     * <code>RpcSendFailed = 12;</code>
      */
-    RpcSendFailed(6),
+    RpcSendFailed(12),
     /**
      * <pre>
      * 用户已经存在
@@ -423,28 +431,36 @@ public final class CmdPb {
     public static final int ServiceError_VALUE = 3;
     /**
      * <pre>
+     * 游戏服务异常
+     * </pre>
+     *
+     * <code>GameServiceError = 4;</code>
+     */
+    public static final int GameServiceError_VALUE = 4;
+    /**
+     * <pre>
      * rpc超时
      * </pre>
      *
-     * <code>RpcTimeOut = 4;</code>
+     * <code>RpcTimeOut = 10;</code>
      */
-    public static final int RpcTimeOut_VALUE = 4;
+    public static final int RpcTimeOut_VALUE = 10;
     /**
      * <pre>
      * rpc发送异常
      * </pre>
      *
-     * <code>RpcSendError = 5;</code>
+     * <code>RpcSendError = 11;</code>
      */
-    public static final int RpcSendError_VALUE = 5;
+    public static final int RpcSendError_VALUE = 11;
     /**
      * <pre>
      * rpc发送失败
      * </pre>
      *
-     * <code>RpcSendFailed = 6;</code>
+     * <code>RpcSendFailed = 12;</code>
      */
-    public static final int RpcSendFailed_VALUE = 6;
+    public static final int RpcSendFailed_VALUE = 12;
     /**
      * <pre>
      * 用户已经存在
@@ -483,9 +499,10 @@ public final class CmdPb {
         case 1: return Param;
         case 2: return NoEnough;
         case 3: return ServiceError;
-        case 4: return RpcTimeOut;
-        case 5: return RpcSendError;
-        case 6: return RpcSendFailed;
+        case 4: return GameServiceError;
+        case 10: return RpcTimeOut;
+        case 11: return RpcSendError;
+        case 12: return RpcSendFailed;
         case 101: return UserExist;
         default: return null;
       }
@@ -563,11 +580,12 @@ public final class CmdPb {
       "Rs\020\356\007\022\024\n\017FriendGetInfoRq\020\321\017\022\024\n\017FriendGet" +
       "InfoRs\020\322\017\022\022\n\rFriendApplyRq\020\323\017\022\022\n\rFriendA" +
       "pplyRs\020\324\017\022\022\n\rClubGetInfoRq\020\271\027\022\022\n\rClubGet" +
-      "InfoRs\020\272\027*\202\001\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param" +
-      "\020\001\022\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\016\n\nRp" +
-      "cTimeOut\020\004\022\020\n\014RpcSendError\020\005\022\021\n\rRpcSendF" +
-      "ailed\020\006\022\r\n\tUserExist\020eB\035\n\024com.panda.game" +
-      ".protoB\005CmdPbb\006proto3"
+      "InfoRs\020\272\027*\230\001\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param" +
+      "\020\001\022\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\024\n\020Ga" +
+      "meServiceError\020\004\022\016\n\nRpcTimeOut\020\n\022\020\n\014RpcS" +
+      "endError\020\013\022\021\n\rRpcSendFailed\020\014\022\r\n\tUserExi" +
+      "st\020eB\035\n\024com.panda.game.protoB\005CmdPbb\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

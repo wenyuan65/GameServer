@@ -7,6 +7,8 @@ import com.alibaba.nacos.api.naming.listener.Event;
 import com.alibaba.nacos.api.naming.listener.EventListener;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.panda.game.common.constants.NodeCluster;
+import com.panda.game.common.constants.NodeType;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 
@@ -17,7 +19,7 @@ import java.util.*;
  * 各个名称在游戏框架中的应用：<br/>
  * serviceName：对应游戏名称，例如王者荣耀游戏简称，wzry<br/>
  * groupName:   对应服务器类型，例如gateway/game/chat/name/club/data/friend等等<br/>
- * clusterName: 对应服务器分区类型，例如用common表示公共服，用xianyu/37等等表示不同渠道独服或者混服<br/>
+ * clusterName: 对应服务器分区类型，例如用common表示公共服，用xianyu/37/苹果/37安卓等等表示不同渠道独服或者混服<br/>
  * 通过使用这三个名称，将服务名称形成一棵4层的目录树，方便检索与使用
  * 应用:      用于标识服务提供方的服务的属性。
  * 服务分组： 不同的服务可以归类到同一分组。
@@ -63,33 +65,12 @@ public class NodeManager implements EventListener {
     }
 
     /**
-     * 注册实例<br/>
-     * @param nodeType
-     * @param nodeId
-     * @param ip
-     * @param port
-     * @return
-     */
-    public static Instance createInstance(String cluster, String nodeType, int nodeId, String ip, int port) {
-        // game_name_1
-        String instanceId = getInstanceId(nodeType, nodeId);
-
-        Instance instance = new Instance();
-        instance.setClusterName(cluster);
-        instance.setInstanceId(instanceId);
-        instance.setIp(ip);
-        instance.setPort(port);
-
-        return instance;
-    }
-
-    /**
      * 批量注册实例
      * @param instances
      */
-    public void register(String nodeType, List<Instance> instances) {
+    public void register(NodeType nodeType, List<Instance> instances) {
         try {
-            namingService.batchRegisterInstance(this.game, nodeType, instances);
+            namingService.batchRegisterInstance(this.game, nodeType.getName(), instances);
         } catch (NacosException e) {
             log.error("#node#register", e);
             throw new RuntimeException(e);
@@ -101,25 +82,19 @@ public class NodeManager implements EventListener {
      * @param nodeType 服务器类型
      * @return
      */
-    public Instance selectOne(String nodeType) {
-        try {
-            return namingService.selectOneHealthyInstance(this.game, nodeType, new ArrayList<>(), true);
-        } catch (NacosException e) {
-            log.error("#node#selectOne", e);
-        }
-
-        return null;
+    public Instance selectNode(NodeType nodeType) {
+        return selectNode(nodeType, NodeCluster.Common);
     }
 
     /**
      * 随机选择一个实例
      * @param nodeType 服务器类型
-     * @param channel 服务器渠道
+     * @param nodeCluster 服务器渠道
      * @return
      */
-    public Instance selectOne(String nodeType, String channel) {
+    public Instance selectNode(NodeType nodeType, NodeCluster nodeCluster) {
         try {
-            return namingService.selectOneHealthyInstance(this.game, nodeType, Arrays.asList(channel), true);
+            return namingService.selectOneHealthyInstance(this.game, nodeType.getName(), Arrays.asList(nodeCluster.getName()), true);
         } catch (NacosException e) {
             log.error("#node#selectOne", e);
         }
@@ -131,8 +106,8 @@ public class NodeManager implements EventListener {
      * 获取指定实例对象,
      * @return
      */
-    public Instance getInstance(String nodeType, int id) {
-        String instanceId = getInstanceId(nodeType, id);
+    public Instance getNode(NodeType nodeType, int id) {
+        String instanceId = NodeHelper.getInstanceId(nodeType.getName(), id);
 
         try {
             if (instanceMap == null) {
@@ -173,10 +148,6 @@ public class NodeManager implements EventListener {
         this.instanceMap = instanceMap2;
 
         log.info("#node#instances#[{}]", sb.toString());
-    }
-
-    private static String getInstanceId(String nodeType, int id) {
-        return nodeType + "_" + id;
     }
 
 }

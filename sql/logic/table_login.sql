@@ -21,6 +21,7 @@ create table `user` (
 	`yx_user_id` varchar(100) not null default '' comment '玩家联运标识',
 	`yx` varchar(20) not null default '' comment '联运',
 	`channel_id` varchar(50) not null default '' comment '渠道',
+	`logic_node_id` int(10) unsigned not null default '0' comment '逻辑服的id',
 	`create_time` datetime not null default '2000-01-01 00:00:00' comment '创建日期',
 	primary key(`id`),
 	index `idx_userId_yx` (`yx_user_id`, `yx`) using btree,

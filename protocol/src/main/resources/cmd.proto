@@ -41,8 +41,9 @@ enum ErrorCode {
     Param = 1;          // 参数错误
     NoEnough = 2;      // 资源不足
     ServiceError = 3;  // 服务异常
-    RpcTimeOut = 4;    // rpc超时
-    RpcSendError = 5;  // rpc发送异常
-    RpcSendFailed = 6; // rpc发送失败
+    GameServiceError = 4;  // 游戏服务异常
+    RpcTimeOut = 10;    // rpc超时
+    RpcSendError = 11;  // rpc发送异常
+    RpcSendFailed = 12; // rpc发送失败
     UserExist = 101;   // 用户已经存在
 }

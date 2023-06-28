@@ -15,27 +15,6 @@ public class LogicHandler extends PacketInboundHandler {
 
     private static final Logger log = LoggerFactory.getLogger(LogicHandler.class);
 
-    public LogicHandler(boolean useSession) {
-        super(useSession);
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        if (!useSession) {
-            return;
-        }
-
-        Channel channel = ctx.channel();
-        boolean hasSession = channel.hasAttr(NettyConstants.Session_Key);
-        if (!hasSession) {
-            Session session = SessionManager.getInstance().getSession("", true);
-            Attribute<String> attr = channel.attr(NettyConstants.Session_Key);
-            attr.setIfAbsent(session.getSessionId());
-
-            log.info("netty channel active, session: {}", session.getSessionId());
-        }
-    }
-
     @Override
     public void channelRead(Channel channel, PacketPb.Pkg pkg) {
         CommandManager.getInstance().handle(channel, pkg);
@@ -43,7 +22,7 @@ public class LogicHandler extends PacketInboundHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("not catch exception in netty", cause);
+        log.error("un-catch exception in netty", cause);
     }
 
 }

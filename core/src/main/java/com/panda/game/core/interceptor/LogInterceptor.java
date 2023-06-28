@@ -32,9 +32,16 @@ public class LogInterceptor implements CommandInterceptor {
 
         CommandInterceptor interceptor = it.next();
 
+        boolean isError = false;
         long beginTime = System.currentTimeMillis();
         ctx.setBeginTime(beginTime);
-        interceptor.invoke(ctx, it);
+        try {
+            interceptor.invoke(ctx, it);
+        } catch (Exception e) {
+            isError = true;
+            dayLog.error("{}.{}()执行异常", e, action.getSimpleName(), method.getName());
+        }
+
         long endTime = System.currentTimeMillis();
         ctx.setEndTime(endTime);
 
@@ -52,7 +59,7 @@ public class LogInterceptor implements CommandInterceptor {
             }
         }
 
-        dayLog.info("#i#[{}]#{}#{}#{}#{}#{}#{}#{}#", index, pkg.getPlayerId(), sb.toString(), action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime);
+        dayLog.info("#i#[{}]#{}#{}#{}#{}#{}#{}#{}#{}#{}#", index, pkg.getRequestId(), pkg.getPlayerId(), sb.toString(), action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime, isError ? "Error" : "");
     }
 
 }

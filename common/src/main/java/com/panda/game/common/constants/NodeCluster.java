@@ -21,4 +21,15 @@ public enum NodeCluster {
     public String getIntro() {
         return intro;
     }
+
+    public static NodeCluster getNodeCluster(String nodeCluster) {
+        for (NodeCluster value : values()) {
+            if (value.getName().equals(nodeCluster)) {
+                return value;
+            }
+        }
+
+        throw new IllegalArgumentException("未知的NodeCluster:" + nodeCluster);
+    }
+
 }

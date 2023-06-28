@@ -21,6 +21,8 @@ public class User  extends BaseEntity {
     private String yx;
     // 渠道
     private String channelId;
+    // 逻辑服的id
+    private int logicNodeId;
     // 创建日期
     private Date createTime;
 
@@ -86,6 +88,17 @@ public class User  extends BaseEntity {
     public void setChannelId(String channelId) {
         if (channelId != null && !channelId.equals(this.channelId)) {
             this.channelId = channelId;
+            setOp(Option.Update);
+        }
+    }
+
+    public int getLogicNodeId() {
+        return logicNodeId;
+    }
+
+    public void setLogicNodeId(int logicNodeId) {
+        if (this.logicNodeId != logicNodeId) {
+            this.logicNodeId = logicNodeId;
             setOp(Option.Update);
         }
     }

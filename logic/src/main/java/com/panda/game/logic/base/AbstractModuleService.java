@@ -4,10 +4,10 @@ import com.panda.game.logic.common.GamePlayer;
 
 public abstract class AbstractModuleService implements ModuleService {
 
-    protected GamePlayer player;
+    protected GamePlayer gamePlayer;
 
-    public AbstractModuleService(GamePlayer player) {
-        this.player = player;
+    public AbstractModuleService(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
     }
 
     @Override

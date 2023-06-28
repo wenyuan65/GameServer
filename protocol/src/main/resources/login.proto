@@ -20,17 +20,20 @@ message LoginRq {
     string password= 2; // 密码
 }
 message LoginRs {
-    string ip = 1; // 登陆服务器的ip
-    int32 port = 2;
+    int64 playerId = 1;
+    int32 logicNodeId = 2; // 逻辑节点的id
 }
 
 // 登陆到gateway
 message GatewayLoginRq {
-    int64 userId = 1;// userId
+    int64 userId = 1;// 自己的userId
     string yx = 2; // yx
     string channel = 3; // 渠道
+    string yxUserId = 4; // 联运的userId
+    int32 nodeId = 5; // 需要登陆的逻辑服的id
 }
 message GatewayLoginRs {
+    int64 playerId = 1;
 }
 
 // 登陆到gateway
@@ -38,9 +41,11 @@ message LogicLoginRq {
     int64 userId = 1;// userId
     string yx = 2; // yx
     string channel = 3; // 渠道
-    string ip = 4;      // 登陆ip
+    string yxUserId = 4; // 联运的userId
+    string ip = 5;      // 登陆ip
 }
 message LogicLoginRs {
+    int64 playerId = 1;
 }
 
 // 连接到gateway

@@ -335,7 +335,7 @@ public class BaseDao<T> {
      * 查询id字段最大值
      */
     public long getMaxId() {
-        List<Map<String, Object>> maps = queryMap(this.tableEntity.getMaxIdSQL());
+        List<Map<String, Object>> maps = queryMapList(this.tableEntity.getMaxIdSQL());
         Map<String, Object> map = maps.get(0);
         Object id = map.get("id");
         if (id instanceof Long) {
@@ -350,7 +350,7 @@ public class BaseDao<T> {
      * @param sql
      * @return
      */
-    public List<Map<String, Object>> queryMap(String sql) {
+    public List<Map<String, Object>> queryMapList(String sql) {
         return JdbcUtils.queryMapList(getDataSource(), sql);
     }
 
