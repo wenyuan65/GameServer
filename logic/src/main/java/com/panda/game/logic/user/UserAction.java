@@ -3,10 +3,6 @@ package com.panda.game.logic.user;
 import com.panda.game.core.cmd.annotation.Action;
 import com.panda.game.core.cmd.annotation.Command;
 import com.panda.game.core.common.BaseAction;
-import com.panda.game.core.jdbc.base.Option;
-import com.panda.game.dao.db.logic.DBManager;
-import com.panda.game.dao.db.logic.common.PlayerDao;
-import com.panda.game.dao.entity.logic.player.Player;
 import com.panda.game.logic.common.EntityIdManager;
 import com.panda.game.logic.common.GamePlayer;
 import com.panda.game.logic.common.OnlineStatus;
@@ -14,16 +10,12 @@ import com.panda.game.logic.player.PlayerService;
 import com.panda.game.logic.world.WorldManager;
 import com.panda.game.proto.CmdPb;
 import com.panda.game.proto.LoginPb;
-import com.panda.game.proto.PlayerPb;
 import io.netty.channel.Channel;
-
-import java.net.InetSocketAddress;
-import java.util.Date;
 
 @Action
 public class UserAction extends BaseAction {
 
-    @Command(value = CmdPb.Cmd.LogicLoginRq_VALUE)
+    @Command(CmdPb.Cmd.LogicLoginRq_VALUE)
     public void login(LoginPb.LogicLoginRq rq, Channel channel) {
         long userId = rq.getUserId();
         String yxUserId = rq.getYxUserId();

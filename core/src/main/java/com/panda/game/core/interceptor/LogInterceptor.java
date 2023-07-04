@@ -22,17 +22,13 @@ public class LogInterceptor implements CommandInterceptor {
         if (!it.hasNext()) {
             return;
         }
+        CommandInterceptor interceptor = it.next();
 
+        boolean isError = false;
         Class<?> action = ctx.getAction();
         Method method = ctx.getMethod();
         Object[] params = ctx.getParams();
         long createdTime = ctx.getCreatedTime();
-        PacketPb.Pkg pkg = ctx.getPkg();
-        int index = ctx.getIndex();
-
-        CommandInterceptor interceptor = it.next();
-
-        boolean isError = false;
         long beginTime = System.currentTimeMillis();
         ctx.setBeginTime(beginTime);
         try {
@@ -41,7 +37,6 @@ public class LogInterceptor implements CommandInterceptor {
             isError = true;
             dayLog.error("{}.{}()执行异常", e, action.getSimpleName(), method.getName());
         }
-
         long endTime = System.currentTimeMillis();
         ctx.setEndTime(endTime);
 
@@ -59,7 +54,8 @@ public class LogInterceptor implements CommandInterceptor {
             }
         }
 
-        dayLog.info("#i#[{}]#{}#{}#{}#{}#{}#{}#{}#{}#{}#", index, pkg.getRequestId(), pkg.getPlayerId(), sb.toString(), action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime, isError ? "Error" : "");
+        dayLog.info("#i#[{}]#{}#{}#{}#{}#{}#{}#{}#{}#{}#", ctx.getIndex(), ctx.getRequestId(), ctx.getPlayerId(), sb.toString(),
+                action.getSimpleName(), method.getName(), requestParam, beginTime - createdTime, endTime - beginTime, isError ? "Error" : "");
     }
 
 }

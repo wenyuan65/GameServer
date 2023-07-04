@@ -3,7 +3,6 @@ package com.panda.game.logic;
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.config.Configuration;
 import com.panda.game.common.constants.DataBaseType;
-import com.panda.game.common.utils.MixUtil;
 import com.panda.game.core.BaseServer;
 import com.panda.game.core.cache.CacheFactory;
 import com.panda.game.core.cmd.CommandManager;
@@ -11,7 +10,7 @@ import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
-import com.panda.game.core.netty.handler.LogicHandler;
+import com.panda.game.core.netty.handler.PacketCommandHandler;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
 import com.panda.game.core.proto.ProtoManager;
 import com.panda.game.logic.base.ModuleServiceHelper;
@@ -100,7 +99,7 @@ public class LogicServer extends BaseServer {
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("LogicTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
+            NettyServer nettyServer = new NettyServer("LogicTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, PacketCommandHandler.class));
             nettyServer.init();
             nettyServer.start();
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.panda.game.core.netty.initializer;
 
 import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.netty.NettyServerInitializer;
+import com.panda.game.core.netty.handler.HttpCommandHandler;
 import com.panda.game.core.netty.handler.PacketInboundHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -17,11 +18,8 @@ import java.lang.reflect.Constructor;
 
 public class HttpChannelInitializer extends NettyServerInitializer {
 
-	private Class<? extends PacketInboundHandler> handlerClazz;
-
-	public HttpChannelInitializer(ServerConfig config, Class<? extends PacketInboundHandler> handlerClazz) {
+	public HttpChannelInitializer(ServerConfig config) {
 		super(config);
-		this.handlerClazz = handlerClazz;
 	}
 
 	@Override
@@ -36,15 +34,12 @@ public class HttpChannelInitializer extends NettyServerInitializer {
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
-		Constructor<? extends PacketInboundHandler> constructor = handlerClazz.getDeclaredConstructor(Boolean.TYPE);
-		PacketInboundHandler handler = constructor.newInstance(config.isUseSession());
-
 		ChannelPipeline cp = ch.pipeline();
 		cp.addLast(new HttpResponseEncoder());
 		cp.addLast(new HttpRequestDecoder());
 		cp.addLast(new HttpObjectAggregator(1024 * 1024));
 		cp.addLast(new ChunkedWriteHandler());
-		cp.addLast(handler);
+		cp.addLast(new HttpCommandHandler());
 	}
 
 }

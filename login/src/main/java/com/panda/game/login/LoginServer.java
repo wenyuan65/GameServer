@@ -3,16 +3,14 @@ package com.panda.game.login;
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.config.Configuration;
 import com.panda.game.common.constants.DataBaseType;
-import com.panda.game.common.utils.MixUtil;
 import com.panda.game.common.utils.SnowFlake;
 import com.panda.game.core.BaseServer;
 import com.panda.game.core.cmd.CommandManager;
 import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
-import com.panda.game.core.netty.NettyClientConfig;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
-import com.panda.game.core.netty.handler.LogicHandler;
+import com.panda.game.core.netty.initializer.HttpChannelInitializer;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
 import com.panda.game.core.proto.ProtoManager;
 
@@ -80,11 +78,16 @@ public class LoginServer extends BaseServer {
         // 初始化Netty服务器
         ServerConfig serverConfig = new ServerConfig();
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
+        NettyServerConfig nettyServerConfig2 = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("LoginTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
-            nettyServer.init();
-            nettyServer.start();
+            NettyServer tcpServer = new NettyServer("LoginTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig));
+            tcpServer.init();
+            tcpServer.start();
+
+            NettyServer httpServer = new NettyServer("LoginHttpServer", serverConfig, nettyServerConfig2, new HttpChannelInitializer(serverConfig));
+            httpServer.init();
+            httpServer.start();
         } catch (Exception e) {
             log.error("服务器启动异常", e);
             return false;

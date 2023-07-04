@@ -140,7 +140,6 @@ public class AOIMap {
         int y1 = y - h * gridNum;
         int y2 = y + h * gridNum;
 
-//        List<AOIEntity> result = new LinkedList<>();
         List<AOIEntity> result = new ArrayList<>(1024);
         List<AOINode> candidateHeadNodeList = new ArrayList<>();
         AOINode headX = node.getHeadX();

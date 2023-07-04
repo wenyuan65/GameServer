@@ -1,24 +1,21 @@
 package com.panda.game.core.cmd;
 
-import com.google.protobuf.MessageLite;
-import com.google.protobuf.Parser;
 import com.panda.game.common.lang.Tuple;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
 import com.panda.game.common.utils.ScanUtil;
+import com.panda.game.core.annotation.Bind;
+import com.panda.game.core.annotation.HttpCommand;
 import com.panda.game.core.cmd.annotation.Action;
 import com.panda.game.core.cmd.annotation.Command;
 import com.panda.game.core.annotation.Order;
-import com.panda.game.core.cmd.inject.ChannelInjector;
-import com.panda.game.core.cmd.inject.PlayerIdInjector;
-import com.panda.game.core.cmd.inject.ProtoBufInjector;
+import com.panda.game.core.cmd.handler.HttpCmdHandler;
+import com.panda.game.core.cmd.handler.ProtoBufCmdHandler;
 import com.panda.game.core.interceptor.CommandInterceptor;
 import com.panda.game.proto.CmdPb;
 import com.panda.game.proto.PacketPb;
 import io.netty.channel.Channel;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -35,7 +32,8 @@ public class CommandManager {
         return instance;
     }
 
-    private Map<Integer, CmdHandler> commandMap = new HashMap<>();
+    private Map<Integer, ProtoBufCmdHandler> commandMap = new HashMap<>();
+    private Map<String, HttpCmdHandler> httpCmdMap = new HashMap<>();
 
     private Map<Class<?>, Class<? extends Injector>> injectorClazzMap = new HashMap<>();
 
@@ -48,22 +46,76 @@ public class CommandManager {
             if (action == null) {
                 continue;
             }
+            Bind actionBind = clazz.getDeclaredAnnotation(Bind.class);
 
             Method[] methods = clazz.getDeclaredMethods();
             for (Method method : methods) {
                 Command cmd = method.getDeclaredAnnotation(Command.class);
-                if (cmd == null) {
+                if (cmd != null) {
+                    if (!initCmd(clazz, method, cmd, actionBind)){
+                        return false;
+                    }
                     continue;
                 }
 
-                CmdHandler cmdHandler = new CmdHandler();
-                cmdHandler.init(clazz, method, cmd);
-                commandMap.put(cmd.value(), cmdHandler);
-
-                logger.info("注册handler: {}.{}(), {}", clazz.getName(), method.getName(), CmdPb.Cmd.forNumber(cmd.value()).name());
+                HttpCommand httpCmd = method.getDeclaredAnnotation(HttpCommand.class);
+                if (httpCmd != null) {
+                    if (!initHttpCmd(clazz, method, httpCmd, actionBind)) {
+                        return false;
+                    }
+                    continue;
+                }
             }
         }
 
+        if (!initInterceptors()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean initCmd(Class<?> clazz, Method method, Command cmd, Bind actionBind) {
+        Bind cmdBind = method.getDeclaredAnnotation(Bind.class);
+        if (cmdBind == null) {
+            cmdBind = actionBind;
+        }
+
+        ProtoBufCmdHandler cmdHandler = new ProtoBufCmdHandler();
+        cmdHandler.init(clazz, method, cmdBind);
+
+        if (commandMap.containsKey(cmd.value())) {
+            ProtoBufCmdHandler oldHandler = commandMap.get(cmd.value());
+            logger.error("{}命令冲突，{}.{}()与{}.{}()命令相同", CmdPb.Cmd.forNumber(cmd.value()), clazz.getName(), method.getName(), oldHandler.getAction().getName(), oldHandler.getMethod().getName());
+            return false;
+        }
+        commandMap.put(cmd.value(), cmdHandler);
+
+        logger.info("注册handler: {}.{}(), {}", clazz.getName(), method.getName(), CmdPb.Cmd.forNumber(cmd.value()));
+        return true;
+    }
+
+    private boolean initHttpCmd(Class<?> clazz, Method method, HttpCommand httpCmd, Bind actionBind) {
+        Bind cmdBind = method.getDeclaredAnnotation(Bind.class);
+        if (cmdBind == null) {
+            cmdBind = actionBind;
+        }
+
+        HttpCmdHandler cmdHandler = new HttpCmdHandler();
+        cmdHandler.init(clazz, method, cmdBind);
+
+        if (httpCmdMap.containsKey(httpCmd.value())) {
+            HttpCmdHandler oldHandler = httpCmdMap.get(httpCmd.value());
+            logger.error("{}命令冲突，{}.{}()与{}.{}()命令相同", httpCmd.value(), clazz.getName(), method.getName(), oldHandler.getAction().getName(), oldHandler.getMethod().getName());
+            return false;
+        }
+        httpCmdMap.put(httpCmd.value(), cmdHandler);
+
+        logger.info("注册handler: {}.{}(), {}", clazz.getName(), method.getName(), httpCmd.value());
+        return true;
+    }
+
+    private boolean initInterceptors() {
         List<CommandInterceptor> tmpList = new ArrayList<>(interceptorList);
         List<Tuple<CommandInterceptor, Integer>> list = new ArrayList<>(tmpList.size() + 1);
         for (CommandInterceptor interceptor : tmpList) {
@@ -90,8 +142,12 @@ public class CommandManager {
         return true;
     }
 
-    public void registerInjector(Class<?> clazz, Class<? extends Injector<?>> injectorClazz) {
+    public void registerInjector(Class<?> clazz, Class<? extends Injector<?, ?>> injectorClazz) {
         injectorClazzMap.put(clazz, injectorClazz);
+    }
+
+    public Class<? extends Injector> getExtraInjectorClass(Class<?> paramType) {
+        return injectorClazzMap.get(paramType);
     }
 
     public void addInterceptor(List<CommandInterceptor> list) {
@@ -110,7 +166,7 @@ public class CommandManager {
 
     public void handle(Channel channel, PacketPb.Pkg pkg) {
         int cmd = pkg.getCmd();
-        CmdHandler handler = commandMap.get(cmd);
+        ProtoBufCmdHandler handler = commandMap.get(cmd);
         if (handler == null) {
             logger.error("接口{}没有找到对应的处理方法", cmd);
             return ;
@@ -123,29 +179,18 @@ public class CommandManager {
         }
     }
 
-    public <T> Injector<?> parse(Class<T> paramType, String paramName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        if (MessageLite.class.isAssignableFrom(paramType)) {
-            Method method = paramType.getDeclaredMethod("parser");
-            Parser<T> parser = (Parser<T>) method.invoke(null);
-            if (parser == null) {
-                throw new RuntimeException(paramType.getName() + "没有parser()方法");
-            }
-
-            return new ProtoBufInjector<>(parser);
-        }
-        if (injectorClazzMap.containsKey(paramType)) {
-            Class<? extends Injector> clazz = injectorClazzMap.get(paramType);
-            Constructor<? extends Injector> constructor = clazz.getConstructor();
-            return constructor.newInstance();
-        }
-        if (Channel.class == paramType) {
-            return new ChannelInjector();
-        }
-        if ("playerId".equals(paramName)) {
-            return new PlayerIdInjector();
+    public void handleHttp(Channel channel, String cmd, Map<String, String> paramMap) {
+        HttpCmdHandler handler = httpCmdMap.get(cmd);
+        if (handler == null) {
+            logger.error("接口{}没有找到对应的处理方法", cmd);
+            return ;
         }
 
-        throw new RuntimeException(paramType.getSimpleName() + "/ " + paramName + "没有对应的injector");
+        try {
+            handler.handle(channel, paramMap, interceptorList);
+        } catch (Exception e) {
+            logger.error("执行命令异常异常:{}, 参数：{}", e, cmd, paramMap);
+        }
     }
 
 }

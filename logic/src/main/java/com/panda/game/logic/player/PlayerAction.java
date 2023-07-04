@@ -16,7 +16,7 @@ public class PlayerAction {
      * @param rq
      * @param player
      */
-    @Command(value = Cmd.PlayerGetInfoRq_VALUE)
+    @Command(Cmd.PlayerGetInfoRq_VALUE)
     public void getInfo(PlayerGetInfoRq rq, GamePlayer player) {
         player.getService(PlayerService.class).getInfo(rq);
     }

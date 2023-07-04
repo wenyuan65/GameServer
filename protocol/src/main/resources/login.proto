@@ -22,6 +22,8 @@ message LoginRq {
 message LoginRs {
     int64 playerId = 1;
     int32 logicNodeId = 2; // 逻辑节点的id
+    string ip = 3;      // 登陆ip
+    int32 port = 4;     // 连接port
 }
 
 // 登陆到gateway

@@ -1,12 +1,13 @@
-package com.panda.game.core.cmd.inject;
+package com.panda.game.core.cmd.inject.pkg;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import com.panda.game.core.cmd.Injector;
+import com.panda.game.core.cmd.inject.PacketPkgInjector;
 import com.panda.game.proto.PacketPb;
 import io.netty.channel.Channel;
 
-public class ProtoBufInjector<T> implements Injector<T> {
+public class ProtoBufInjector<T> implements PacketPkgInjector<T> {
 
     private Parser<T> parser;
 

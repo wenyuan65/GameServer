@@ -5,6 +5,7 @@ import com.panda.game.common.constants.NodeCluster;
 import com.panda.game.common.constants.NodeType;
 import com.panda.game.common.utils.SnowFlake;
 import com.panda.game.common.utils.StringUtils;
+import com.panda.game.core.annotation.Bind;
 import com.panda.game.core.cmd.CmdBindType;
 import com.panda.game.core.cmd.annotation.Action;
 import com.panda.game.core.cmd.annotation.Command;
@@ -27,7 +28,8 @@ import java.util.Date;
 @Action
 public class UserAction extends BaseAction {
 
-    @Command(value=CmdPb.Cmd.CreateUserRq_VALUE, bindType=CmdBindType.Bind_Group)
+    @Bind(bindType=CmdBindType.Bind_Group)
+    @Command(CmdPb.Cmd.CreateUserRq_VALUE)
     public void createUser(LoginPb.CreateUserRq rq, Channel channel) {
         String userName = rq.getUserName();
         String password = rq.getPassword();
@@ -57,7 +59,7 @@ public class UserAction extends BaseAction {
         sendOk(channel, CmdPb.Cmd.CreateUserRs_VALUE);
     }
 
-    @Command(value=CmdPb.Cmd.LoginRq_VALUE, bindType=CmdBindType.Bind_Group)
+    @Command(CmdPb.Cmd.LoginRq_VALUE)
     public void login(LoginPb.LoginRq rq, Channel channel) {
         String userName = rq.getUserName();
         String password = rq.getPassword();
@@ -101,7 +103,7 @@ public class UserAction extends BaseAction {
         builder.setNodeId(user.getLogicNodeId());
         builder.setYxUserId(user.getYxUserId());
 
-        GatewayLoginRs loginRs = RpcManager.getInstance().sendSync(instance.getIp(), instance.getPort(), CmdPb.Cmd.GatewayLoginRq_VALUE, builder.build());
+        GatewayLoginRs loginRs = RpcManager.getInstance().sendSync(instance, CmdPb.Cmd.GatewayLoginRq_VALUE, builder.build());
         if (loginRs == null) {
             sendError(channel, CmdPb.Cmd.LoginRs_VALUE, CmdPb.ErrorCode.GameServiceError_VALUE);
             return ;
@@ -110,6 +112,8 @@ public class UserAction extends BaseAction {
         LoginRs.Builder rs = LoginRs.newBuilder();
         rs.setPlayerId(loginRs.getPlayerId());
         rs.setLogicNodeId(user.getLogicNodeId());
+        rs.setIp(instance.getIp());
+        rs.setPort(instance.getPort());
         sendMessage(channel, CmdPb.Cmd.LoginRs_VALUE, rs.build());
     }
 

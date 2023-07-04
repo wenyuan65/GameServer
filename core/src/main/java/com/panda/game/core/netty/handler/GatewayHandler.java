@@ -22,7 +22,7 @@ import io.netty.util.Attribute;
 
 public class GatewayHandler extends PacketInboundHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(LogicHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(PacketCommandHandler.class);
 
     public GatewayHandler() {
     }

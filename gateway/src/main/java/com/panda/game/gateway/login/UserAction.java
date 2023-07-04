@@ -16,7 +16,7 @@ import java.net.InetSocketAddress;
 @Action
 public class UserAction extends BaseAction {
 
-    @Command(value = CmdPb.Cmd.GatewayLoginRq_VALUE)
+    @Command(CmdPb.Cmd.GatewayLoginRq_VALUE)
     public void login(GatewayLoginRq rq, Channel channel) {
         int nodeId = rq.getNodeId();
         Instance node = NodeManager.getInstance().getNode(NodeType.Logic, nodeId);
@@ -32,7 +32,7 @@ public class UserAction extends BaseAction {
         builder.setYx(rq.getYx());
         builder.setYxUserId(rq.getYxUserId());
 
-        LogicLoginRs loginRs = RpcManager.getInstance().sendSync(node.getIp(), node.getPort(), CmdPb.Cmd.LogicLoginRq_VALUE, builder.build());
+        LogicLoginRs loginRs = RpcManager.getInstance().sendSync(node, CmdPb.Cmd.LogicLoginRq_VALUE, builder.build());
         if (loginRs == null) {
             sendError(channel, CmdPb.Cmd.GatewayLoginRs_VALUE, CmdPb.ErrorCode.GameServiceError_VALUE);
             return;
@@ -43,7 +43,7 @@ public class UserAction extends BaseAction {
         sendMessage(channel, CmdPb.Cmd.GatewayLoginRs_VALUE, rs.build());
     }
 
-    @Command(value = CmdPb.Cmd.GatewayConnectRq_VALUE)
+    @Command(CmdPb.Cmd.GatewayConnectRq_VALUE)
     public GatewayConnectRs connect(GatewayConnectRq rq, Channel channel) {
 
 

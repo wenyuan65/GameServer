@@ -8,7 +8,7 @@ import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
-import com.panda.game.core.netty.handler.LogicHandler;
+import com.panda.game.core.netty.handler.PacketCommandHandler;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
 import com.panda.game.core.proto.ProtoManager;
 
@@ -70,7 +70,7 @@ public class GatewayServer extends BaseServer {
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("GatewayTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, LogicHandler.class));
+            NettyServer nettyServer = new NettyServer("GatewayTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, PacketCommandHandler.class));
             nettyServer.init();
             nettyServer.start();
         } catch (Exception e) {

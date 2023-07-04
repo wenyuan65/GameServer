@@ -1,20 +1,25 @@
 package com.panda.game.core.cmd;
 
-import com.panda.game.proto.PacketPb;
+import com.panda.game.common.constants.CommandType;
 import io.netty.channel.Channel;
 
 import java.lang.reflect.Method;
 
 public class CommandContext {
 
+    // 请求类型
+    private CommandType commandType;
     // 网络通道
     private Channel channel;
     // 执行方法相关
     private Class<?> action;
     private Method method;
     private Object instance;
+    private Object result;
     // 请求数据
-    private PacketPb.Pkg pkg;
+    private int cmd;
+    private int requestId;
+    private long playerId;
     private Object[] params;
     // 执行的线程id
     private int index;
@@ -22,6 +27,14 @@ public class CommandContext {
     private long createdTime = System.currentTimeMillis();
     private long beginTime;
     private long endTime;
+
+    public CommandType getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(CommandType commandType) {
+        this.commandType = commandType;
+    }
 
     public Channel getChannel() {
         return channel;
@@ -55,6 +68,14 @@ public class CommandContext {
         this.instance = instance;
     }
 
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
     public Object[] getParams() {
         return params;
     }
@@ -63,12 +84,28 @@ public class CommandContext {
         this.params = params;
     }
 
-    public PacketPb.Pkg getPkg() {
-        return pkg;
+    public int getCmd() {
+        return cmd;
     }
 
-    public void setPkg(PacketPb.Pkg pkg) {
-        this.pkg = pkg;
+    public void setCmd(int cmd) {
+        this.cmd = cmd;
+    }
+
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
+    }
+
+    public long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
     }
 
     public int getIndex() {
