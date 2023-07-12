@@ -3,13 +3,18 @@ package com.panda.game.common.timer;
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.log.Logger;
 import com.panda.game.common.log.LoggerFactory;
+import com.panda.game.common.timer.annotation.Crontab;
 import com.panda.game.common.timer.future.Future;
 import com.panda.game.common.timer.future.FutureImpl;
 import com.panda.game.common.timer.impl.CronTimerTask;
 import com.panda.game.common.timer.impl.ScheduledTimerTask;
 import com.panda.game.common.timer.impl.SimpleTimeTask;
 import com.panda.game.common.timer.quartz.Job;
+import com.panda.game.common.utils.StringUtils;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +38,41 @@ public final class Scheduler {
 
 	public static ThreadPoolExecutor getThreadPool() {
 		return ServerThreadManager.getInstance().getSchedulerThreadPool();
+	}
+
+	public static boolean init(Class<?> clazz) {
+		try {
+			// 实例
+			Object instance = clazz.newInstance();
+
+			Method[] methods = clazz.getDeclaredMethods();
+			for (int i = 0; i < methods.length; i++) {
+				Method method = methods[i];
+				Crontab crontab = method.getDeclaredAnnotation(Crontab.class);
+				if (crontab == null) {
+					continue;
+				}
+				int modifiers = method.getModifiers();
+				if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) {
+					continue;
+				}
+				Parameter[] parameters = method.getParameters();
+				if (parameters == null || parameters.length != 1 || parameters[0].getType() != long.class) {
+					log.error("定时任务{}，执行方法的参数列表异常", method.getName());
+					return false;
+				}
+
+				int jobId = crontab.jobId() <= 0 ? i + 1 : crontab.jobId();
+				String jobName = StringUtils.isBlank(crontab.jobName()) ? method.getName() : crontab.jobName();
+
+				Scheduler.addJob(new Job(jobId, jobName, instance, method, crontab.value()));
+			}
+		} catch (Throwable e) {
+			log.error("初始化定时任务异常", e);
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

@@ -82,6 +82,9 @@ public class HttpCmdHandler extends AbstractCmdHandler<Map<String, String>> {
     }
 
     protected HttpParamInjector<?> parseInjectors(Class<?> paramType, String paramName) {
+        if (Channel.class.isAssignableFrom(paramType)) {
+            return new ChannelParamInjector();
+        }
         if (paramType == String.class) {
             return new StringParamInjector();
         }
@@ -91,17 +94,17 @@ public class HttpCmdHandler extends AbstractCmdHandler<Map<String, String>> {
         if (paramType == long.class || paramType == Long.class) {
             return new LongParamInjector();
         }
-        if (paramType == boolean.class || paramType == Boolean.class) {
-            return new BooleanParamInjector();
-        }
-        if (paramType == byte.class || paramType == Byte.class) {
-            return new ByteParamInjector();
-        }
         if (paramType == double.class || paramType == Double.class) {
             return new DoubleParamInjector();
         }
         if (paramType == float.class || paramType == Float.class) {
             return new FloatParamInjector();
+        }
+        if (paramType == boolean.class || paramType == Boolean.class) {
+            return new BooleanParamInjector();
+        }
+        if (paramType == byte.class || paramType == Byte.class) {
+            return new ByteParamInjector();
         }
 
         throw new RuntimeException(paramType.getSimpleName() + "/ " + paramName + "没有对应的injector");

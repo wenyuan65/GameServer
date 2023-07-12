@@ -1,5 +1,7 @@
 package com.panda.game.core.common;
 
+import com.panda.game.common.json.JsonDocument;
+import com.panda.game.proto.CmdPb;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.*;
@@ -9,6 +11,33 @@ import java.util.Base64;
 import java.util.Map;
 
 public class BaseHttpAction {
+
+    public void sendOk(Channel channel) {
+        sendOk(channel, null);
+    }
+
+    public void sendOk(Channel channel, String result) {
+        JsonDocument doc = new JsonDocument();
+        doc.startObject();
+        doc.createElement("state", CmdPb.ErrorCode.Ok_VALUE);
+
+        if (result != null) {
+            doc.append("msg", result);
+        }
+
+        doc.endObject();
+
+        sendMessage(channel, doc.toByte());
+    }
+
+    public void sendError(Channel channel, int errorCode) {
+        JsonDocument doc = new JsonDocument();
+        doc.startObject();
+        doc.createElement("state", errorCode);
+        doc.endObject();
+
+        sendMessage(channel, doc.toByte());
+    }
 
     public void sendMessage(Channel channel, byte[] content) {
         sendMessage(channel, content, null);

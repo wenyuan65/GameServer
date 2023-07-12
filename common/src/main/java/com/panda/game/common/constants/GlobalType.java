@@ -2,7 +2,7 @@ package com.panda.game.common.constants;
 
 public enum GlobalType {
 
-    Version(1, "版本号"),
+    Version(1, "数据库版本号"),
     Server_Start_Time(2, "开服时间"),
     ;
 

@@ -45,7 +45,7 @@ public class GatewayHandler extends PacketInboundHandler {
         if (pkg.getNodeType() == NodeType.Gateway.getType()) {
             CommandManager.getInstance().handle(channel, pkg);
         } else {
-            ServerThreadManager.getInstance().runAny(() -> handlePacket(channel, pkg));
+            ServerThreadManager.getInstance().runAsync(() -> handlePacket(channel, pkg));
         }
     }
 

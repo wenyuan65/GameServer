@@ -3,6 +3,7 @@ package com.panda.game.logic;
 import com.panda.game.common.concrrent.ServerThreadManager;
 import com.panda.game.common.config.Configuration;
 import com.panda.game.common.constants.DataBaseType;
+import com.panda.game.common.timer.Scheduler;
 import com.panda.game.core.BaseServer;
 import com.panda.game.core.cache.CacheFactory;
 import com.panda.game.core.cmd.CommandManager;
@@ -10,14 +11,13 @@ import com.panda.game.core.common.ServerConfig;
 import com.panda.game.core.interceptor.*;
 import com.panda.game.core.netty.NettyServer;
 import com.panda.game.core.netty.NettyServerConfig;
-import com.panda.game.core.netty.handler.PacketCommandHandler;
 import com.panda.game.core.netty.initializer.TcpChannelInitializer;
 import com.panda.game.core.proto.ProtoManager;
 import com.panda.game.logic.base.ModuleServiceHelper;
 import com.panda.game.logic.common.EntityIdManager;
 import com.panda.game.logic.common.GamePlayer;
 import com.panda.game.logic.common.GamePlayerInjector;
-import com.panda.game.logic.world.ScheduleTaskManager;
+import com.panda.game.logic.timer.TimerTasks;
 import com.panda.game.logic.world.WorldManager;
 
 import java.util.Arrays;
@@ -77,7 +77,7 @@ public class LogicServer extends BaseServer {
         if (!init(() -> WorldManager.getInstance().init(), "初始化公共模块类")) {
             return ;
         }
-        if (!init(() -> ScheduleTaskManager.getInstance().init(), "初始化定时任务")) {
+        if (!init(() -> Scheduler.init(TimerTasks.class), "初始化定时任务")) {
             return ;
         }
 
@@ -99,7 +99,7 @@ public class LogicServer extends BaseServer {
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("LogicTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, PacketCommandHandler.class));
+            NettyServer nettyServer = new NettyServer("LogicTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig));
             nettyServer.init();
             nettyServer.start();
         } catch (Exception e) {

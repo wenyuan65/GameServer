@@ -70,7 +70,7 @@ public class GatewayServer extends BaseServer {
         NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
         try {
-            NettyServer nettyServer = new NettyServer("GatewayTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig, PacketCommandHandler.class));
+            NettyServer nettyServer = new NettyServer("GatewayTcpServer", serverConfig, nettyServerConfig, new TcpChannelInitializer(serverConfig));
             nettyServer.init();
             nettyServer.start();
         } catch (Exception e) {

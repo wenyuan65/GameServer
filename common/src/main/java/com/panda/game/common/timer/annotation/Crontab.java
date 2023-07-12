@@ -1,4 +1,4 @@
-package com.panda.game.core.annotation;
+package com.panda.game.common.timer.annotation;
 
 import java.lang.annotation.*;
 

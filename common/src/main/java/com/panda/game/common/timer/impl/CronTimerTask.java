@@ -40,29 +40,33 @@ public class CronTimerTask implements TimerTask {
 	@Override
 	public void run(Timeout timeout) throws Exception {
 		executor.submit(new Runnable() {
-
 			@Override
 			public void run() {
-				log.info("#execute#job#{}#{}#{}#{}#begin", job.getJobName());
-
-				try {
-					Object target = job.getTarget();
-					Method method = job.getMethod();
-
-					method.invoke(target);
-				} catch (Throwable e) {
-					log.error("定时任务执行异常， {}", e, job.getJobName());
-				} finally {
-					// 设置下一次的定时任务的时间
-					Date fireTimeAfter = CronTimerTask.this.cronTrigger.getFireTimeAfter(nextFireTime);
-					CronTimerTask.this.nextFireTime = fireTimeAfter;
-					long delay = fireTimeAfter.getTime() - System.currentTimeMillis();
-					timeout.timer().newTimeout(CronTimerTask.this, delay, TimeUnit.MILLISECONDS);
-					
-					log.info("#execute#job#{}#{}#{}#{}#finish#{}#", job.getJobName(), DateUtil.format(fireTimeAfter));
-				}
+				execute(timeout);
 			}
 		});
+	}
+
+	private void execute(Timeout timeout) {
+		log.info("#execute#job#{}#begin", job.getJobName());
+
+		try {
+			Object target = job.getTarget();
+			Method method = job.getMethod();
+			long time = nextFireTime.getTime();
+
+			method.invoke(target, time);
+		} catch (Throwable e) {
+			log.error("定时任务执行异常， {}", e, job.getJobName());
+		} finally {
+			// 设置下一次的定时任务的时间
+			Date fireTimeAfter = CronTimerTask.this.cronTrigger.getFireTimeAfter(nextFireTime);
+			CronTimerTask.this.nextFireTime = fireTimeAfter;
+			long delay = fireTimeAfter.getTime() - System.currentTimeMillis();
+			timeout.timer().newTimeout(CronTimerTask.this, delay, TimeUnit.MILLISECONDS);
+
+			log.info("#execute#job#{}#finish#{}#", job.getJobName(), DateUtil.format(fireTimeAfter));
+		}
 	}
 	
 	public Date getNextFireTime() {
