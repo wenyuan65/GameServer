@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "RedisPb";
+
+package com.panda.game.proto;
+
+// redis订阅cmd
+enum RedisCmd {
+    Player_Online_Message = 0;  // 玩家在线消息
+}
+
+// 在线玩家数据
+message PlayerOnlinePb {
+    int32 lv = 1;               // 经验
+    int32 exp = 2;              // 经验
+    string name = 3;            // 名称
+    string pic = 4;             // 头像
+}
+
+
+
+

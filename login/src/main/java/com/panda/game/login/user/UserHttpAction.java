@@ -32,7 +32,7 @@ import java.util.Date;
 public class UserHttpAction extends BaseHttpAction {
 
     @Bind(bindType=CmdBindType.Bind_Group)
-    @HttpCommand("createUser")
+    @HttpCommand("/user/create")
     public void createUser(String userName, String password, Channel channel) {
         if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)) {
             sendError(channel, CmdPb.ErrorCode.Param_VALUE);
@@ -60,7 +60,7 @@ public class UserHttpAction extends BaseHttpAction {
         sendOk(channel);
     }
 
-    @HttpCommand("login")
+    @HttpCommand("/user/login")
     public void login(String userName, String password, Channel channel) {
         if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)) {
             sendError(channel, CmdPb.ErrorCode.Param_VALUE);

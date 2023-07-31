@@ -10,12 +10,24 @@ tools：代码自动生成、机器人模块
 
 特性：
 1.使用protoBuf协议作为网络数据编码方式
-2.接口执行时，支持多种将其绑定到指定线程的策略
-3.在内存中维护玩家数据，异步落库
-4.支持分模块加载玩家的数据
+2.接口执行时，支持多种将其绑定到指定任务队列的策略，队列内串行执行，减少加锁消耗
+3.在内存中维护玩家数据，异步落库，支持启动时检测数据库版本号
+4.支持分模块加载玩家的数据, 优化加载不在线玩家的数据量
 5.玩家数据及公共数据支持多种类型的生命周期
 6.支持redis订阅接口
-7.支持服务以node为节点注册,提供soa服务,node之间通过rpc请求通信
+7.提供soa服务，支持服务器以node为节点向nacos服务中心注册，node之间通过rpc请求通信
+8.支持http和tcp两种通信模式
+9.使用时间轮定时器，支持延迟、定时间隔以及crontab表达式的定时任务
+10.支持基于protoBuf协议的RPC通信机制
+11.支持定制请求拦截器
+12.提供了一个灵活的json构造器JsonBuilder
+13.提供了一个支持在线修改的通用配置文件读取工具Configuration
+14.提供了一个多语言工具LocalMessage，以及消息模板格式化工具MessageFormat
+15.提供了一个通用的排行榜工具RankManager/Rank，采用前N名精确排行，N名之后采用非精确排行的方式排名
+16.封装logback日志框架，提供多种类型的日志，并且优化错误日志
+17.提供了一个雪花算法SnowFlake，每秒产生3.2万个Id。在流量峰值时，可扩大Id使用量，最多支持5 * 3.2万=16万个Id
+18.提供了日期处理工具，http/https请求发送工具，随机工具，类扫描工具，字符串处理工具等
+19.提供了解析pcap文件的工具，将protoBuf数据流反序列化成json
 
 
 Action类：
@@ -30,12 +42,13 @@ public class PlayerAction {
     public void getPlayerInfo(PlayerGetInfoRq rq, GamePlayer player) {
     }
 
-
-    @Command(value=Cmd.PlayerUpdateNameRq_Value, index = 0, bind={"playerId"})
+    @Bind(bindType=CmdBindType.Bind_Fields, index = 0, bind={"playerId"})
+    @Command(Cmd.PlayerUpdateNameRq_Value)
     public void updatePlayerName(PlayerUpdateNameRq rq, GamePlayer player) {
     }
 
-    @Command(value=Cmd.ClubApplyRq_Value, index = 0, bind={"clubId"}) // ClubApplyRq中包含clubId字段
+    @Bind(bindType=CmdBindType.Bind_Fields, index = 0, bind={"clubId"}) // ClubApplyRq中包含clubId字段
+    @Command(Cmd.ClubApplyRq_Value)
     public void apply(ClubApplyRq rq, GamePlayer player) {
     }
 
@@ -47,14 +60,14 @@ public class PlayerAction {
 public class PlayerTimer {
 
     @Schedule(crontab="0 0 0 * * ? *")
-    public void resetOnlinePlayerDaily() {
+    public void resetOnlinePlayerDaily(long now) {
 
     }
 
 }
 
 
-自动生成带option的setter/getter方法：
+IDEA中，自动生成带option的setter/getter方法：
 ```
 #set($paramName = $helper.getParamName($field, $project))
 #if($field.modifierStatic)

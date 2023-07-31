@@ -45,8 +45,10 @@ public class TaskQueue {
         } catch (Throwable e) {
             log.error("任务执行异常", e);
         } finally {
-            if (!queue.remove(task)) {
-                log.error("删除任务异常");
+            synchronized (this) {
+                if (!queue.remove(task)) {
+                    log.error("删除任务异常");
+                }
             }
 
             Runnable nextTask = queue.peek();

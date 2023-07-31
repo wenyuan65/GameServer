@@ -1,5 +1,8 @@
 package com.panda.game.common.utils;
 
+import com.panda.game.common.log.Logger;
+import com.panda.game.common.log.LoggerFactory;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,6 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * serverId(16) + timestamp(32) + sequence(15)<br/>
  */
 public class SnowFlake {
+
+    private static final Logger log = LoggerFactory.getLogger(SnowFlake.class);
 
     private static final int ServerId_Bit_Num = 16;
     private static final int Timestamp_Bit_Num = 32;
@@ -81,12 +86,12 @@ public class SnowFlake {
         if (newSequence == 0) {
             lastTime ++;
 
-            long timestampSecond = System.currentTimeMillis() / 1000;
-            if (lastTime - timestampSecond > Time_Offset) {
+            long currentTime = System.currentTimeMillis() / 1000;
+            if (lastTime - currentTime > Time_Offset) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    log.error("生成ID时，sleep中断", e);
                 }
             }
         }

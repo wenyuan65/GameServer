@@ -3,7 +3,7 @@ package com.panda.game.core.annotation;
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Inherited
 @Documented
 public @interface RedisCommand {
