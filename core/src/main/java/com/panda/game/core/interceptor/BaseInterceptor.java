@@ -10,10 +10,10 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 
 @Order(99)
-public class BaseInterceptor implements CommandInterceptor {
+public class BaseInterceptor extends AbstractCommandInterceptor {
 
     @Override
-    public void invoke(CommandContext ctx, Iterator<CommandInterceptor> it) {
+    public void doInvoke(CommandContext ctx, Iterator<CommandInterceptor> it) {
         Method method = ctx.getMethod();
         Object instance = ctx.getInstance();
         Object[] params = ctx.getParams();
@@ -35,10 +35,6 @@ public class BaseInterceptor implements CommandInterceptor {
             builder.setBody(((MessageLite)result).toByteString());
 
             ctx.getChannel().writeAndFlush(builder);
-        }
-
-        if (it.hasNext()) {
-            it.next().invoke(ctx, it);
         }
     }
 

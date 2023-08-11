@@ -8,17 +8,24 @@ package com.panda.game.proto;
 // 请求相应接口id
 enum Cmd {
     Unkown = 0;
-    LoginRq = 1; // login
-    LoginRs = 2;
-    CreateUserRq = 3;
-    CreateUserRs = 4;
 
-    GatewayLoginRq = 100; // gateway
+    // redis订阅cmd
+    TopicPlayerOnline = 1;  // 玩家在线消息
+
+    // login
+    LoginRq = 81;
+    LoginRs = 82;
+    CreateUserRq = 83;
+    CreateUserRs = 84;
+
+    // gateway
+    GatewayLoginRq = 100;
     GatewayLoginRs = 101;
     GatewayConnectRq = 102;
     GatewayConnectRs = 103;
 
-    LogicLoginRq = 1001; // logic
+    // logic
+    LogicLoginRq = 1001;
     LogicLoginRs = 1002;
 
     PlayerGetInfoRq = 1003;

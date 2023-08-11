@@ -29,24 +29,32 @@ public final class CmdPb {
     Unkown(0),
     /**
      * <pre>
+     * redis订阅cmd
+     * </pre>
+     *
+     * <code>TopicPlayerOnline = 1;</code>
+     */
+    TopicPlayerOnline(1),
+    /**
+     * <pre>
      * login
      * </pre>
      *
-     * <code>LoginRq = 1;</code>
+     * <code>LoginRq = 81;</code>
      */
-    LoginRq(1),
+    LoginRq(81),
     /**
-     * <code>LoginRs = 2;</code>
+     * <code>LoginRs = 82;</code>
      */
-    LoginRs(2),
+    LoginRs(82),
     /**
-     * <code>CreateUserRq = 3;</code>
+     * <code>CreateUserRq = 83;</code>
      */
-    CreateUserRq(3),
+    CreateUserRq(83),
     /**
-     * <code>CreateUserRs = 4;</code>
+     * <code>CreateUserRs = 84;</code>
      */
-    CreateUserRs(4),
+    CreateUserRs(84),
     /**
      * <pre>
      * gateway
@@ -128,24 +136,32 @@ public final class CmdPb {
     public static final int Unkown_VALUE = 0;
     /**
      * <pre>
+     * redis订阅cmd
+     * </pre>
+     *
+     * <code>TopicPlayerOnline = 1;</code>
+     */
+    public static final int TopicPlayerOnline_VALUE = 1;
+    /**
+     * <pre>
      * login
      * </pre>
      *
-     * <code>LoginRq = 1;</code>
+     * <code>LoginRq = 81;</code>
      */
-    public static final int LoginRq_VALUE = 1;
+    public static final int LoginRq_VALUE = 81;
     /**
-     * <code>LoginRs = 2;</code>
+     * <code>LoginRs = 82;</code>
      */
-    public static final int LoginRs_VALUE = 2;
+    public static final int LoginRs_VALUE = 82;
     /**
-     * <code>CreateUserRq = 3;</code>
+     * <code>CreateUserRq = 83;</code>
      */
-    public static final int CreateUserRq_VALUE = 3;
+    public static final int CreateUserRq_VALUE = 83;
     /**
-     * <code>CreateUserRs = 4;</code>
+     * <code>CreateUserRs = 84;</code>
      */
-    public static final int CreateUserRs_VALUE = 4;
+    public static final int CreateUserRs_VALUE = 84;
     /**
      * <pre>
      * gateway
@@ -245,10 +261,11 @@ public final class CmdPb {
     public static Cmd forNumber(int value) {
       switch (value) {
         case 0: return Unkown;
-        case 1: return LoginRq;
-        case 2: return LoginRs;
-        case 3: return CreateUserRq;
-        case 4: return CreateUserRs;
+        case 1: return TopicPlayerOnline;
+        case 81: return LoginRq;
+        case 82: return LoginRs;
+        case 83: return CreateUserRq;
+        case 84: return CreateUserRs;
         case 100: return GatewayLoginRq;
         case 101: return GatewayLoginRs;
         case 102: return GatewayConnectRq;
@@ -569,23 +586,23 @@ public final class CmdPb {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tcmd.proto\022\024com.panda.game.proto*\235\003\n\003Cm" +
-      "d\022\n\n\006Unkown\020\000\022\013\n\007LoginRq\020\001\022\013\n\007LoginRs\020\002\022" +
-      "\020\n\014CreateUserRq\020\003\022\020\n\014CreateUserRs\020\004\022\022\n\016G" +
-      "atewayLoginRq\020d\022\022\n\016GatewayLoginRs\020e\022\024\n\020G" +
-      "atewayConnectRq\020f\022\024\n\020GatewayConnectRs\020g\022" +
-      "\021\n\014LogicLoginRq\020\351\007\022\021\n\014LogicLoginRs\020\352\007\022\024\n" +
-      "\017PlayerGetInfoRq\020\353\007\022\024\n\017PlayerGetInfoRs\020\354" +
-      "\007\022\024\n\017PlayerSetNameRq\020\355\007\022\024\n\017PlayerSetName" +
-      "Rs\020\356\007\022\024\n\017FriendGetInfoRq\020\321\017\022\024\n\017FriendGet" +
-      "InfoRs\020\322\017\022\022\n\rFriendApplyRq\020\323\017\022\022\n\rFriendA" +
-      "pplyRs\020\324\017\022\022\n\rClubGetInfoRq\020\271\027\022\022\n\rClubGet" +
-      "InfoRs\020\272\027*\230\001\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param" +
-      "\020\001\022\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\024\n\020Ga" +
-      "meServiceError\020\004\022\016\n\nRpcTimeOut\020\n\022\020\n\014RpcS" +
-      "endError\020\013\022\021\n\rRpcSendFailed\020\014\022\r\n\tUserExi" +
-      "st\020eB\035\n\024com.panda.game.protoB\005CmdPbb\006pro" +
-      "to3"
+      "\n\tcmd.proto\022\024com.panda.game.proto*\264\003\n\003Cm" +
+      "d\022\n\n\006Unkown\020\000\022\025\n\021TopicPlayerOnline\020\001\022\013\n\007" +
+      "LoginRq\020Q\022\013\n\007LoginRs\020R\022\020\n\014CreateUserRq\020S" +
+      "\022\020\n\014CreateUserRs\020T\022\022\n\016GatewayLoginRq\020d\022\022" +
+      "\n\016GatewayLoginRs\020e\022\024\n\020GatewayConnectRq\020f" +
+      "\022\024\n\020GatewayConnectRs\020g\022\021\n\014LogicLoginRq\020\351" +
+      "\007\022\021\n\014LogicLoginRs\020\352\007\022\024\n\017PlayerGetInfoRq\020" +
+      "\353\007\022\024\n\017PlayerGetInfoRs\020\354\007\022\024\n\017PlayerSetNam" +
+      "eRq\020\355\007\022\024\n\017PlayerSetNameRs\020\356\007\022\024\n\017FriendGe" +
+      "tInfoRq\020\321\017\022\024\n\017FriendGetInfoRs\020\322\017\022\022\n\rFrie" +
+      "ndApplyRq\020\323\017\022\022\n\rFriendApplyRs\020\324\017\022\022\n\rClub" +
+      "GetInfoRq\020\271\027\022\022\n\rClubGetInfoRs\020\272\027*\230\001\n\tErr" +
+      "orCode\022\006\n\002Ok\020\000\022\t\n\005Param\020\001\022\014\n\010NoEnough\020\002\022" +
+      "\020\n\014ServiceError\020\003\022\024\n\020GameServiceError\020\004\022" +
+      "\016\n\nRpcTimeOut\020\n\022\020\n\014RpcSendError\020\013\022\021\n\rRpc" +
+      "SendFailed\020\014\022\r\n\tUserExist\020eB\035\n\024com.panda" +
+      ".game.protoB\005CmdPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

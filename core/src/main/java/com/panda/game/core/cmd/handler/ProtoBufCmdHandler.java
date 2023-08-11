@@ -26,6 +26,10 @@ public class ProtoBufCmdHandler extends AbstractCmdHandler<PacketPb.Pkg> {
 
     protected PacketPkgInjector<?>[] injectors;
 
+    public ProtoBufCmdHandler(Object instance) {
+        super(instance);
+    }
+
     @Override
     protected void initInjectors(Method method) {
         Parameter[] parameters = method.getParameters();

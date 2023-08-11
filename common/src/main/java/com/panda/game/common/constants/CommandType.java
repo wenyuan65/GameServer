@@ -4,6 +4,7 @@ public enum CommandType {
 
     ProtoBuf,
     Http,
+    Redis,
     ;
 
 }

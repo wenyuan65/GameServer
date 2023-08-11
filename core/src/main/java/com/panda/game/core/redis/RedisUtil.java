@@ -1,8 +1,14 @@
 package com.panda.game.core.redis;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.MessageLite;
+import com.google.protobuf.Parser;
+import com.panda.game.common.constants.RedisKey;
 import org.redisson.api.*;
 import org.redisson.api.listener.MessageListener;
+import org.redisson.client.codec.ByteArrayCodec;
 
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -187,16 +193,40 @@ public class RedisUtil {
     /**
      * 订阅topic
      * @param topic
-     * @param messageClass
      * @param listener
      * @return
-     * @param <M>
      */
     public static <M> int subscribeTopic(String topic, Class<M> messageClass, MessageListener<? extends M> listener) {
         RedissonClient client = RedisManager.getInstance().getClient();
         RTopic topic1 = client.getTopic(topic);
 
         return topic1.addListener(messageClass, listener);
+    }
+
+    public static long publishTopic(int cmd, MessageLite message) {
+        RedissonClient client = RedisManager.getInstance().getClient();
+        RTopic topic1 = client.getTopic(RedisKey.getPubSubTopic(cmd), new ByteArrayCodec());
+
+        return topic1.publish(message.toByteArray());
+    }
+
+    public static <T> int subscribeTopic(int cmd, Parser<T> parser, MessageListener<T> listener) {
+        RedissonClient client = RedisManager.getInstance().getClient();
+        RTopic topic1 = client.getTopic(RedisKey.getPubSubTopic(cmd), new ByteArrayCodec());
+
+        return topic1.addListener(byte[].class, new MessageListener<byte[]>() {
+            @Override
+            public void onMessage(CharSequence channel, byte[] msg) {
+                try {
+                    T message = parser.parseFrom(msg);
+                    if (listener != null) {
+                        listener.onMessage(channel, message);
+                    }
+                } catch (InvalidProtocolBufferException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     /**

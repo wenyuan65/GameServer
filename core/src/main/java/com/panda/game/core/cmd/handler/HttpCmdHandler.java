@@ -20,6 +20,10 @@ public class HttpCmdHandler extends AbstractCmdHandler<Map<String, String>> {
     protected HttpParamInjector<?>[] injectors;
     private int playerIdIndex = -1;
 
+    public HttpCmdHandler(Object instance) {
+        super(instance);
+    }
+
     /**
      * 生成参数的注入类
      * @param method

@@ -5,10 +5,6 @@ option java_outer_classname = "RedisPb";
 
 package com.panda.game.proto;
 
-// redis订阅cmd
-enum RedisCmd {
-    Player_Online_Message = 0;  // 玩家在线消息
-}
 
 // 在线玩家数据
 message PlayerOnlinePb {

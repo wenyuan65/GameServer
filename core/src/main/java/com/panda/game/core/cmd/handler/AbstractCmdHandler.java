@@ -16,7 +16,9 @@ public abstract class AbstractCmdHandler<T> implements CmdHandler<T> {
 
     protected Binder binder;
 
-    public AbstractCmdHandler() {}
+    public AbstractCmdHandler(Object instance) {
+        this.instance = instance;
+    }
 
     /**
      * 初始化
@@ -29,7 +31,7 @@ public abstract class AbstractCmdHandler<T> implements CmdHandler<T> {
         this.method = method;
 
         initInjectors(method);
-        initInstance();
+        // initInstance();
         initBinder(bind);
     }
 

@@ -14,117 +14,6 @@ public final class RedisPb {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  /**
-   * <pre>
-   * redis订阅cmd
-   * </pre>
-   *
-   * Protobuf enum {@code com.panda.game.proto.RedisCmd}
-   */
-  public enum RedisCmd
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <pre>
-     * 玩家在线消息
-     * </pre>
-     *
-     * <code>Player_Online_Message = 0;</code>
-     */
-    Player_Online_Message(0),
-    UNRECOGNIZED(-1),
-    ;
-
-    /**
-     * <pre>
-     * 玩家在线消息
-     * </pre>
-     *
-     * <code>Player_Online_Message = 0;</code>
-     */
-    public static final int Player_Online_Message_VALUE = 0;
-
-
-    public final int getNumber() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
-            "Can't get the number of an unknown enum value.");
-      }
-      return value;
-    }
-
-    /**
-     * @param value The numeric wire value of the corresponding enum entry.
-     * @return The enum associated with the given numeric wire value.
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
-    @java.lang.Deprecated
-    public static RedisCmd valueOf(int value) {
-      return forNumber(value);
-    }
-
-    /**
-     * @param value The numeric wire value of the corresponding enum entry.
-     * @return The enum associated with the given numeric wire value.
-     */
-    public static RedisCmd forNumber(int value) {
-      switch (value) {
-        case 0: return Player_Online_Message;
-        default: return null;
-      }
-    }
-
-    public static com.google.protobuf.Internal.EnumLiteMap<RedisCmd>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        RedisCmd> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<RedisCmd>() {
-            public RedisCmd findValueByNumber(int number) {
-              return RedisCmd.forNumber(number);
-            }
-          };
-
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalStateException(
-            "Can't get the descriptor of an unrecognized enum value.");
-      }
-      return getDescriptor().getValues().get(ordinal());
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return com.panda.game.proto.RedisPb.getDescriptor().getEnumTypes().get(0);
-    }
-
-    private static final RedisCmd[] VALUES = values();
-
-    public static RedisCmd valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      if (desc.getIndex() == -1) {
-        return UNRECOGNIZED;
-      }
-      return VALUES[desc.getIndex()];
-    }
-
-    private final int value;
-
-    private RedisCmd(int value) {
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:com.panda.game.proto.RedisCmd)
-  }
-
   public interface PlayerOnlinePbOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.panda.game.proto.PlayerOnlinePb)
       com.google.protobuf.MessageOrBuilder {
@@ -1119,9 +1008,8 @@ public final class RedisPb {
     java.lang.String[] descriptorData = {
       "\n\013redis.proto\022\024com.panda.game.proto\"D\n\016P" +
       "layerOnlinePb\022\n\n\002lv\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\014" +
-      "\n\004name\030\003 \001(\t\022\013\n\003pic\030\004 \001(\t*%\n\010RedisCmd\022\031\n" +
-      "\025Player_Online_Message\020\000B\037\n\024com.panda.ga" +
-      "me.protoB\007RedisPbb\006proto3"
+      "\n\004name\030\003 \001(\t\022\013\n\003pic\030\004 \001(\tB\037\n\024com.panda.g" +
+      "ame.protoB\007RedisPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
