@@ -1,4 +1,4 @@
-package com.panda.game.logic.annotation;
+package com.panda.game.logic.base;
 
 import com.panda.game.logic.common.ModuleGroups;
 

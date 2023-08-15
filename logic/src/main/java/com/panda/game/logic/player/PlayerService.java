@@ -4,7 +4,7 @@ import com.panda.game.common.utils.StringUtils;
 import com.panda.game.core.jdbc.base.Option;
 import com.panda.game.dao.db.logic.DBManager;
 import com.panda.game.dao.entity.logic.player.Player;
-import com.panda.game.logic.annotation.Group;
+import com.panda.game.logic.base.Group;
 import com.panda.game.logic.base.AbstractModuleService;
 import com.panda.game.logic.common.GamePlayer;
 import com.panda.game.logic.common.ModuleGroups;

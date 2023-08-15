@@ -13,6 +13,7 @@ public class StringUtils {
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
     public static final String DEFAULT_DELIMITER = ",";
+    public static final String DEFAULT_ARRAY_DELIMITER = ";";
 
     private static final String default_key_value_spliterator = ":";
     private static final String default_entry_spliterator = ",";
@@ -61,7 +62,27 @@ public class StringUtils {
     }
 
     /**
-     * 将字符串解析为int数组, 例如："1,2,3" ==> {1, 2, 3}
+     * 将字符串转换成一个二维数据
+     * @param content
+     * @return
+     */
+    public static List<int[]> str2IntArray2(String content) {
+        String[] args = split(content, DEFAULT_ARRAY_DELIMITER);
+        List<int[]> list = new ArrayList<>(args.length);
+        for (String arg : args) {
+            if (isBlank(arg)) {
+                continue;
+            }
+
+            int[] intArray = str2IntArray(content, DEFAULT_DELIMITER);
+            list.add(intArray);
+        }
+
+        return list;
+    }
+
+    /**
+     * 将字符串解析为int数组, 例如："1,2,3" ==> [1, 2, 3]
      * @param content
      * @return
      */
@@ -70,7 +91,7 @@ public class StringUtils {
     }
 
     /**
-     * 将字符串解析为int数组, 例如："1,2,3" ==> {1, 2, 3}
+     * 将字符串解析为int数组, 例如："1,2,3" ==> [1, 2, 3]
      * @param content
      * @param delimiter 分隔符
      * @return
@@ -86,7 +107,7 @@ public class StringUtils {
     }
 
     /**
-     * 将字符串解析为long数组, 例如："1,2,3" ==> {1L, 2L, 3L}
+     * 将字符串解析为long数组, 例如："1,2,3" ==> [1L, 2L, 3L]
      * @param content
      * @return
      */
@@ -95,7 +116,7 @@ public class StringUtils {
     }
 
     /**
-     * 将字符串解析为int数组, 例如："1,2,3" ==> {1L, 2L, 3L}
+     * 将字符串解析为int数组, 例如："1,2,3" ==> [1L, 2L, 3L]
      * @param content
      * @param delimiter 分隔符
      * @return

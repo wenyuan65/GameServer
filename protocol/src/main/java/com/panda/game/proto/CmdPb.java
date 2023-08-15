@@ -127,6 +127,30 @@ public final class CmdPb {
      * <code>ClubGetInfoRs = 3002;</code>
      */
     ClubGetInfoRs(3002),
+    /**
+     * <pre>
+     * 活动列表
+     * </pre>
+     *
+     * <code>ActivityListRq = 4001;</code>
+     */
+    ActivityListRq(4001),
+    /**
+     * <code>ActivityListRs = 4002;</code>
+     */
+    ActivityListRs(4002),
+    /**
+     * <pre>
+     * 领取奖励
+     * </pre>
+     *
+     * <code>ActivityGetRewardRq = 4003;</code>
+     */
+    ActivityGetRewardRq(4003),
+    /**
+     * <code>ActivityGetRewardRs = 4004;</code>
+     */
+    ActivityGetRewardRs(4004),
     UNRECOGNIZED(-1),
     ;
 
@@ -234,6 +258,30 @@ public final class CmdPb {
      * <code>ClubGetInfoRs = 3002;</code>
      */
     public static final int ClubGetInfoRs_VALUE = 3002;
+    /**
+     * <pre>
+     * 活动列表
+     * </pre>
+     *
+     * <code>ActivityListRq = 4001;</code>
+     */
+    public static final int ActivityListRq_VALUE = 4001;
+    /**
+     * <code>ActivityListRs = 4002;</code>
+     */
+    public static final int ActivityListRs_VALUE = 4002;
+    /**
+     * <pre>
+     * 领取奖励
+     * </pre>
+     *
+     * <code>ActivityGetRewardRq = 4003;</code>
+     */
+    public static final int ActivityGetRewardRq_VALUE = 4003;
+    /**
+     * <code>ActivityGetRewardRs = 4004;</code>
+     */
+    public static final int ActivityGetRewardRs_VALUE = 4004;
 
 
     public final int getNumber() {
@@ -282,6 +330,10 @@ public final class CmdPb {
         case 2004: return FriendApplyRs;
         case 3001: return ClubGetInfoRq;
         case 3002: return ClubGetInfoRs;
+        case 4001: return ActivityListRq;
+        case 4002: return ActivityListRs;
+        case 4003: return ActivityGetRewardRq;
+        case 4004: return ActivityGetRewardRs;
         default: return null;
       }
     }
@@ -586,7 +638,7 @@ public final class CmdPb {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tcmd.proto\022\024com.panda.game.proto*\264\003\n\003Cm" +
+      "\n\tcmd.proto\022\024com.panda.game.proto*\222\004\n\003Cm" +
       "d\022\n\n\006Unkown\020\000\022\025\n\021TopicPlayerOnline\020\001\022\013\n\007" +
       "LoginRq\020Q\022\013\n\007LoginRs\020R\022\020\n\014CreateUserRq\020S" +
       "\022\020\n\014CreateUserRs\020T\022\022\n\016GatewayLoginRq\020d\022\022" +
@@ -597,12 +649,14 @@ public final class CmdPb {
       "eRq\020\355\007\022\024\n\017PlayerSetNameRs\020\356\007\022\024\n\017FriendGe" +
       "tInfoRq\020\321\017\022\024\n\017FriendGetInfoRs\020\322\017\022\022\n\rFrie" +
       "ndApplyRq\020\323\017\022\022\n\rFriendApplyRs\020\324\017\022\022\n\rClub" +
-      "GetInfoRq\020\271\027\022\022\n\rClubGetInfoRs\020\272\027*\230\001\n\tErr" +
-      "orCode\022\006\n\002Ok\020\000\022\t\n\005Param\020\001\022\014\n\010NoEnough\020\002\022" +
-      "\020\n\014ServiceError\020\003\022\024\n\020GameServiceError\020\004\022" +
-      "\016\n\nRpcTimeOut\020\n\022\020\n\014RpcSendError\020\013\022\021\n\rRpc" +
-      "SendFailed\020\014\022\r\n\tUserExist\020eB\035\n\024com.panda" +
-      ".game.protoB\005CmdPbb\006proto3"
+      "GetInfoRq\020\271\027\022\022\n\rClubGetInfoRs\020\272\027\022\023\n\016Acti" +
+      "vityListRq\020\241\037\022\023\n\016ActivityListRs\020\242\037\022\030\n\023Ac" +
+      "tivityGetRewardRq\020\243\037\022\030\n\023ActivityGetRewar" +
+      "dRs\020\244\037*\230\001\n\tErrorCode\022\006\n\002Ok\020\000\022\t\n\005Param\020\001\022" +
+      "\014\n\010NoEnough\020\002\022\020\n\014ServiceError\020\003\022\024\n\020GameS" +
+      "erviceError\020\004\022\016\n\nRpcTimeOut\020\n\022\020\n\014RpcSend" +
+      "Error\020\013\022\021\n\rRpcSendFailed\020\014\022\r\n\tUserExist\020" +
+      "eB\035\n\024com.panda.game.protoB\005CmdPbb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

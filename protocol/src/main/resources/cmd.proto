@@ -40,6 +40,12 @@ enum Cmd {
 
     ClubGetInfoRq = 3001;
     ClubGetInfoRs = 3002;
+
+    ActivityListRq = 4001;          // 活动列表
+    ActivityListRs = 4002;
+    ActivityGetRewardRq = 4003;     // 领取奖励
+    ActivityGetRewardRs = 4004;
+
 }
 
 // 错误码

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "CommonPb";
+
+package com.panda.game.proto;
+
+// 参数
+message ParamPb {
+    string name = 1;
+    string value = 2;
+}
+
+// 掉落信息
+message DropMessagePb {
+    repeated DropItemMessagePb list = 1;    // 掉落信息
+}
+
+// 掉落道具信息
+message DropItemMessagePb {
+    int32 itemId = 1;               // item表id
+    int64 count = 2;                // 数量
+    repeated ParamPb params = 3;    // 其他参数
+}
+
+
+
+

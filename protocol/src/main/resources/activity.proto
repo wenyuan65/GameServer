@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option java_package = "com.panda.game.proto";
+option java_outer_classname = "ActivityPb";
+
+package com.panda.game.proto;
+
+import "common.proto";
+
+// 活动列表
+message ActivityListRq {
+}
+message ActivityListRs {
+    repeated ActivityInfoPb list = 1; 	// 活动列表
+}
+
+// 领取奖励
+message ActivityGetRewardRq {
+    int32 uid = 1;					    // 活动id
+    string param = 2;					// 领取参数
+}
+// 领取奖励
+message ActivityGetRewardRs {
+    ActivityInfoPb info = 1;			// 更新活动数据
+}
+
+
+// 活动进度、奖励
+message ActivityInfoPb {
+    int32 uid = 1;		// 唯一id
+    int64 beginTime = 2; 	//开始时间
+    int64 endTime = 3; 	//结束时间
+    repeated ParamPb params = 4;		// 活动参数
+    repeated ActivityRewardPb rewardsInfo = 5;// 活动奖励
+}
+
+// 活动奖励列表信息
+message ActivityRewardPb {
+    DropMessagePb rewards = 1;      // 奖励列表
+    int32 status = 2;				// 奖励状态，0无法领奖，1可以领取，2已经领取
+}
+
