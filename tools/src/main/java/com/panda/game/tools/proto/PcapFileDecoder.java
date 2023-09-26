@@ -149,14 +149,19 @@ public class PcapFileDecoder {
             ByteBuf packetBuf = buffer.readBytes(capLen);
 
             // 解析网络数据帧
-            packetBuf.skipBytes(12);
-            ByteBuf packetTypeBuf = packetBuf.readBytes(2);
-            String packetType = byteArrToHex(ByteBufUtil.getBytes(packetTypeBuf));
-            packetTypeBuf.release();
-
-            if (!"0800".equalsIgnoreCase(packetType)) {
-                packetBuf.release();
-                continue;
+            ByteBuf byteBuf1 = packetBuf.readBytes(4);
+            String packetType1 = byteArrToHex(ByteBufUtil.getBytes(byteBuf1));
+            if (!"02000000".equalsIgnoreCase(packetType1)) { // 判断是否是本地环回数据包，环回数据包省略了数据帧头部
+//                packetBuf.skipBytes(12);
+                packetBuf.skipBytes(8); // 源MAC地址和目的MAC地址总共12字节，前面读取了4字节
+                ByteBuf packetTypeBuf = packetBuf.readBytes(2);
+                String packetType = byteArrToHex(ByteBufUtil.getBytes(packetTypeBuf));
+                packetTypeBuf.release();
+                // ip数据包类型判断
+                if (!"0800".equalsIgnoreCase(packetType)) {
+                    packetBuf.release();
+                    continue;
+                }
             }
 
             // 解析ip协议包
